@@ -18,9 +18,9 @@ model User {
   clerkId               String?  @unique
   role                  Role     @default(USER)
   // Informations
-  firstName             String?
-  lastName              String?
-  pseudo                String?  @unique
+  firstname             String?
+  lastname              String?
+  username                String?  @unique
   phone                 String?
   profilePicture        String?  @db.LongText
   coverPicture          String?  @db.LongText
