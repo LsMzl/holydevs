@@ -1,4 +1,6 @@
 npm i uuidv4
+Image optimization with NextJs
+npm i sharp
 
 
 // Clerk

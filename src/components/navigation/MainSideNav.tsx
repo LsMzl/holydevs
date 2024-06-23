@@ -4,13 +4,13 @@ import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
 
-import { Typography } from "../ui/design-system/Typography";
+// import { Typography } from "../ui/design-system/Typography";
 
 import { cn } from "@/lib/utils";
-import LocationFilter from "./LocationFilter";
+// import LocationFilter from "./LocationFilter";
 
 import { useUser } from "@clerk/nextjs";
-import MiniMap from "../user/MiniMap";
+// import MiniMap from "../user/MiniMap";
 
 // Type
 import { MainSideNaveUser } from "@/types/MainSideNav";
@@ -76,7 +76,7 @@ const MainSideNav = ({
             {/* Followers */}
             <div className="shadow">
                {/* <LeafletMap/> */}
-               <MiniMap cityLatitude="48.400002" cityLongitude="-4.48333" />
+               {/* <MiniMap cityLatitude="48.400002" cityLongitude="-4.48333" /> */}
             </div>
          </section>
 
@@ -116,7 +116,7 @@ const MainSideNav = ({
             </div>
             {/* Filters */}
             <Separator className="my-5" />
-            <LocationFilter />
+            {/* <LocationFilter /> */}
             <Separator className="my-5" />
             {/* Friends */}
             <div className="flex flex-col gap-1 font-medium">
