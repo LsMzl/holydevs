@@ -7,11 +7,19 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../shadcn/button";
 import { Input } from "../shadcn/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
-import { useContext } from "react";
-import { ConnectedUserContext } from "@/hooks/context/connectedUserContext";
+import { UserMenuProps } from "@/types/topNav";
+import { UserMenu } from "./components/UserMenu";
+import { GuestMenu } from "./components/GuestMenu";
 
-export const TopNav = () => {
-   // const user = useContext(ConnectedUserContext);
+export const TopNav = ({
+   userId,
+   userMail,
+   userAvatar,
+   userClerkId,
+   firstname,
+   lastname,
+}: UserMenuProps) => {
+
    return (
       <nav className="flex items-center justify-between py-1 static w-full top-0 left-0 z-50 bg-background/60 shadow 2xl:relative">
          <div className="lg:w-[20%] 2xl:w-[15%] flex items-center justify-center">
@@ -100,13 +108,13 @@ export const TopNav = () => {
 
             <div className="flex items-center justify-between gap-3 md:gap-5">
                {/* Mobile */}
-               {/* {userId && (
+               {userId && (
                   <Button className="md:hidden" size="sm">
                      <Pen size={15} />
                   </Button>
-               )} */}
+               )}
                {/* Screen */}
-               {/* {userId && (
+               {userId && (
                   <Link
                      href="/ajouter"
                      className={cn(
@@ -117,14 +125,14 @@ export const TopNav = () => {
                      <Plus size={15} />
                      Annonce
                   </Link>
-               )} */}
+               )}
 
                <div className="relative md:ml-5">
                   <Bell size={20} />
                   <span className="absolute h-4 w-4 rounded-full bg-red-500 -top-1 -right-1"></span>
                </div>
 
-               {/* {userId ? (
+               {userId ? (
                   <UserMenu
                      userMail={userMail}
                      userClerkId={userClerkId}
@@ -134,7 +142,7 @@ export const TopNav = () => {
                   />
                ) : (
                   <GuestMenu />
-               )} */}
+               )}
             </div>
          </div>
       </nav>

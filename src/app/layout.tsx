@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../globals.css";
+import "./globals.css";
 import { cn } from "@/lib/utils";
-import { TopNav } from "@/components/navigation/TopNav";
 import { ClerkProvider } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
-import { ConnectedUserContext } from "@/hooks/context/connectedUserContext";
-import { getUserByClerkId } from "@/actions/getUserByClerkId";
+import { frFR } from "@clerk/localizations";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,20 +15,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({
    children,
 }: Readonly<{ children: React.ReactNode }>) {
-   // Utilisateur connecté
-   const user = await currentUser();
-   if (!user) return null;
-
-   const dbUser = await getUserByClerkId(user.id);
-   // if (!user) return null;
-
    return (
-      <ClerkProvider>
+      <ClerkProvider localization={frFR}>
          <html lang="fr" suppressHydrationWarning>
             <body className={cn("w-full min-h-screen", inter.className)}>
-               {/* <ConnectedUserContext.Provider value={dbUser}> */}
-               <TopNav />
-               {/* </ConnectedUserContext.Provider> */}
                <main>{children}</main>
             </body>
          </html>

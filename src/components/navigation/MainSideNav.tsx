@@ -4,13 +4,10 @@ import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
 
-
 import { Typography } from "../ui/design-system/Typography";
 
 import { cn } from "@/lib/utils";
 import LocationFilter from "./LocationFilter";
-
-
 
 import { useUser } from "@clerk/nextjs";
 import MiniMap from "../user/MiniMap";
@@ -19,18 +16,14 @@ import MiniMap from "../user/MiniMap";
 import { MainSideNaveUser } from "@/types/MainSideNav";
 
 // Data
-import { sideNavLinks } from "@/data/MainSideNav";
+
 import { Separator } from "../shadcn/separator";
 import { Avatar, AvatarImage } from "../shadcn/avatar";
 import { buttonVariants } from "../shadcn/button";
-
-
-
-
-
+import { sideNavLinks } from "@/data/navigationData";
 
 const MainSideNav = ({
-   userAvatar,
+   userAvatar, 
    userFirstName,
    userLastName,
    username,
@@ -38,7 +31,7 @@ const MainSideNav = ({
 }: MainSideNaveUser) => {
    const pathname = usePathname();
 
-   const { user } = useUser();
+   // const { user } = useUser();
 
    return (
       <aside
@@ -107,7 +100,7 @@ const MainSideNav = ({
                   >
                      <link.icon className="mr-2 h-4 w-4" />
                      {link.title}
-                     {link.label && (
+                     {link.title && (
                         <span
                            className={cn(
                               "ml-auto",
@@ -115,7 +108,7 @@ const MainSideNav = ({
                                  "text-background dark:text-white"
                            )}
                         >
-                           {link.label}
+                           {link.title}
                         </span>
                      )}
                   </Link>

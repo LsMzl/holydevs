@@ -26,4 +26,6 @@ export const sideNavLinks: MainSideNavData[] = [
        variant: "ghost",
        href: "/mes-reservations",
     },
- ];
+];
+
+export const topNavLinks = []

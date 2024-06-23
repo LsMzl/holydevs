@@ -9,10 +9,8 @@ export interface MainSideNaveUser {
 }
 
 export interface MainSideNavData {
-   className?: string;
    title: string;
-   label?: string;
    icon: LucideIcon;
-   variant: "default" | "ghost";
+   variant: string;
    href: string;
 }
