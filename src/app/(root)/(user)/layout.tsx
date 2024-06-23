@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import "../../globals.css";
 import { TopNav } from "@/components/navigation/TopNav";
 import { auth } from "@clerk/nextjs/server";
 import { getUserByClerkId } from "@/actions/getUserByClerkId";

@@ -21,7 +21,7 @@ export const TopNav = ({
 }: UserMenuProps) => {
 
    return (
-      <nav className="flex items-center justify-between py-1 static w-full top-0 left-0 z-50 bg-background/60 shadow 2xl:relative">
+      <nav className="flex items-center justify-between py-1 static w-full top-0 left-0 z-50 bg-foreground/5 shadow 2xl:relative">
          <div className="lg:w-[20%] 2xl:w-[15%] flex items-center justify-center">
             <Link
                href="/"

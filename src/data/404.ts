@@ -1,14 +1,20 @@
-import { Home, LayoutGrid } from "lucide-react";
+import { NotFoundTypes } from "@/types/404";
+import { Home, LayoutGrid, User } from "lucide-react";
 
-export const NotFoundLinks = [
+export const NotFoundLinks: NotFoundTypes[] = [
     {
         label: "Accueil",
         icon: Home,
-        link: "/"
+        href: "/"
     },
     {
         label: "Réseau social",
         icon: LayoutGrid,
-        link: "/posts"
-    }
+        href: "/posts"
+    },
+    // {
+    //     label: "Profil",
+    //     icon: User,
+    //     href: `/profil/${user.username}`
+    // },
 ]
