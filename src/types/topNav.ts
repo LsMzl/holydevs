@@ -5,7 +5,7 @@ export interface UserMenuProps {
    userClerkId: string | null;
    firstname: string | null;
    lastname: string | null;
-   pseudo?: string | null;
+   username?: string | null;
 }
 
 export interface TopNavProps {

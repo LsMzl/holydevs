@@ -18,7 +18,7 @@ import { Input } from "@/components/shadcn/input";
 import axios from "axios";
 import { toast } from "@/components/shadcn/use-toast";
 import { Button } from "@/components/shadcn/button";
-import { Loader2 } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -225,7 +225,7 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
                         {isLoading ? (
                            // Pendant le chargement
                            <>
-                              <Loader2 className="h-4 w-4" />
+                              <LoaderCircle className="h-4 w-4 animate-spin" />
                            </>
                         ) : (
                            // Sans chargement

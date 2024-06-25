@@ -7,8 +7,10 @@ export default async function MainLayout({
 }: Readonly<{ children: React.ReactNode }>) {
    // Utilisateur connecté
    const { userId } = auth();
+   if(!userId) return null;
    // Informations utilisateur
-   const user = await getUserByClerkId(userId ?? "");
+   const user = await getUserByClerkId(userId);
+
 
    return (
       <>
@@ -16,9 +18,10 @@ export default async function MainLayout({
             userId={userId}
             userAvatar={user?.profilePicture}
             userClerkId={userId}
-            userMail={user?.email ?? ""}
-            firstname={user?.firstname ?? ""}
-            lastname={user?.lastname ?? ""}
+            userMail={user?.email || null}
+            firstname={user?.firstname || null}
+            lastname={user?.lastname || null}
+            username={user?.username || null}
          />
          <main>{children}</main>
       </>

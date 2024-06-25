@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Bell, Home, LayoutGrid, Pen, Plus, Search, Users } from "lucide-react";
 import Logo from "../../../public/logo/logo.png";
 import Image from "next/image";
@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
 import { UserMenuProps } from "@/types/topNav";
 import { UserMenu } from "./components/UserMenu";
 import { GuestMenu } from "./components/GuestMenu";
+import { DbUserContext } from "@/hooks/context/dbUserContext";
 
 export const TopNav = ({
    userId,
@@ -18,8 +19,8 @@ export const TopNav = ({
    userClerkId,
    firstname,
    lastname,
+   username,
 }: UserMenuProps) => {
-
    return (
       <nav className="flex items-center justify-between py-1 static w-full top-0 left-0 z-50 bg-foreground/5 shadow 2xl:relative">
          <div className="lg:w-[20%] 2xl:w-[15%] flex items-center justify-center">
@@ -89,9 +90,9 @@ export const TopNav = ({
                      <Users />
                   </Link>
                   <Link
-                     href="/social"
+                     href="/posts"
                      className="hover:bg-secondary py-3 px-8 rounded"
-                     title="Social"
+                     title="Posts"
                   >
                      <LayoutGrid />
                   </Link>
@@ -109,18 +110,24 @@ export const TopNav = ({
             <div className="flex items-center justify-between gap-3 md:gap-5">
                {/* Mobile */}
                {userId && (
-                  <Button className="md:hidden" size="sm">
-                     <Pen size={15} />
-                  </Button>
+                  <Link
+                     href="/annonce/ajouter"
+                     className={cn(buttonVariants(), "md:hidden")}
+                     title="Ajouter une annonce"
+                  >
+                     <Plus size={15} />
+                     Annonce
+                  </Link>
                )}
                {/* Screen */}
                {userId && (
                   <Link
-                     href="/ajouter"
+                     href="/annonce/ajouter"
                      className={cn(
                         buttonVariants(),
-                        "hidden md:flex items-center gap-1 shadow "
+                        "hidden md:flex items-center gap-1"
                      )}
+                     title="Ajouter une annonce"
                   >
                      <Plus size={15} />
                      Annonce
@@ -139,6 +146,7 @@ export const TopNav = ({
                      userAvatar={userAvatar}
                      firstname={firstname}
                      lastname={lastname}
+                     username={username}
                   />
                ) : (
                   <GuestMenu />

@@ -61,6 +61,23 @@ model User {
   rates      Rates[]
   //! Un utilisateur peut avoir 0 ou plusieurs todoList
   todos      Todolist[]
+  //! Un utilisateur peut effectuer 0 ou plusieurs réservations
+  // bookings      Booking[]
+  //! Un utilisateur peut suivre 0 ou plusieurs utilisateurs
+  followings      Friend[] @relation("UserFollowings")
+  //! Un utilisateur peut être suivi par 0 ou plusieurs utilisateurs
+  followers      Friend[] @relation("UserFollowers")
+  //! Un utilisateur peut être envoyer 0 ou plusieurs demandes d'amis
+  followRequestSent FriendRequest[] @relation("FollowRequestSent")
+  //! Un utilisateur peut être recevoir 0 ou plusieurs demandes d'amis
+  followRequestReceived FriendRequest[] @relation("FollowRequestReceived")
+  //! Un utilisateur peut blocquer 0 ou plusieurs utilisateurs
+  blocks Block[] @relation("BlocksSent")
+  //! Un utilisateur peut être bloqué par 0 ou plusieurs utilisateurs
+  blockedBy Block[] @relation("BlocksReceived")
+
+
+
   // Sessions          Session[]
   // VerificationToken VerificationToken[]
 }
@@ -107,6 +124,45 @@ model Group {
   users UsersOnGroups[]
 }
 
+//* Amis / Followers
+model Friend {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  follower    User     @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId  String
+  following    User     @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId  String
+}
+
+model FriendRequest {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  sender    User     @relation("FollowRequestSent", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId  String
+  receiver    User     @relation("FollowRequestReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId  String
+
+  //! On ne peut demander qu'une seule fois un utilisateur en ami
+  @@unique([senderId, receiverId])
+}
+
+//* Personne bloquée
+model Block {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  //! Personne qui bloque
+  blocker    User     @relation("BlocksSent", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockerId  String
+  //! Personne bloquée
+  blocked    User     @relation("BlocksReceived", fields: [blockedId], references: [id], onDelete: Cascade)
+  blockedId  String
+
+  //! On ne peut bloquer qu'une seule fois un utilisateur
+  @@unique([blockedId, blockerId])
+}
+
+
+
 //* Annonces
 model House {
   id           String   @id @default(uuid())
@@ -132,7 +188,6 @@ model House {
   bathroom     Int?
   // Disponibilité
   isAvailable  Boolean  @default(true)
-
   // Relations
   //! Many to Many catégories
   categories CategoriesOnHouses[]
@@ -209,6 +264,9 @@ model Booking {
   userName        String
   userId          String
   userEmail       String
+  //! Une reservation ne concerne qu'un seul tutilisateur
+  // user   User @relation(fields: [userId], references: [id])
+  // userId String
   // Maison réservée
   //! Une réservation n'a qu'une seule maison
   House           House?   @relation(fields: [houseId], references: [id], onDelete: Cascade)
@@ -236,14 +294,13 @@ model Post {
   content   String   @db.Text
   image     String?  @db.LongText
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   //! Un post n'a qu'un seul auteur
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
-
-  parent   Post?   @relation("PostParent", fields: [parentId], references: [id])
-  children Post[]  @relation("PostParent")
-  parentId String?
-
+  //! Un post peut avoir 0 et plusieurs commentaires
+  comments Comment[]
+  
   //! Un post peut avoir 0 et plusieurs likes
   likes Like[]
 }
@@ -253,10 +310,15 @@ model Comment {
   id        String   @id @default(uuid())
   content   String   @db.Text
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   //! Un commentaire n'a qu'un seul auteur
-  author   User   @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
+
+  //! Un commentaire n'a qu'un seul post
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
 
   //! Un commentaire peut avoir 0 et plusieurs likes
   likes Like[]
@@ -266,13 +328,13 @@ model Comment {
 model Like {
   id        String  @id @default(uuid())
   //! Un like n'a qu'un seul post
-  post      Post    @relation(fields: [postId], references: [id])
-  postId    String
-  //! Un like n'a qu'un seul commentaire
-  comment   Comment @relation(fields: [commentId], references: [id])
-  commentId String
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String?
+  //! Un commentaire n'appartient n'a un seul post
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?
   //! Un like n'a qu'un seul auteur
-  author    User    @relation(fields: [authorId], references: [id])
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 }
 
@@ -307,7 +369,7 @@ model Task {
   isDone Boolean
 }
 
-//! Many to many entre groupes et users
+//* Many to many entre groupes et users
 model UsersOnGroups {
   group   Group  @relation(fields: [groupId], references: [id])
   groupId String
@@ -317,7 +379,7 @@ model UsersOnGroups {
   @@id([groupId, userId])
 }
 
-//! Many to many entre catégories et maisons
+//* Many to many entre catégories et maisons
 model CategoriesOnHouses {
   house        House    @relation(fields: [houseId], references: [id])
   houseId      String
@@ -327,7 +389,7 @@ model CategoriesOnHouses {
   @@id([houseId, categoryId])
 }
 
-//! Many to many entre types et maisons
+//* Many to many entre types et maisons
 model TypesOnHouses {
   house         House     @relation(fields: [houseId], references: [id])
   houseId       String
@@ -337,7 +399,7 @@ model TypesOnHouses {
   @@id([houseId, typeId])
 }
 
-//! Many to many entre équipements et maisons
+//* Many to many entre équipements et maisons
 model FeaturesOnHouses {
   house       House   @relation(fields: [houseId], references: [id])
   houseId     String

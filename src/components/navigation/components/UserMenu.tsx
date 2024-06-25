@@ -34,7 +34,7 @@ export function UserMenu({
    userAvatar,
    firstname,
    lastname,
-   pseudo,
+   username,
 }: UserMenuProps) {
    return (
       <DropdownMenu>
@@ -68,7 +68,7 @@ export function UserMenu({
             <DropdownMenuGroup>
                <DropdownMenuItem className="flex items-center gap-1 hover:text-gray-500 cursor-pointer">
                   <UserRound size={15} />
-                  <Link href={`/profil/${pseudo}`} title="Profil utilisateur">
+                  <Link href={`/${username}`} title="Profil utilisateur">
                      Mon profil
                   </Link>
                </DropdownMenuItem>
@@ -105,8 +105,6 @@ export function UserMenu({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-               <DropdownMenuItem>Cartes cadeaux</DropdownMenuItem>
-
                {/* Theme toggle */}
                <DropdownMenuItem
                   className=" flex items-center gap-1 cursor-pointer hover:text-gray-500"

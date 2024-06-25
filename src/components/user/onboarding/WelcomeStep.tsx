@@ -17,8 +17,12 @@ export const WelcomeStep = ({}) => {
                site
             </p>
             <div className="flex items-center justify-center gap-5 mt-5">
-              <Link href={'/'} className={cn(buttonVariants())}>Ajouter une annonce</Link>
-              <Link href={'/'} className={cn(buttonVariants())}>Terminer</Link>
+               <Link href={"/"} className={cn(buttonVariants())}>
+                  Ajouter une annonce
+               </Link>
+               <Link href={"/"} className={cn(buttonVariants())}>
+                  Terminer
+               </Link>
             </div>
          </div>
       </section>

@@ -14,7 +14,7 @@ import { Textarea } from "@/components/shadcn/textarea";
 import { cn } from "@/lib/utils";
 import { UserOnboardingTypes } from "@/types/user/onboarding";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Camera, Loader2 } from "lucide-react";
+import { Camera, LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -261,7 +261,7 @@ export const UserSecondStep = ({ user }: UserOnboardingTypes) => {
                         {isLoading ? (
                            // Pendant le chargement
                            <>
-                              <Loader2 className="h-4 w-4" />
+                              <LoaderCircle className="h-4 w-4 animate-spin" />
                            </>
                         ) : (
                            // Sans chargement
