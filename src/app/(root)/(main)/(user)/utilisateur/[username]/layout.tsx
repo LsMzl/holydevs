@@ -1,31 +1,57 @@
+// Clerk
 import { auth } from "@clerk/nextjs/server";
-import { getUserByClerkId } from "@/actions/getUserByClerkId";
-import { CameraIcon, Eye } from "lucide-react";
-import Link from "next/link";
-import { Button, buttonVariants } from "@/components/shadcn/button";
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarImage } from "@/components/shadcn/avatar";
-import Image from "next/image";
-import { Badge } from "@/components/shadcn/badge";
-import Banner from "../../../../../public/img/banniere.jpg";
-import UpdateProfileForm from "@/components/user/profile/UpdateProfileForm";
-import { UserContextProvider } from "@/app/hooks/context/UserContext";
-import { db } from "@/lib/prisma";
-import SettingsMenu from "@/components/user/profile/SettingsMenu";
 
-export default async function MainLayout({
+// Database
+import { db } from "@/lib/prisma";
+
+// Icons
+import {
+   CameraIcon,
+   Eye,
+   MessageSquareTextIcon,
+   UserPlusIcon,
+} from "lucide-react";
+
+// React / Next
+import Link from "next/link";
+import Image from "next/image";
+
+// UI Components
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/shadcn/badge";
+import { Avatar, AvatarImage } from "@/components/shadcn/avatar";
+import { Button, buttonVariants } from "@/components/shadcn/button";
+
+// Images
+import Banner from "../../../../../../../public/img/banniere.jpg";
+
+interface ProfilPageProps {
+   params: {
+      username: string;
+   };
+   children: React.ReactNode;
+}
+
+export default async function FriendLayout({
+   params,
    children,
-}: Readonly<{ children: React.ReactNode }>) {
-   // Utilisateur connecté
-   const { userId } = auth();
-   if (!userId) return null;
-   // Informations utilisateur
+}: ProfilPageProps) {
+   console.log("username", params.username);
+   // Utilisateur du profil
    const user = await db.user.findUnique({
       where: {
-         clerkId: userId,
+         username: params.username,
+      },
+      include: {
+         houses: true,
+         opinions: {
+            select: {
+               id: true,
+            },
+         },
       },
    });
-   if (!user) return <h1>Vous n'êtes pas connecté</h1>;
+   if (!user) return <h1>Cette utilisateur n'existe pas</h1>;
 
    return (
       <main className="flex flex-col items-center gap-5">
@@ -82,71 +108,64 @@ export default async function MainLayout({
                      {/* Menu Buttons Screen */}
                      <div className=" mt-2 items-center gap-2 hidden md:flex ">
                         <Link
-                           href="/mes-annonces"
+                           href=""
                            className={cn(
                               buttonVariants(),
                               "flex gap-1 font-semibold"
                            )}
                            title="Annonces utilisateur"
                         >
-                           <Eye size={15} /> Mes annonces
+                           <Eye size={15} />
+                           Annonces
                         </Link>
-                        <UserContextProvider>
-                           <UpdateProfileForm
-                              biography={user?.biography ?? ""}
-                              avatar={user?.profilePicture ?? ""}
-                              email={user?.email ?? ""}
-                              coverPicture={user?.coverPicture ?? ""}
-                              createdAt={user?.createdAt}
-                              languages={user?.languages ?? ""}
-                              interests={user?.interests ?? ""}
-                           />
-                        </UserContextProvider>
-
-                        <SettingsMenu
-                           firstname={user?.firstname ?? ""}
-                           lastname={user?.lastname ?? ""}
-                           country={user?.country ?? ""}
-                           state={user?.state ?? ""}
-                           city={user?.city ?? ""}
-                           address={user?.address ?? ""}
-                           email={user?.email ?? ""}
-                           phone={user?.phone ?? ""}
-                        />
+                        <Button
+                           variant="secondary"
+                           className="flex items-center gap-1"
+                        >
+                           <UserPlusIcon size={15} />
+                           S'abonner
+                        </Button>
+                        <Button
+                           variant="secondary"
+                           className="flex items-center gap-1"
+                        >
+                           <MessageSquareTextIcon size={15} />
+                           Contacter
+                        </Button>
                      </div>
                   </div>
+
                   {/* Menu Buttons Mobile */}
                   <div className="items-center flex justify-between mx-2 md:hidden pb-5">
                      <Link
-                        href="/mes-annonces"
+                        href=""
                         className={cn(
                            buttonVariants(),
                            "flex gap-1 font-semibold"
                         )}
                         title="Annonces utilisateur"
                      >
-                        <Eye size={15} /> Mes annonces
+                        <Eye size={15} />
+                        Annonces
                      </Link>
-                     <UpdateProfileForm
-                        biography={user?.biography ?? ""}
-                        avatar={user?.profilePicture ?? ""}
-                        email={user?.email ?? ""}
-                        coverPicture={user?.coverPicture ?? ""}
-                        createdAt={user?.createdAt}
-                        languages={user?.languages ?? ""}
-                        interests={user?.interests ?? ""}
-                     />
-                     {/* <SettingsMenu
-                        firstname={user?.firstName ?? ""}
-                        lastname={user?.lastName ?? ""}
-                        country={user?.country ?? ""}
-                        state={user?.state ?? ""}
-                        city={user?.city ?? ""}
-                        address={user?.address ?? ""}
-                        email={user?.email ?? ""}
-                        phone={user?.phone ?? ""}
-                     /> */}
+                     <div className="flex items-center gap-2">
+                        <Button
+                           variant="secondary"
+                           className="flex items-center gap-1"
+                        >
+                           <UserPlusIcon size={20} />
+                           S'abonner
+                        </Button>
+                        <Button
+                           variant="secondary"
+                           className="flex items-center gap-1"
+                        >
+                           <MessageSquareTextIcon size={20} />
+                           Contacter
+                        </Button>
+                     </div>
                   </div>
+
                   {/* Tabs/Onglets */}
                   <div className="md:mx-10">
                      <ul className="flex items-center gap-2">
@@ -170,17 +189,6 @@ export default async function MainLayout({
                               title="Page des amis utilisateur"
                            >
                               Amis
-                           </Link>
-                        </li>
-                        <li>
-                           <Link
-                              href={`/${user.username}/reservations`}
-                              className={cn(
-                                 buttonVariants({ variant: "ghost" })
-                              )}
-                              title="Page des réservations utilisateur"
-                           >
-                              Réservations
                            </Link>
                         </li>
                      </ul>

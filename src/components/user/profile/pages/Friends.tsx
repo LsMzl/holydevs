@@ -16,7 +16,7 @@ export const Friends = ({ followers, followings }: FriendsPageType) => {
             <h1 className="text-xl font-semibold mb-3">Amis</h1>
 
             <Tabs defaultValue="followings">
-               <TabsList className="text-sm space-x-3 mb-3">
+               <TabsList className="text-sm space-x-3 mb-3 bg-card text-primary font-medium">
                   <TabsTrigger value="followings">Je les suis</TabsTrigger>
                   <TabsTrigger value="followers">Ils me suivent</TabsTrigger>
                </TabsList>
