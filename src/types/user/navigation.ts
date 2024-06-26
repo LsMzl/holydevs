@@ -17,3 +17,27 @@ export interface PublicationsSideNavTypes {
       }[];
    };
 }
+
+export interface SocialLeftNavTypes {
+   user: {
+      id: string;
+      firstname: string | null;
+      lastname: string | null;
+      username: string | null;
+      email: string;
+      profilePicture: string | null;
+      coverPicture: string | null;
+   };
+}
+
+
+
+export interface SocialRightNavTypes {
+   lastUsers: {
+      id: string;
+      firstname: string | null;
+      lastname: string | null;
+      username: string | null;
+      profilePicture: string | null;
+   }[];
+}

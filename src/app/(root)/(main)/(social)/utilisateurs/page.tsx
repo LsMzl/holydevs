@@ -39,8 +39,8 @@ export default async function AllUsers() {
    if (!allUsers) return <h1>Aucun utilisateur trouvé.</h1>;
 
    return (
-      <section>
-         <h1 className="text-2xl font-semibold my-5">Rechercher des membres</h1>
+      <section className="bg-card rounded-lg p-2 shadow">
+         <h1 className="text-2xl font-semibold mb-5">Rechercher des membres</h1>
          <div className=" grid grid-cols-3 lg:grid-cols-5 gap-5">
             {allUsers.length > 1 &&
                allUsers.map((user) => (

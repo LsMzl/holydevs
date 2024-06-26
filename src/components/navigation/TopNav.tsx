@@ -1,5 +1,5 @@
 "use client";
-import { Bell, Home, LayoutGrid, Pen, Plus, Search, Users } from "lucide-react";
+import { Home, LayoutGrid, Pen, Plus, Search, Users } from "lucide-react";
 import Logo from "../../../public/logo/logo.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
 import { UserMenuProps } from "@/types/topNav";
 import { UserMenu } from "./components/UserMenu";
 import { GuestMenu } from "./components/GuestMenu";
+import Bell from "../../../public/icon/bell.png";
 
 export const TopNav = ({
    userId,
@@ -99,8 +100,13 @@ export const TopNav = ({
             )}
 
             <div className="relative md:ml-5">
-               <Bell size={20} />
-               <span className="absolute h-4 w-4 rounded-full bg-red-500 -top-1 -right-1"></span>
+               <Image
+                  src={Bell}
+                  alt="Icône de notification"
+                  width={24}
+                  height={24}
+                  className="h-6 w-6"
+               />
             </div>
 
             {userId ? (

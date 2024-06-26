@@ -24,6 +24,12 @@ import { Button, buttonVariants } from "@/components/shadcn/button";
 
 // Images
 import Banner from "../../../../../../../public/img/banniere.jpg";
+import Block from "../../../../../../../public/icon/block.png";
+import Message from "../../../../../../../public/icon/comments.png";
+
+// Queries
+import { getUserByClerkId } from "@/actions/getUserByClerkId";
+import { BlockAndFollowInteraction } from "@/components/social/BlockAndFollowInteraction";
 
 interface ProfilPageProps {
    params: {
@@ -36,7 +42,6 @@ export default async function FriendLayout({
    params,
    children,
 }: ProfilPageProps) {
-   console.log("username", params.username);
    // Utilisateur du profil
    const user = await db.user.findUnique({
       where: {
@@ -52,6 +57,53 @@ export default async function FriendLayout({
       },
    });
    if (!user) return <h1>Cette utilisateur n'existe pas</h1>;
+
+   // Utilisateur connecté
+   const { userId } = auth();
+   if (!userId) return <p>Vous n'êtes pas connecté</p>;
+
+   const currentUser = await getUserByClerkId(userId);
+   if (!currentUser) return null;
+
+   // Blocage utilisateur
+   let isUserBlocked: boolean = true;
+   // Amis ?
+   let isFollowing: boolean = false;
+   // Demande d'amis envoyée ?
+   let isFollowingRequestSent: boolean = false;
+
+   if (userId) {
+      // Blocage utilisateur
+      const blockResponse = await db.block.findFirst({
+         where: {
+            // Utilisateur qui bloque (utilisateur connecté)
+            blockerId: currentUser.id,
+            // Utilisateur bloqué (utilisateur du profil visité)
+            blockedId: user.id,
+         },
+      });
+      blockResponse ? (isUserBlocked = true) : (isUserBlocked = false);
+
+      // Amis ?
+      const followingResponse = await db.friend.findFirst({
+         where: {
+            followerId: currentUser.id,
+            followingId: user.id,
+         },
+      });
+      followingResponse ? (isFollowing = true) : (isFollowing = false);
+
+      // Demande d'amis envoyée ?
+      const followingRequestResponse = await db.friendRequest.findFirst({
+         where: {
+            senderId: currentUser.id,
+            receiverId: user.id,
+         },
+      });
+      followingRequestResponse
+         ? (isFollowingRequestSent = true)
+         : (isFollowingRequestSent = false);
+   }
 
    return (
       <main className="flex flex-col items-center gap-5">
@@ -85,7 +137,7 @@ export default async function FriendLayout({
                               src={
                                  user?.profilePicture
                                     ? user?.profilePicture
-                                    : `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${user?.email}`
+                                    : `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${user?.username}`
                               }
                            />
                         </Avatar>
@@ -105,8 +157,50 @@ export default async function FriendLayout({
                         </div>
                      </div>
 
-                     {/* Menu Buttons Screen */}
-                     <div className=" mt-2 items-center gap-2 hidden md:flex ">
+                     {/* Menu Buttons Screen / Affichage seulement si connecté */}
+                     {currentUser && (
+                        <div className=" mt-2 items-center gap-2 hidden md:flex ">
+                           <Link
+                              href=""
+                              className={cn(
+                                 buttonVariants(),
+                                 "flex gap-1 font-semibold"
+                              )}
+                              title="Annonces utilisateur"
+                           >
+                              <Eye size={15} />
+                              Annonces
+                           </Link>
+
+                           <Button
+                              variant="secondary"
+                              className="flex items-center gap-1"
+                              title="Envoyer un message"
+                           >
+                              <Image
+                                 src={Message}
+                                 alt="Envoyer un message"
+                                 width={20}
+                                 height={20}
+                                 className="w-6 h-6 mt-1"
+                              />
+                              Contacter
+                           </Button>
+
+                           <BlockAndFollowInteraction
+                              currentUserId={currentUser.id}
+                              userId={user.id}
+                              isUserBlocked={isUserBlocked}
+                              isFollowing={isFollowing}
+                              isFollowingRequestSent={isFollowingRequestSent}
+                           />
+                        </div>
+                     )}
+                  </div>
+
+                  {/* Menu Buttons Mobile / Affichage seulement si connecté */}
+                  {currentUser && (
+                     <div className="items-center flex justify-between mx-2 md:hidden pb-5">
                         <Link
                            href=""
                            className={cn(
@@ -118,53 +212,41 @@ export default async function FriendLayout({
                            <Eye size={15} />
                            Annonces
                         </Link>
-                        <Button
-                           variant="secondary"
-                           className="flex items-center gap-1"
-                        >
-                           <UserPlusIcon size={15} />
-                           S'abonner
-                        </Button>
-                        <Button
-                           variant="secondary"
-                           className="flex items-center gap-1"
-                        >
-                           <MessageSquareTextIcon size={15} />
-                           Contacter
-                        </Button>
+                        <div className="flex items-center gap-2">
+                           <Button
+                              variant="secondary"
+                              title="Envoyer un message"
+                           >
+                              <Image
+                                 src={Message}
+                                 alt="Envoyer un message"
+                                 width={20}
+                                 height={20}
+                                 className="w-6 h-6"
+                              />
+                           </Button>
+                           <Button
+                              variant="secondary"
+                              className="flex items-center gap-1"
+                           >
+                              <UserPlusIcon size={20} />
+                              S'abonner
+                           </Button>
+                           <Button
+                              variant="secondary"
+                              // title="Bloquer cet utilisateur"
+                           >
+                              <Image
+                                 src={Block}
+                                 alt="Icône de blocage"
+                                 width={20}
+                                 height={20}
+                                 className="w-6 h-6"
+                              />
+                           </Button>
+                        </div>
                      </div>
-                  </div>
-
-                  {/* Menu Buttons Mobile */}
-                  <div className="items-center flex justify-between mx-2 md:hidden pb-5">
-                     <Link
-                        href=""
-                        className={cn(
-                           buttonVariants(),
-                           "flex gap-1 font-semibold"
-                        )}
-                        title="Annonces utilisateur"
-                     >
-                        <Eye size={15} />
-                        Annonces
-                     </Link>
-                     <div className="flex items-center gap-2">
-                        <Button
-                           variant="secondary"
-                           className="flex items-center gap-1"
-                        >
-                           <UserPlusIcon size={20} />
-                           S'abonner
-                        </Button>
-                        <Button
-                           variant="secondary"
-                           className="flex items-center gap-1"
-                        >
-                           <MessageSquareTextIcon size={20} />
-                           Contacter
-                        </Button>
-                     </div>
-                  </div>
+                  )}
 
                   {/* Tabs/Onglets */}
                   <div className="md:mx-10">

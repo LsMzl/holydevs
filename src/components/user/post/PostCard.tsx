@@ -57,6 +57,7 @@ export default function PostCard({ post }: PostTypes) {
             </div>
             <EllipsisIcon />
          </div>
+         <Separator className=""/>
          {/* Content */}
          <div className=" flex flex-col gap-4">
             {post.image && (

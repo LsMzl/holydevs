@@ -1,7 +1,5 @@
 "use client";
 import { Bell, Home, LayoutGrid, Pen, Plus, Search, Users } from "lucide-react";
-import Logo from "../../../public/logo/logo.png";
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../shadcn/button";
@@ -21,7 +19,7 @@ export const BottomNav = ({
    username,
 }: UserMenuProps) => {
    return (
-      <nav className="flex items-center justify-between py-1 fixed w-full bottom-0 left-0 z-50 bg-foreground/5 px-2 lg:hidden">
+      <nav className="flex items-center justify-between py-1 fixed w-full bottom-0 left-0 z-50 bg-card px-2 lg:hidden border-t">
          <div className="flex items-center gap-2">
             {/* Search Bar */}
             <Popover>

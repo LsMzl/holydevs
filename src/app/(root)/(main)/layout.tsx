@@ -23,7 +23,7 @@ export default async function MainLayout({
             lastname={user?.lastname || null}
             username={user?.username || null}
          />
-         <div className="h-[56px]"/>
+         <div className="hidden lg:block h-[56px]"/>
          <main>{children}</main>
          <BottomNav
             userId={userId}
