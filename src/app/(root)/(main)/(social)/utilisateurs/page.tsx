@@ -41,7 +41,7 @@ export default async function AllUsers() {
    return (
       <section className="bg-card rounded-lg p-2 shadow">
          <h1 className="text-2xl font-semibold mb-5">Rechercher des membres</h1>
-         <div className=" grid grid-cols-3 lg:grid-cols-5 gap-5">
+         <div className=" grid grid-cols-3 lg:grid-cols-4 gap-5">
             {allUsers.length > 1 &&
                allUsers.map((user) => (
                   <div
@@ -60,6 +60,7 @@ export default async function AllUsers() {
                            fill
                            className="absolute top-0 left-0 object-cover rounded-lg rounded-b-none border-b-cyan-400 border-b-4"
                            sizes="100%"
+                           priority
                         />
                      </div>
                      <div className="p-2">

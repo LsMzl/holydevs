@@ -22,7 +22,7 @@ export const TopNav = ({
    username,
 }: UserMenuProps) => {
    return (
-      <nav className="hidden lg:flex items-center py-1 fixed w-full top-0 left-0 z-50 bg-card shadow">
+      <nav className="hidden lg:flex items-center py-1 fixed w-full top-0 left-0 z-50 bg-card/80 shadow">
          {/* left */}
          <div className="w-[20%] flex items-center justify-center">
             <Link
@@ -73,13 +73,13 @@ export const TopNav = ({
             </div>
             {/* SearchBar */}
             <div className="flex items-center flex-1">
-               <label htmlFor="searchBar" />
-               <Input
-                  // className="hidden sm:block md:w-[300px] md:absolute md:left-[50%] md:translate-x-[-50%] 2xl:w-[500px]"
-                  placeholder="Recherchez une annonce, ville, catégorie..."
-                  name="searchBar"
-                  id="searchBar"
-               />
+               <label htmlFor="searchBar">
+                  <Input
+                     placeholder="Recherchez une annonce, ville, catégorie..."
+                     name="searchBar"
+                     id="searchBar"
+                  />
+               </label>
             </div>
          </div>
 

@@ -8,26 +8,26 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
       <aside className="hidden w-[25%] md:flex flex-col gap-5 ">
          <div className="flex items-center justify-center text-center rounded m-auto bg-card w-full">
             <span className="w-28 hover:bg-border/70 py-2 border-r border-border">
-               {user.followers.length === 0 && (
+               {user.followings.length === 0 && (
                   <>
                      <p className="font-semibold leading-5">0</p>
-                     <p className="text-sm">Relation</p>
+                     <p className="text-sm">Follower</p>
                   </>
                )}
-               {user.followers.length === 1 && (
+               {user.followings.length === 1 && (
                   <>
                      <p className="font-semibold leading-5">
-                        {user?.followers.length}
+                        {user?.followings.length}
                      </p>
-                     <p className="text-sm">Relation</p>
+                     <p className="text-sm">Follower</p>
                   </>
                )}
-               {user.followers.length > 1 && (
+               {user.followings.length > 1 && (
                   <>
                      <p className="font-semibold leading-5">
-                        {user.followers.length}
+                        {user.followings.length}
                      </p>
-                     <p className="text-sm">Relations</p>
+                     <p className="text-sm">Followers</p>
                   </>
                )}
             </span>

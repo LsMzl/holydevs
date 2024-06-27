@@ -35,7 +35,11 @@ export default async function MyProfile() {
                id: true,
             },
          },
-         followings: true,
+         followings: {
+            select: {
+               id: true,
+            },
+         },
       },
    });
    if (!user) return <h1>Vous n'êtes pas connecté</h1>;

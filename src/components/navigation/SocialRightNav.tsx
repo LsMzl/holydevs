@@ -1,66 +1,163 @@
+"use client";
+// React / Next
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import Friends from "../../../public/icon/friends.png";
-import { Button } from "../shadcn/button";
+import React, { useOptimistic, useState } from "react";
+
+// Types
 import { SocialRightNavTypes } from "@/types/user/navigation";
+
+// UI Components
+import { Button } from "../shadcn/button";
+
+// Images
+import Accept from "../../../public/icon/check.png";
+import Refuse from "../../../public/icon/cancel.png";
 
 // Libraries
 import { v4 as uuidv4 } from "uuid";
 
-export const SocialRightNav = ({ lastUsers }: SocialRightNavTypes) => {
+// API
+import {
+   acceptFollowRequest,
+   declineFollowRequest,
+} from "@/app/api/social/blockAndFollow";
+
+export const SocialRightNav = ({
+   lastUsers,
+   requests,
+}: SocialRightNavTypes) => {
+   const [requestState, setRequestState] = useState(requests);
+
+   const accept = async (requestId: string, userId: string) => {
+      removeOptimisticRequest(requestId);
+      try {
+         await acceptFollowRequest(userId);
+         setRequestState((prev) => prev.filter((req) => req.id !== requestId));
+      } catch (error) {
+         console.error(error);
+      }
+   };
+
+   const decline = async (requestId: string, userId: string) => {
+      removeOptimisticRequest(requestId);
+      try {
+         await declineFollowRequest(userId);
+         setRequestState((prev) => prev.filter((req) => req.id !== requestId));
+      } catch (error) {
+         console.error(error);
+      }
+   };
+
+   const [optimisticRequest, removeOptimisticRequest] = useOptimistic(
+      requestState,
+      (state, value: string) => state.filter((req) => req.id !== value)
+   );
+
    return (
       <aside className="space-y-5">
-         {/* Top */}
+         {/* Friend Requests */}
          <div className="bg-card rounded-lg shadow flex flex-col gap-3 p-5">
             {/* Title */}
             <div className="flex items-center justify-between">
                <h3 className="font-semibold text-foreground/70">
                   Demandes d'amis
                </h3>
-               <Link
-                  href=""
-                  title="Voir les demandes d'amis en attente"
-                  className="font-medium text-sm text-cyan-500"
-               >
-                  Voir tout
-               </Link>
+               {requests.length > 0 && (
+                  <Link
+                     href=""
+                     title="Voir les demandes d'amis en attente"
+                     className="font-medium text-sm text-cyan-500"
+                  >
+                     Voir tout
+                  </Link>
+               )}
             </div>
             {/* Content */}
             <div className="flex flex-col items-start">
-               <span className="flex justify-between items-center gap-2 w-full">
-                  {/* User Infos */}
-                  <Link
-                     href={`/utilisateur/j_babouche`}
-                     title="Visiter le profil de jason babouche"
-                  >
-                     <div className="flex items-center gap-2">
-                        {/* Avatar */}
-                        <div className="relative h-10 w-10 rounded-full shadow">
-                           <Image
-                              src={Friends}
-                              alt={`Photo de profil de Jason babouche`}
-                              fill
-                              sizes="100%"
-                              className="absolute top-0 left-0 rounded-full object-cover"
-                           />
+               {requests.length > 0 ? (
+                  optimisticRequest.map((request) => (
+                     <span
+                        className="flex justify-between items-center gap-2 w-full"
+                        key={uuidv4()}
+                     >
+                        {/* User Infos */}
+                        <Link
+                           href={`/utilisateur/${request.sender.username}`}
+                           title={`Visiter le profil de ${request.sender.firstname} ${request.sender.lastname}`}
+                        >
+                           <div className="flex items-center gap-2">
+                              {/* Avatar */}
+                              <div className="relative h-10 w-10 rounded-full shadow">
+                                 <Image
+                                    src={
+                                       request.sender.profilePicture
+                                          ? request.sender.profilePicture
+                                          : `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${request.sender.username}`
+                                    }
+                                    alt={`Photo de profil de ${request.sender.firstname} ${request.sender.lastname}`}
+                                    fill
+                                    sizes="100%"
+                                    className="absolute top-0 left-0 rounded-full object-cover"
+                                 />
+                              </div>
+                              {/* Name */}
+                              <p className="font-medium text-sm">
+                                 {request.sender.firstname}{" "}
+                                 {request.sender.lastname}
+                              </p>
+                           </div>
+                        </Link>
+                        {/* Accept & Decline */}
+                        <div className="flex items-center mt-1">
+                           <form
+                              action={() =>
+                                 accept(request.id, request.sender.id)
+                              }
+                           >
+                              <button
+                                 title="Accepter l'invitation"
+                                 className="p-1 hover:bg-blue-500 rounded-full"
+                              >
+                                 <Image
+                                    src={Accept}
+                                    alt="Icône de validation de demande d'amis"
+                                    width={20}
+                                    height={20}
+                                    className="w-5 h-5 cursor-pointer"
+                                 />
+                              </button>
+                           </form>
+
+                           <form
+                              action={() =>
+                                 decline(request.id, request.sender.id)
+                              }
+                           >
+                              <button
+                                 title="Refuser l'invitation"
+                                 className="p-1 hover:bg-blue-500 rounded-full"
+                              >
+                                 <Image
+                                    src={Refuse}
+                                    alt="Icône de refus de demande d'amis"
+                                    width={20}
+                                    height={20}
+                                    className="w-5 h-5 cursor-pointer"
+                                 />
+                              </button>
+                           </form>
                         </div>
-                        {/* Name */}
-                        <p className="font-medium text-sm">Jason babouche</p>
-                     </div>
-                  </Link>
-                  {/* Icons */}
-                  <div className="flex items-center gap-2">
-                     <p>V</p>
-                     <p>X</p>
-                  </div>
-               </span>
+                     </span>
+                  ))
+               ) : (
+                  <p className="text-xs">Aucun demande d'amis pour le moment</p>
+               )}
             </div>
          </div>
          {/* Middle */}
          <div className="bg-card rounded-lg shadow flex flex-col gap-3 p-5">
             {/* Title */}
-
             <h3 className="font-semibold text-foreground/70">
                Nouveaux membres
             </h3>

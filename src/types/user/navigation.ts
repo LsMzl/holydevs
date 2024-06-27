@@ -15,6 +15,9 @@ export interface PublicationsSideNavTypes {
       followers: {
          id: string;
       }[];
+      followings: {
+         id: string;
+      }[];
    };
 }
 
@@ -30,8 +33,6 @@ export interface SocialLeftNavTypes {
    };
 }
 
-
-
 export interface SocialRightNavTypes {
    lastUsers: {
       id: string;
@@ -39,5 +40,15 @@ export interface SocialRightNavTypes {
       lastname: string | null;
       username: string | null;
       profilePicture: string | null;
+   }[];
+   requests: {
+      id: string;
+      sender: {
+         id: string;
+         firstname: string | null;
+         lastname: string | null;
+         username: string | null;
+         profilePicture: string | null;
+      };
    }[];
 }

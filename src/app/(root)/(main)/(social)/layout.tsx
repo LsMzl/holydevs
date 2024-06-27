@@ -9,13 +9,12 @@ import { SocialLeftNav } from "@/components/navigation/SocialLeftNav";
 import { SocialRightNav } from "@/components/navigation/SocialRightNav";
 import { db } from "@/lib/prisma";
 
-export default async function MainLayout({
+export default async function SocialLayout({
    children,
 }: Readonly<{ children: React.ReactNode }>) {
    // Utilisateur connecté
    const { userId } = auth();
    if (!userId) return null;
-   // Informations utilisateur
    const user = await db.user.findUnique({
       where: {
          clerkId: userId,
@@ -48,6 +47,25 @@ export default async function MainLayout({
    });
    if (!lastUsers) return <p>Aucun nouveau membres pour le moment</p>;
 
+   // Friend Requests
+   const requests = await db.friendRequest.findMany({
+      where: {
+         receiverId: user.id,
+      },
+      take: 5,
+      include: {
+         sender: {
+            select: {
+               id: true,
+               firstname: true,
+               lastname: true,
+               username: true,
+               profilePicture: true,
+            },
+         },
+      },
+   });
+
    return (
       <main className="flex items-start gap-10 2xl:mx-52 mt-5">
          <div className="max-lg:hidden w-[20%] static top-0 left-0 self-start">
@@ -55,7 +73,7 @@ export default async function MainLayout({
          </div>
          <div className="max-lg:w-full max-lg:mx-2 w-[60%]">{children}</div>
          <div className="max-lg:hidden w-[20%] static top-0 right-0">
-            <SocialRightNav lastUsers={lastUsers} />
+            <SocialRightNav lastUsers={lastUsers} requests={requests} />
          </div>
       </main>
    );

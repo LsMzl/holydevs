@@ -42,7 +42,7 @@ export default async function FriendLayout({
    params,
    children,
 }: ProfilPageProps) {
-   // Utilisateur du profil
+   /** Utilisateur du profil */
    const user = await db.user.findUnique({
       where: {
          username: params.username,
@@ -66,7 +66,7 @@ export default async function FriendLayout({
    if (!currentUser) return null;
 
    // Blocage utilisateur
-   let isUserBlocked: boolean = true;
+   let isUserBlocked: boolean = false;
    // Amis ?
    let isFollowing: boolean = false;
    // Demande d'amis envoyée ?
