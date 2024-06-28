@@ -189,15 +189,11 @@ export const SocialRightNav = ({
                                  />
                               </div>
                               {/* Name */}
-                              <p className="font-medium text-sm">
+                              <p className="font-medium text-md">
                                  {user.firstname} {user.lastname}
                               </p>
                            </div>
                         </Link>
-
-                        <Button size="sm" className="w-[50px]">
-                           Voir
-                        </Button>
                      </span>
                   ))
                ) : (

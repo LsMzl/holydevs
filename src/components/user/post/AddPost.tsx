@@ -25,10 +25,7 @@ import {
 import { Textarea } from "@/components/shadcn/textarea";
 import {
    Check,
-   ImageIcon,
-   ImagePlusIcon,
    LoaderCircleIcon,
-   SmilePlusIcon,
 } from "lucide-react";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
@@ -57,6 +54,7 @@ export const AddPost = ({ currentUser }: PublicationsPageType) => {
    const [isPickerVisible, setIsPickerVisible] = useState(false);
    const router = useRouter();
    const [files, setFiles] = useState<File[]>([]);
+
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
@@ -90,7 +88,6 @@ export const AddPost = ({ currentUser }: PublicationsPageType) => {
          fileReader.readAsDataURL(file);
 
          setTimeout(() => {
-            console.log("localStorage vidé");
             localStorage.clear();
             form.reset();
          }, 120000);

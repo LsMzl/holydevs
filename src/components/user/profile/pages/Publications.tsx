@@ -26,7 +26,14 @@ export const Publications = async () => {
       where: {
          authorId: user.id,
       },
-      include: {
+      orderBy: {
+         createdAt: "desc",
+      },
+      select: {
+         id: true,
+         content: true,
+         image: true,
+         createdAt: true,
          author: {
             select: {
                id: true,
@@ -38,17 +45,24 @@ export const Publications = async () => {
          },
          likes: {
             select: {
-               id: true,
+               userId: true,
             },
          },
          comments: {
             select: {
                id: true,
+               content: true,
+               author: {
+                  select: {
+                     id: true,
+                     firstname: true,
+                     lastname: true,
+                     username: true,
+                     profilePicture: true,
+                  }
+               }
             },
          },
-      },
-      orderBy: {
-         createdAt: "desc",
       },
    });
 

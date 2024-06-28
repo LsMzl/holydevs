@@ -334,8 +334,8 @@ model Like {
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?
   //! Un like n'a qu'un seul auteur
-  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  String
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
 }
 
 //* TodoList de préparation réservation

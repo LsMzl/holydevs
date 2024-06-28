@@ -25,9 +25,9 @@ export default async function AllUsers() {
                id: true,
             },
          },
-         followers: {
+         followings: {
             select: {
-               follower: {
+               following: {
                   select: {
                      id: true,
                   },
@@ -41,7 +41,7 @@ export default async function AllUsers() {
    return (
       <section className="bg-card rounded-lg p-2 shadow">
          <h1 className="text-2xl font-semibold mb-5">Rechercher des membres</h1>
-         <div className=" grid grid-cols-3 lg:grid-cols-4 gap-5">
+         <div className=" grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {allUsers.length > 1 &&
                allUsers.map((user) => (
                   <div
@@ -66,9 +66,16 @@ export default async function AllUsers() {
                      <div className="p-2">
                         {/* Infos */}
                         <div className="my-1">
-                           <p className="font-semibold text-xl">
-                              {user.firstname} {user.lastname}
-                           </p>
+                           {user.firstname && user.lastname ? (
+                              <p className="font-semibold text-lg md:text-xl">
+                                 {user.firstname} {user.lastname}
+                              </p>
+                           ) : (
+                              <p className="font-semibold text-xl">
+                                 {user.username}
+                              </p>
+                           )}
+
                            <div className="flex flex-col gap-1 p-2">
                               {/* Annonces */}
                               <div className="flex items-center gap-3">
@@ -99,20 +106,14 @@ export default async function AllUsers() {
                                     className="h-5 w-5"
                                  />
                                  <p className="font-medium text-sm">
-                                    {user.followers.length <= 1 ? (
-                                       <>{user.followers.length} abonné</>
+                                    {user.followings.length <= 1 ? (
+                                       <>{user.followings.length} abonné</>
                                     ) : (
-                                       <>{user.followers.length} abonnés</>
+                                       <>{user.followings.length} abonnés</>
                                     )}
                                  </p>
                               </div>
                            </div>
-                        </div>
-
-                        {/* Buttons */}
-                        <div className="flex items-center justify-center gap-2">
-                           <Button>Ajouter</Button>
-                           <Button>Message</Button>
                         </div>
                      </div>
                   </div>

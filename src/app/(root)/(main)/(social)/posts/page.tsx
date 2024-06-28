@@ -50,13 +50,24 @@ export default async function Post() {
          },
          likes: {
             select: {
-               id: true,
+               userId: true,
             },
          },
          comments: {
             select: {
                id: true,
+               content: true,
+               author: {
+                  select: {
+                     id: true,
+                     firstname: true,
+                     lastname: true,
+                     username: true,
+                     profilePicture: true,
+                  }
+               }
             },
+            
          },
       },
    });

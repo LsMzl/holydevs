@@ -67,7 +67,7 @@ export default async function SocialLayout({
    });
 
    return (
-      <main className="flex items-start gap-10 2xl:mx-52 mt-5">
+      <main className="flex items-start gap-10 lg:mx-5 2xl:mx-52 mt-5">
          <div className="max-lg:hidden w-[20%] static top-0 left-0 self-start">
             <SocialLeftNav user={user} />
          </div>
