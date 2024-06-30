@@ -20,10 +20,10 @@ import { Switch } from "@/components/shadcn/switch";
 import { v4 as uuidv4 } from "uuid";
 import { Checkbox } from "@/components/shadcn/checkbox";
 
-import House from "@/public/img/house.jpg";
-import Glasses from "@/public/img/lunettes.jpg";
-import Palmier from "@/public/img/palmier.jpg";
-import Van from "@/public/img/van.jpg";
+import House from "../../../../public/img/house.jpg";
+import Glasses from "../../../../public/img/lunettes.jpg";
+import Palmier from "../../../../public/img/palmier.jpg";
+import Van from "../../../../public/img/van.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {

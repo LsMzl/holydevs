@@ -2,8 +2,7 @@ import { TopNav } from "@/components/navigation/TopNav";
 import { auth } from "@clerk/nextjs/server";
 import { getUserByClerkId } from "@/actions/getUserByClerkId";
 import { BottomNav } from "@/components/navigation/BottomNav";
-import { Footer } from "@/components/navigation/footer";
-
+import { Footer } from "@/components/navigation/Footer";
 
 export default async function MainLayout({
    children,
@@ -26,7 +25,7 @@ export default async function MainLayout({
             username={user?.username || null}
          />
          <div className="hidden lg:block h-[56px]" />
-         {/* <main>{children}</main> */}
+         <main>{children}</main>
          <Footer />
          <div className="lg:hidden h-[56px]" />
          <BottomNav

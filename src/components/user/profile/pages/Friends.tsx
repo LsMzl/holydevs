@@ -9,8 +9,8 @@ import { v4 as uuidv4 } from "uuid";
 
 export const Friends = ({ followers, followings }: FriendsPageType) => {
    return (
-      <div className="w-full">
-         <div>Suggestions</div>
+      <div className="w-full space-y-3">
+         <div className="bg-card w-full rounded-lg py-5">Suggestions</div>
          {/* Friends List */}
          <div className="bg-card rounded-lg py-5 px-3">
             <h1 className="text-xl font-semibold mb-3">Amis</h1>

@@ -14,9 +14,23 @@ export interface PublicationsSideNavTypes {
       }[];
       followers: {
          id: string;
+         follower: {
+            id: string;
+            firstname: string | null;
+            lastname: string | null;
+            username: string | null;
+            profilePicture: string | null;
+         };
       }[];
       followings: {
          id: string;
+         following: {
+            id: string;
+            firstname: string | null;
+            lastname: string | null;
+            username: string | null;
+            profilePicture: string | null;
+         }
       }[];
    };
 }

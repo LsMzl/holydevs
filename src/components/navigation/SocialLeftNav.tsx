@@ -99,7 +99,7 @@ export const SocialLeftNav = ({ user }: SocialLeftNavTypes) => {
             {/* Messagerie */}
             <Link
                className="flex items-center gap-2 hover:bg-foreground/5 p-1 rounded-lg"
-               href=""
+               href={`/${user.username}/messages`}
             >
                <Image
                   src={Message}
@@ -112,7 +112,7 @@ export const SocialLeftNav = ({ user }: SocialLeftNavTypes) => {
             {/* Group */}
             <Link
                className="flex items-center gap-2 hover:bg-foreground/5 p-1 rounded-lg"
-               href=""
+               href={`/${user.username}/groupes`}
             >
                <Image
                   src={Group}

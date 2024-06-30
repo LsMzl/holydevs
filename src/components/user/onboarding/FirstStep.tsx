@@ -1,11 +1,26 @@
 "use client";
-import React, { useState } from "react";
+
+// React / Next
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Libraries
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { ICity, IState } from "country-state-city";
+
+// Types
 import { UserOnboardingTypes } from "@/types/user/onboarding";
+
+// Hooks
+import useLocation from "@/app/hooks/useLocations";
+
+// Icons
+import { LoaderCircle } from "lucide-react";
+
+// UI Components
 import {
    Form,
    FormControl,
@@ -15,11 +30,15 @@ import {
    FormMessage,
 } from "@/components/shadcn/form";
 import { Input } from "@/components/shadcn/input";
-import axios from "axios";
 import { toast } from "@/components/shadcn/use-toast";
 import { Button } from "@/components/shadcn/button";
-import { LoaderCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
+import {
+   Select,
+   SelectContent,
+   SelectItem,
+   SelectTrigger,
+   SelectValue,
+} from "@/components/shadcn/select";
 
 const formSchema = z.object({
    firstname: z.string().min(2, {
@@ -37,12 +56,34 @@ const formSchema = z.object({
    phone: z.string().min(10, {
       message: "Votre numéro de téléphone n'est pas valide",
    }),
+   country: z.string().min(1, {
+      message: "Vous devez sélectionner un pays",
+   }),
+   state: z.string().min(1, {
+      message: "Vous devez sélectionner un état ou département",
+   }),
+   city: z.string().min(1, {
+      message: "La ville est requise",
+   }),
+   address: z.string().min(1, {
+      message: "L'adresse est requise",
+   }),
 });
 
 export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
+   //
+
+   // States
    const [isLoading, setIsLoading] = useState<boolean>(false);
+   const [states, setStates] = useState<IState[]>([]);
+   const [cities, setCities] = useState<ICity[]>([]);
+
+   const { getAllCountries, getCountryStates, getStateCities } = useLocation();
+   const countries = getAllCountries();
+
    const router = useRouter();
 
+   // Form values
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
@@ -51,8 +92,34 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
          username: user.username || "",
          email: user.email || "",
          phone: user.phone || "",
+         country: "",
+         state: "",
+         city: "",
+         address: "",
       },
    });
+
+   // Use Effects
+   /** Récupération des états d'un pays lors d'un changement dans le formulaire */
+   useEffect(() => {
+      const selectedCountry = form.watch("country");
+      // Récupération des états du pays selectionné
+      const countryStates = getCountryStates(selectedCountry);
+      if (countryStates) {
+         setStates(countryStates);
+      }
+   }, [form.watch("country")]);
+
+   /** Récupération des états d'un pays lors d'un changement dans le formulaire */
+   useEffect(() => {
+      const selectedCountry = form.watch("country");
+      const selectedState = form.watch("state");
+      // Récupération des villes de l'état selectionné
+      const stateCities = getStateCities(selectedCountry, selectedState);
+      if (stateCities) {
+         setCities(stateCities);
+      }
+   }, [form.watch("country"), form.watch("state")]);
 
    function onSubmit(values: z.infer<typeof formSchema>) {
       console.log("onSubmit", values);
@@ -126,6 +193,7 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
                               </FormItem>
                            )}
                         />
+                        {/* Nom de famille */}
                         <FormField
                            control={form.control}
                            name="firstname"
@@ -149,6 +217,7 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
                            )}
                         />
                      </div>
+                     {/* Pseudo */}
                      <FormField
                         control={form.control}
                         name="username"
@@ -217,6 +286,148 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
                            )}
                         />
                      </div>
+
+                     {/* Localisation */}
+                     <div className="grid grid-cols-3 gap-5">
+                        <FormField
+                           control={form.control}
+                           name="country"
+                           render={({ field }) => (
+                              <FormItem>
+                                 <FormLabel htmlFor="country">
+                                    Pays <span className="text-red-500">*</span>
+                                 </FormLabel>
+
+                                 <FormControl>
+                                    <Select
+                                       disabled={isLoading}
+                                       onValueChange={field.onChange}
+                                       value={field.value}
+                                       defaultValue={field.value}
+                                       name="country"
+                                       
+                                    >
+                                       <SelectTrigger
+                                          className="bg-background"
+                                          name="country"
+                                          id="country"
+                                          
+                                       >
+                                          <SelectValue
+                                             placeholder="Pays"
+                                             defaultValue={field.value}
+                                             
+                                          />
+                                       </SelectTrigger>
+                                       <SelectContent>
+                                          {countries.map((country) => (
+                                             <SelectItem
+                                                key={country.isoCode}
+                                                value={country.isoCode}
+                                                
+                                             >
+                                                {country.name}
+                                             </SelectItem>
+                                          ))}
+                                       </SelectContent>
+                                    </Select>
+                                 </FormControl>
+                                 <FormMessage />
+                              </FormItem>
+                           )}
+                        />
+                        <FormField
+                           control={form.control}
+                           name="state"
+                           render={({ field }) => (
+                              <FormItem>
+                                 <FormLabel htmlFor="state">
+                                    Région{" "}
+                                    <span className="text-red-500">*</span>
+                                 </FormLabel>
+
+                                 <FormControl>
+                                    <Select
+                                       disabled={isLoading || states.length < 1}
+                                       onValueChange={field.onChange}
+                                       value={field.value}
+                                       defaultValue={field.value}
+                                       name="state"
+                                    >
+                                       <SelectTrigger
+                                          className="bg-background"
+                                          name="state"
+                                          id="state"
+                                       >
+                                          <SelectValue
+                                             placeholder="Région"
+                                             defaultValue={field.value}
+                                          />
+                                       </SelectTrigger>
+                                       <SelectContent>
+                                          {states.map((state) => (
+                                             <SelectItem
+                                                key={state.isoCode}
+                                                value={state.isoCode}
+                                             >
+                                                {state.isoCode} - {state.name}
+                                             </SelectItem>
+                                          ))}
+                                       </SelectContent>
+                                    </Select>
+                                 </FormControl>
+                                 <FormMessage />
+                              </FormItem>
+                           )}
+                        />
+
+                        <FormField
+                           control={form.control}
+                           name="city"
+                           render={({ field }) => (
+                              <FormItem>
+                                 <FormLabel htmlFor="city">
+                                    Ville{" "}
+                                    <span className="text-red-500">*</span>
+                                 </FormLabel>
+
+                                 <FormControl>
+                                    <Select
+                                       disabled={isLoading || cities.length < 1}
+                                       onValueChange={field.onChange}
+                                       value={field.value}
+                                       defaultValue={field.value}
+                                       name="city"
+                                       
+                                    >
+                                       <SelectTrigger
+                                          className="bg-background"
+                                          name="city"
+                                          id="city"
+                                       >
+                                          <SelectValue
+                                             placeholder="Ville"
+                                             defaultValue={field.value}
+                                          />
+                                       </SelectTrigger>
+                                       <SelectContent>
+                                          {cities.map((city) => (
+                                             <SelectItem
+                                                key={city.name}
+                                                value={city.name}
+                                             >
+                                                {city.name}
+                                             </SelectItem>
+                                          ))}
+                                       </SelectContent>
+                                    </Select>
+                                 </FormControl>
+                                 <FormMessage />
+                              </FormItem>
+                           )}
+                        />
+                     </div>
+
                      <Button
                         disabled={isLoading}
                         className="w-[150px] self-end"

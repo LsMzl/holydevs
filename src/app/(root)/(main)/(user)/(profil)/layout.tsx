@@ -42,7 +42,7 @@ export default async function MainLayout({
       <main className="flex flex-col items-center gap-5">
          {/* Haut de la page */}
          <div className="bg-gradient-to-b from-gray-500 to-background w-full border-b pb-5">
-            <div className="w-full max-w-[1400px] mx-auto">
+            <div className="w-full max-w-[1200px] mx-auto">
                {/* Cover picture & informations */}
                <section>
                   {/* Cover picture */}
@@ -199,7 +199,7 @@ export default async function MainLayout({
             </div>
          </div>
          {/* Bas de la page */}
-         <div className="max-w-[1400px] w-full">{children}</div>
+         <div className="max-w-[1200px] w-full">{children}</div>
       </main>
    );
 }

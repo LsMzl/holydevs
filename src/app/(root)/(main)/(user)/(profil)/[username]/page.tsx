@@ -15,10 +15,14 @@ export default async function MyProfile() {
    const { userId } = auth();
    if (!userId) return null;
    // Informations utilisateur
-   const user = await db.user.findUnique({
+   const user = await db.user.findFirst({
       where: {
          clerkId: userId,
       },
+      // select:{
+      //    id: true,
+      //    clerkId: true,
+      // },
       include: {
          houses: {
             select: {
