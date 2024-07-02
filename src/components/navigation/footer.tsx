@@ -94,17 +94,22 @@ export const Footer = () => {
                   </p>
                   <form className="space-y-5">
                      <div className="flex items-center">
+                        <label className="hidden" htmlFor="newsletter" />
                         <input
                            className="border bg-transparent px-3 py-2 w-full focus:outline-none"
                            type="email"
                            placeholder="Votre email"
+                           name="newsletter"
+                           id="newsletter"
                         />
                         <button className="border border-l-0 py-2 px-3">
                            Valider
                         </button>
                      </div>
                      <div className="flex items-start gap-2">
-                        <Checkbox />
+                        <label htmlFor="rgpd" />
+                        <Checkbox name="rgpd" id="rgpd" />
+
                         <p className="text-xs">
                            En cochant cette case, vous acceptez que vos données
                            soient conservés.

@@ -17,109 +17,138 @@ import { MainSideNaveUser } from "@/types/MainSideNav";
 
 // Data
 
+// Images
+import House from "../../../public/icon/house.png";
+import Booking from "../../../public/icon/booking.png";
+import Fav from "../../../public/icon/favourite.png";
+
 import { Separator } from "../shadcn/separator";
 import { Avatar, AvatarImage } from "../shadcn/avatar";
 import { buttonVariants } from "../shadcn/button";
 import { sideNavLinks } from "@/data/navigationData";
+import Image from "next/image";
 
-const MainSideNav = ({
-   userAvatar, 
-   userFirstName,
-   userLastName,
-   username,
-   userId,
-}: MainSideNaveUser) => {
+import Banner from "../../../public/img/banniere.jpg";
+import MiniMap from "../home/MiniMap";
+import useLocation from "@/app/hooks/useLocations";
+
+const MainSideNav = ({ user }: MainSideNaveUser) => {
    const pathname = usePathname();
 
-   // const { user } = useUser();
+   const { getStateCities } = useLocation();
+   const cities = getStateCities(user?.country ?? "", user?.state ?? "");
+   const city = cities?.filter((city) => city.name === user?.city);
+   if (!city) return <p>Position non trouvée</p>;
 
    return (
       <aside
          className={cn(
-            "hidden lg:block py-2 static top-0 left-0 h-screen pt-16 ml-2"
+            "hidden lg:block static top-0 left-0 ml-2 space-y-5"
          )}
       >
          {/* User infos */}
-         <section className="mb-5">
-            <div className="text-center mb-5">
-               <Avatar className="hidden sm:block ml-1 bg-gray-200 h-28 w-28 relative left-[50%] -translate-x-[50%] drop-shadow-lg mb-2">
-                  <Link href={`/profil/${userId}`} title="Profil utilisateur">
-                     <AvatarImage
-                        className="object-cover"
+         <Link href={`/${user?.username}`} title="Visiter mon profil">
+            <div className="bg-card rounded-lg shadow flex flex-col items-center pb-5">
+               {/* Cover picture */}
+               <div className="w-full h-28 bg-card rounded-t-lg relative">
+                  <Image
+                     src={user?.coverPicture ? user?.coverPicture : Banner}
+                     alt={`Photo de profil de ${user?.firstname} ${user?.lastname}`}
+                     fill
+                     sizes="100%"
+                     className="absolute top-0 left-0 rounded-t-lg object-cover"
+                  />
+                  {/* Avatar */}
+                  <div className="relative top-[60%] left-[50%] translate-x-[-50%] h-20 w-20 rounded-full">
+                     <Image
                         src={
-                           userAvatar
-                              ? userAvatar
-                              : `https://api.dicebear.com/8.x/thumbs/svg?seed=${
-                                   Math.floor(Math.random() * 100) + 1
-                                }`
+                           user?.profilePicture
+                              ? user?.profilePicture
+                              : `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${user?.username}`
                         }
+                        alt={`Photo de profil de ${user?.firstname} ${user?.lastname}`}
+                        fill
+                        className="absolute rounded-full object-cover border-2 border-card"
                      />
-                  </Link>
-               </Avatar>
-               {userFirstName || userLastName ? (
-                  <>
-                     <p className="font-semibold capitalize">
-                        {userFirstName} {userLastName}
+                  </div>
+               </div>
+               {/* Name */}
+               <div className="text-center mt-10">
+                  {user?.firstname && user?.lastname ? (
+                     <p className="text-lg font-semibold capitalize">
+                        {user?.firstname} {user?.lastname}
                      </p>
-                     <p className="text-sm">{username}</p>
-                  </>
-               ) : (
-                  <>
-                     <p className="font-semibold capitalize">Visiteur</p>
-                     <p className="text-xs">
-                        Connectez-vous pour profiter de toutes les
-                        fonctionnalités
-                     </p>
-                  </>
-               )}
-            </div>
-            {/* Followers */}
-            <div className="shadow">
-               {/* <LeafletMap/> */}
-               {/* <MiniMap cityLatitude="48.400002" cityLongitude="-4.48333" /> */}
-            </div>
-         </section>
+                  ) : (
+                     <p className="text-lg font-medium">Utilisateur</p>
+                  )}
 
-         <section className="rounded p-3 bg-card/30 shadow  overflow-scroll">
+                  <p className="text-sm">@{user?.username}</p>
+               </div>
+            </div>
+         </Link>
+         {/* MiniMap */}
+         <div>
+            <MiniMap
+               cityLatitude={Number(city[0].latitude)}
+               cityLongitude={Number(city[0].longitude)}
+            />
+         </div>
+         <section className="rounded py-3 bg-card/30 shadow">
             {/* Links */}
             <div className="flex flex-col gap-1">
-               {sideNavLinks.map((link, index) => (
-                  <Link
-                     key={index}
-                     href={link.href}
-                     className={cn(
-                        buttonVariants({
-                           variant:
-                              link.href === pathname ? "default" : "ghost",
-                           size: "sm",
-                        }),
-                        link.variant === "default" &&
-                           "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                        "justify-start"
-                     )}
-                  >
-                     <link.icon className="mr-2 h-4 w-4" />
-                     {link.title}
-                     {link.title && (
-                        <span
-                           className={cn(
-                              "ml-auto",
-                              link.variant === "default" &&
-                                 "text-background dark:text-white"
-                           )}
-                        >
-                           {link.title}
-                        </span>
-                     )}
-                  </Link>
-               ))}
+               <Link
+                  href=""
+                  className={cn(
+                     buttonVariants({ variant: "ghost" }),
+                     "flex items-center gap-2 justify-start w-full"
+                  )}
+               >
+                  <Image
+                     src={House}
+                     alt="Logo du lien"
+                     width={16}
+                     height={16}
+                     className="w-4 h-4"
+                  />
+                  Mes annonces
+               </Link>
+               <Link
+                  href=""
+                  className={cn(
+                     buttonVariants({ variant: "ghost" }),
+                     "flex items-center gap-2 justify-start w-full"
+                  )}
+               >
+                  <Image
+                     src={Booking}
+                     alt="Logo du lien"
+                     width={16}
+                     height={16}
+                     className="w-4 h-4"
+                  />
+                  Mes réservations
+               </Link>
+               <Link
+                  href=""
+                  className={cn(
+                     buttonVariants({ variant: "ghost" }),
+                     "flex items-center gap-2 justify-start w-full"
+                  )}
+               >
+                  <Image
+                     src={Fav}
+                     alt="Logo du lien"
+                     width={16}
+                     height={16}
+                     className="w-4 h-4"
+                  />
+                  Mes favoris
+               </Link>
             </div>
-            {/* Filters */}
-            <Separator className="my-5" />
-            {/* <LocationFilter /> */}
+
             <Separator className="my-5" />
             {/* Friends */}
-            <div className="flex flex-col gap-1 font-medium">
+            <div className="flex flex-col gap-1 px-3 font-medium">
                <p className="text-sm font-medium mb-3">Discussions récentes</p>
                <div className="flex items-center gap-2">
                   <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">

@@ -17,7 +17,17 @@ import { Settings } from "lucide-react";
 
 import { Label } from "@/components/shadcn/label";
 // import UpdateInfosForm from "./UpdateInfosForm";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/shadcn/alert-dialog";
+import {
+   AlertDialog,
+   AlertDialogAction,
+   AlertDialogCancel,
+   AlertDialogContent,
+   AlertDialogDescription,
+   AlertDialogFooter,
+   AlertDialogHeader,
+   AlertDialogTitle,
+   AlertDialogTrigger,
+} from "@/components/shadcn/alert-dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/radio-group";
 import UpdateInfosForm from "./UpdateInfosForm";
 
@@ -30,7 +40,6 @@ interface SettingsMenuProps {
    address: string;
    email: string;
    phone: string;
-
 }
 
 const SettingsMenu = ({
@@ -42,7 +51,6 @@ const SettingsMenu = ({
    address,
    email,
    phone,
-
 }: SettingsMenuProps) => {
    return (
       <Sheet>
@@ -94,7 +102,6 @@ const SettingsMenu = ({
                      address={address}
                      email={email}
                      phone={phone}
-
                   />
                </div>
                {/* Suppression du compte */}

@@ -72,7 +72,7 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
                         <p className="text-sm">Avis</p>
                      </>
                   )}
-                  {user?.houses.length > 0 && (
+                  {user?.houses.length > 1 && (
                      <>
                         <p className="font-semibold leading-5">
                            {user?.opinions.length}
@@ -85,6 +85,7 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
          </div>
          <div className="rounded-lg shadow-sm bg-card w-full p-3 flex flex-col gap-3">
             {/* Biographie */}
+            <p className="text-lg font-semibold">Informations</p>
             <div>
                <p className="font-semibold mb-2">Biographie</p>
                {user?.biography ? (
@@ -118,38 +119,21 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
          {/* Connexions */}
          <div className="rounded-lg shadow-sm bg-card p-3">
             <div className="flex items-center justify-between mb-2">
-               <p className="font-semibold">Mes connexions</p>
+               <p className="font-semibold text-lg">Followers</p>
                <p className="text-sm text-cyan-500">Voir tout</p>
             </div>
             <div className="bg-background grid grid-cols-3 gap-3 justify-between">
-               <Image
-                  src={Avatar}
-                  alt="Photo de profil"
-                  width={70}
-                  height={70}
-                  className="rounded"
-               />
-               <Image
-                  src={Avatar}
-                  alt="Photo de profil"
-                  width={70}
-                  height={70}
-                  className="rounded"
-               />
-               <Image
-                  src={Avatar}
-                  alt="Photo de profil"
-                  width={70}
-                  height={70}
-                  className="rounded"
-               />
-               <Image
-                  src={Avatar}
-                  alt="Photo de profil"
-                  width={70}
-                  height={70}
-                  className="rounded"
-               />
+               {user.followings.map((follower) => (
+                  <Link href={follower.following.username} key={follower.id}>
+                     <Image
+                        src={follower.following.profilePicture ?? ""}
+                        alt="Photo de profil"
+                        width={70}
+                        height={70}
+                        className="rounded"
+                     />
+                  </Link>
+               ))}
             </div>
          </div>
 
@@ -158,62 +142,45 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
             {/* Biographie */}
             <div>
                <p className="font-semibold mb-2">Annonces</p>
-               {user?.houses ? (
-                  <div className="space-y-2">
-                     <Link
-                        href=""
-                        className="flex items-start bg-background rounded p-1 hover:bg-foreground/10 transition-colors gap-5"
-                        title="Voir l'annonce"
-                     >
-                        <Image
-                           src={Avatar}
-                           alt="Photo de profil"
-                           width={50}
-                           height={50}
-                           className="rounded"
-                        />
-                        <div>
-                           <p className="text-sm font-medium">
-                              Nom de l'annonce
-                           </p>
-                           <p className="text-xs">Localisation</p>
-                           <p className="text-xs">Prix par nuit</p>
-                        </div>
-                        <div>
-                           <Badge variant="success">Réservé</Badge>
-                           <Badge variant="info">Disponible</Badge>
-                        </div>
-                     </Link>
-                     <Link
-                        href=""
-                        className="flex items-start bg-background rounded p-1 hover:bg-foreground/10 transition-colors gap-5"
-                        title="Voir l'annonce"
-                     >
-                        <Image
-                           src={Avatar}
-                           alt="Photo de profil"
-                           width={50}
-                           height={50}
-                           className="rounded"
-                        />
-                        <div>
-                           <p className="text-sm font-medium">
-                              Nom de l'annonce
-                           </p>
-                           <p className="text-xs">Localisation</p>
-                           <p className="text-xs">Prix par nuit</p>
-                        </div>
-                        <div>
-                           <Badge variant="success">Réservé</Badge>
-                           <Badge variant="info">Disponible</Badge>
-                        </div>
-                     </Link>
-                  </div>
-               ) : (
-                  <p className="text-xs">
-                     Vous n'avez pas encore ajouté d'annonce
-                  </p>
-               )}
+               <div className="space-y-2">
+                  {user.houses.length > 0 ? (
+                     user.houses.map((house) => (
+                        <Link
+                           href={`/annonce/${house.id}`}
+                           className="flex items-start justify-between bg-background rounded p-1 hover:bg-foreground/10 transition-colors gap-2"
+                           title="Voir l'annonce"
+                           key={house.id}
+                        >
+                           <div className="relative h-16 w-16">
+                              <Image
+                                 src={house.image ?? ""}
+                                 alt="Photo de l'annonce"
+                                 fill
+                                 sizes="100%"
+                                 className="rounded"
+                              />
+                           </div>
+                           <div>
+                              <p className="text-sm font-medium">
+                                 {house.title}
+                              </p>
+                              <p className="text-xs">Localisation</p>
+                              <p className="text-xs">{house.price}€ /nuit</p>
+                           </div>
+                           {/* <div> */}
+                           <Badge variant="success" className="self-center">
+                              Réservé
+                           </Badge>
+                           {/* <Badge variant="info" className="self-end">Disponible</Badge> */}
+                           {/* </div> */}
+                        </Link>
+                     ))
+                  ) : (
+                     <p className="text-xs">
+                        Vous n'avez pas encore ajouté d'annonce
+                     </p>
+                  )}
+               </div>
             </div>
          </div>
       </aside>

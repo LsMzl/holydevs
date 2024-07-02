@@ -39,6 +39,7 @@ import axios from "axios";
 import { toast } from "@/components/shadcn/use-toast";
 import { Button } from "@/components/shadcn/button";
 import { HouseOnboardingTypes } from "@/types/house/onboarding";
+import useLocation from "@/app/hooks/useLocations";
 
 const formSchema = z.object({
    image: z.string().min(1, {
@@ -97,6 +98,12 @@ const SecondStep = ({
    // Récupération des données du local storage
    const houseStorage = JSON.parse(localStorage.getItem("house") || "");
 
+   const { getCountryByCode, getStateByCode, getStateCities } = useLocation();
+   const country = getCountryByCode(houseStorage.country);
+   const state = getStateByCode(houseStorage.country, houseStorage.state);
+   const cities = getStateCities(houseStorage.country, houseStorage.state);
+   const city = cities?.filter((city) => city.name === houseStorage.city);
+
    /** Affichage de l'image selectionnée par l'utilisateur.*/
    const handleImageSelect = (
       e: React.ChangeEvent<HTMLInputElement>,
@@ -147,9 +154,9 @@ const SecondStep = ({
    }
 
    return (
-      <section className="flex flex-col md:flex-row justify-center items-start max-w-7xl m-auto h-screen px-10 pt-20">
+      <section className="flex flex-col md:flex-row justify-center items-start max-w-7xl m-auto px-10 pt-20 ">
          {/* left section */}
-         <div className="flex-1 flex flex-col items-center justify-center rounded-l-xl py-5 bg-gradient-to-b from-foreground/10 to-background">
+         <div className="flex-1 flex flex-col items-center justify-center rounded-l-xl py-5 bg-gradient-to-b from-foreground/10 to-background mb-10">
             <div className="">
                <div className="px-10">
                   <h2 className="text-3xl font-semibold mb-2">
@@ -177,14 +184,23 @@ const SecondStep = ({
                         </div>
                         <div>
                            <p className="font-semibold">Description:</p>
-                           <p className="text-sm">{houseStorage.description}</p>
+                           <p className="text-sm max-h-36 overflow-y-auto">
+                              {houseStorage.description}
+                           </p>
                         </div>
-                        <p className="font-semibold">Localisation:</p>
+                        <div>
+                           <p className="font-semibold">Localisation:</p>
+                           <div className="flex items-center gap-2 text-sm">
+                              <p>Pays: {country?.name}</p>
+                              <p>Région: {state?.name}</p>
+                              <p>Ville: {city[0].name}</p>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>
                {/* Illustrations */}
-               <div className="w-full h-96 flex justify-between gap-2 mt-16">
+               <div className="w-full h-96 flex justify-between gap-2 mt-10">
                   <div className="relative self-start rounded-lg bg-background h-[320px] w-[25%] drop-shadow">
                      <Image
                         src={House}
@@ -429,8 +445,8 @@ const SecondStep = ({
                                              <SelectContent>
                                                 {types?.map((type) => (
                                                    <SelectItem
-                                                      key={type.name}
-                                                      value={type.name}
+                                                      key={type.id}
+                                                      value={type.id}
                                                    >
                                                       {type.name}
                                                    </SelectItem>
@@ -476,8 +492,8 @@ const SecondStep = ({
                                              <SelectContent>
                                                 {categories?.map((category) => (
                                                    <SelectItem
-                                                      key={category.name}
-                                                      value={category.name}
+                                                      key={category.id}
+                                                      value={category.id}
                                                    >
                                                       {category.name}
                                                    </SelectItem>
@@ -492,10 +508,10 @@ const SecondStep = ({
                            </div>
                         </div>
                         {/* Equipements */}
-                        <div className="mb-5">
+                        <div className="mb-5 max-h-28 overflow-y-auto">
                            <FormField
                               control={form.control}
-                              name="categories"
+                              name="features"
                               render={() => (
                                  <FormItem>
                                     <div>
@@ -517,7 +533,7 @@ const SecondStep = ({
                                                    <FormControl>
                                                       <Checkbox
                                                          checked={field.value?.includes(
-                                                            feature.name
+                                                            feature.id
                                                          )}
                                                          name="features"
                                                          id="features"
@@ -528,7 +544,7 @@ const SecondStep = ({
                                                                ? field.onChange(
                                                                     [
                                                                        ...field.value,
-                                                                       feature.name,
+                                                                       feature.id,
                                                                     ]
                                                                  )
                                                                : field.onChange(
@@ -537,7 +553,7 @@ const SecondStep = ({
                                                                           value
                                                                        ) =>
                                                                           value !==
-                                                                          feature.name
+                                                                          feature.id
                                                                     )
                                                                  );
                                                          }}

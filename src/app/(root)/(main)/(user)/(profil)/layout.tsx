@@ -38,6 +38,8 @@ export default async function MainLayout({
    });
    if (!user) return <h1>Vous n'êtes pas connecté</h1>;
 
+   
+
    return (
       <main className="flex flex-col items-center gap-5">
          {/* Haut de la page */}

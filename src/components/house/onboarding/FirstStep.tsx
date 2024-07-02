@@ -42,6 +42,8 @@ import { Loader2, Pen } from "lucide-react";
 import { HouseOnboardingTypes } from "@/types/house/onboarding";
 import { Input } from "@/components/shadcn/input";
 import { Textarea } from "@/components/shadcn/textarea";
+import useLocation from "@/app/hooks/useLocations";
+import { ICity, IState } from "country-state-city";
 
 const formSchema = z.object({
    title: z.string().min(3, {
@@ -66,11 +68,11 @@ const formSchema = z.object({
 });
 
 const FirstStep = ({ house }: HouseOnboardingTypes) => {
-   //    const [states, setStates] = useState<IState[]>([]);
-   //    const [cities, setCities] = useState<ICity[]>([]);
-   //    const { getAllCountries, getCountryStates, getStateCities } = useLocation();
+   const [states, setStates] = useState<IState[]>([]);
+   const [cities, setCities] = useState<ICity[]>([]);
+   const { getAllCountries, getCountryStates, getStateCities } = useLocation();
    const router = useRouter();
-   //    const countries = getAllCountries();
+   const countries = getAllCountries();
    const [isLoading, setIsLoading] = useState(false);
 
    const form = useForm<z.infer<typeof formSchema>>({
@@ -87,25 +89,25 @@ const FirstStep = ({ house }: HouseOnboardingTypes) => {
    });
 
    /** Récupération des états d'un pays lors d'un changement dans le formulaire */
-   //    useEffect(() => {
-   //       const selectedCountry = form.watch("country");
-   //       // Récupération des états du pays selectionné
-   //       const countryStates = getCountryStates(selectedCountry);
-   //       if (countryStates) {
-   //          setStates(countryStates);
-   //       }
-   //    }, [form.watch("country")]);
+   useEffect(() => {
+      const selectedCountry = form.watch("country");
+      // Récupération des états du pays selectionné
+      const countryStates = getCountryStates(selectedCountry);
+      if (countryStates) {
+         setStates(countryStates);
+      }
+   }, [form.watch("country")]);
 
    /** Récupération des états d'un pays lors d'un changement dans le formulaire */
-   //    useEffect(() => {
-   //       const selectedCountry = form.watch("country");
-   //       const selectedState = form.watch("state");
-   //       // Récupération des villes de l'état selectionné
-   //       const stateCities = getStateCities(selectedCountry, selectedState);
-   //       if (stateCities) {
-   //          setCities(stateCities);
-   //       }
-   //    }, [form.watch("country"), form.watch("state")]);
+   useEffect(() => {
+      const selectedCountry = form.watch("country");
+      const selectedState = form.watch("state");
+      // Récupération des villes de l'état selectionné
+      const stateCities = getStateCities(selectedCountry, selectedState);
+      if (stateCities) {
+         setCities(stateCities);
+      }
+   }, [form.watch("country"), form.watch("state")]);
 
    /**
     * Stockage des données du formulaire dans le localStorage.
@@ -310,7 +312,7 @@ const FirstStep = ({ house }: HouseOnboardingTypes) => {
                                                 id="country"
                                              />
                                           </SelectTrigger>
-                                          {/* <SelectContent>
+                                          <SelectContent>
                                              {countries.map((country) => (
                                                 <SelectItem
                                                    key={country.isoCode}
@@ -319,7 +321,7 @@ const FirstStep = ({ house }: HouseOnboardingTypes) => {
                                                    {country.name}
                                                 </SelectItem>
                                              ))}
-                                          </SelectContent> */}
+                                          </SelectContent>
                                        </Select>
                                     </FormControl>
                                     <FormMessage />
@@ -340,7 +342,7 @@ const FirstStep = ({ house }: HouseOnboardingTypes) => {
                                        <span className="text-red-500">*</span>
                                     </FormLabel>
                                     <FormControl>
-                                       {/* <Select
+                                       <Select
                                           disabled={
                                              isLoading || states.length < 1
                                           }
@@ -361,19 +363,18 @@ const FirstStep = ({ house }: HouseOnboardingTypes) => {
                                                    key={state.isoCode}
                                                    value={state.isoCode}
                                                 >
-                                                   {state.isoCode} -{" "}
                                                    {state.name}
                                                 </SelectItem>
                                              ))}
                                           </SelectContent>
-                                       </Select> */}
+                                       </Select>
                                     </FormControl>
                                     <FormMessage />
                                  </FormItem>
                               )}
                            />
                            {/* Ville du logement */}
-                           {/* <FormField
+                           <FormField
                               control={form.control}
                               name="city"
                               render={({ field }) => (
@@ -416,7 +417,7 @@ const FirstStep = ({ house }: HouseOnboardingTypes) => {
                                     <FormMessage />
                                  </FormItem>
                               )}
-                           /> */}
+                           />
                         </div>
                      </div>
                      {/* Adresse */}

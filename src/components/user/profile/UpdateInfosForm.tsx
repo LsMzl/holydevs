@@ -41,8 +41,8 @@ import {
    SelectTrigger,
    SelectValue,
 } from "@/components/shadcn/select";
-// import { ICity, IState } from "country-state-city";
-// import useLocation from "@/hooks/useLocations";
+import { ICity, IState } from "country-state-city";
+import useLocation from "@/app/hooks/useLocations";
 
 interface UpdateUserProps {
    lastname: string;
@@ -57,10 +57,10 @@ interface UpdateUserProps {
 
 const formSchema = z.object({
    // Identité
-   firstName: z.string().min(2, {
+   firstname: z.string().min(2, {
       message: "Votre prénom doit contenir au moins 3 caractères",
    }),
-   lastName: z.string().min(2, {
+   lastname: z.string().min(2, {
       message: "Votre prénom doit contenir au moins 3 caractères",
    }),
 
@@ -90,18 +90,19 @@ const UpdateInfosForm = ({
 
    const [isLoading, setIsLoading] = useState(false);
 
-   // const [states, setStates] = useState<IState[]>([]);
-   // const [cities, setCities] = useState<ICity[]>([]);
+   const [states, setStates] = useState<IState[]>([]);
+   const [cities, setCities] = useState<ICity[]>([]);
 
-   // const { getAllCountries, getCountryStates, getStateCities } = useLocation();
+   const { getAllCountries, getCountryStates, getStateCities } = useLocation();
+   const countries = getAllCountries();
 
    // const countries = getAllCountries();
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         lastName: lastname ?? "",
-         firstName: firstname ?? "",
+         lastname: lastname ?? "",
+         firstname: firstname ?? "",
          country: country ?? "",
          state: state ?? "",
          city: city ?? "",
@@ -136,7 +137,7 @@ const UpdateInfosForm = ({
       setIsLoading(true);
       //? Modifications informations utilisateur
       axios
-         .patch(`../api/user/update`, values)
+         .patch(`../api/user/profile`, values)
          .then((res) => {
             toast({
                variant: "success",
@@ -190,16 +191,22 @@ const UpdateInfosForm = ({
                         <div className="flex-1">
                            <FormField
                               control={form.control}
-                              name="lastName"
+                              name="lastname"
                               render={({ field }) => (
                                  <FormItem>
-                                    <FormLabel className="text-xs">
+                                    <FormLabel
+                                       className="text-xs"
+                                       htmlFor="lastname"
+                                    >
                                        Nom
                                     </FormLabel>
                                     <FormControl>
                                        <Input
                                           placeholder="Votre nom"
                                           {...field}
+                                          name="lastname"
+                                          id="lastname"
+                                          autoComplete="lastname"
                                        />
                                     </FormControl>
                                     <FormMessage />
@@ -210,16 +217,22 @@ const UpdateInfosForm = ({
                         <div className="flex-1">
                            <FormField
                               control={form.control}
-                              name="firstName"
+                              name="firstname"
                               render={({ field }) => (
                                  <FormItem>
-                                    <FormLabel className="text-xs">
+                                    <FormLabel
+                                       className="text-xs"
+                                       htmlFor="firstname"
+                                    >
                                        Prénom{" "}
                                     </FormLabel>
                                     <FormControl>
                                        <Input
                                           placeholder="Votre prénom"
                                           {...field}
+                                          name="firstname"
+                                          id="firstname"
+                                          autoComplete="firstname"
                                        />
                                     </FormControl>
                                     <FormMessage />
@@ -242,7 +255,10 @@ const UpdateInfosForm = ({
                                  name="country"
                                  render={({ field }) => (
                                     <FormItem>
-                                       <FormLabel className="hidden">
+                                       <FormLabel
+                                          className="hidden"
+                                          htmlFor="country"
+                                       >
                                           Pays
                                        </FormLabel>
                                        <FormControl>
@@ -251,14 +267,19 @@ const UpdateInfosForm = ({
                                              onValueChange={field.onChange}
                                              value={field.value}
                                              defaultValue={field.value}
+                                             name="country"
                                           >
-                                             <SelectTrigger className="bg-background">
+                                             <SelectTrigger
+                                                className="bg-background"
+                                                name="country"
+                                                id="country"
+                                             >
                                                 <SelectValue
                                                    placeholder="Pays"
                                                    defaultValue={field.value}
                                                 />
                                              </SelectTrigger>
-                                             {/* <SelectContent>
+                                             <SelectContent>
                                                 {countries.map((country) => (
                                                    <SelectItem
                                                       key={country.isoCode}
@@ -267,7 +288,7 @@ const UpdateInfosForm = ({
                                                       {country.name}
                                                    </SelectItem>
                                                 ))}
-                                             </SelectContent> */}
+                                             </SelectContent>
                                           </Select>
                                        </FormControl>
                                        <FormMessage />
@@ -282,7 +303,10 @@ const UpdateInfosForm = ({
                                  name="state"
                                  render={({ field }) => (
                                     <FormItem>
-                                       <FormLabel className="hidden">
+                                       <FormLabel
+                                          className="hidden"
+                                          htmlFor="state"
+                                       >
                                           Etat/département{" "}
                                        </FormLabel>
 
@@ -294,8 +318,13 @@ const UpdateInfosForm = ({
                                              onValueChange={field.onChange}
                                              value={field.value}
                                              defaultValue={field.value}
+                                             name="state"
                                           >
-                                             <SelectTrigger className="bg-background">
+                                             <SelectTrigger
+                                                className="bg-background"
+                                                name="state"
+                                                id="state"
+                                             >
                                                 <SelectValue
                                                    placeholder="Région"
                                                    defaultValue={field.value}
@@ -307,7 +336,6 @@ const UpdateInfosForm = ({
                                                       key={state.isoCode}
                                                       value={state.isoCode}
                                                    >
-                                                      {state.isoCode} -{" "}
                                                       {state.name}
                                                    </SelectItem>
                                                 ))}
@@ -326,7 +354,10 @@ const UpdateInfosForm = ({
                                  name="city"
                                  render={({ field }) => (
                                     <FormItem>
-                                       <FormLabel className="hidden">
+                                       <FormLabel
+                                          className="hidden"
+                                          htmlFor="city"
+                                       >
                                           Ville
                                        </FormLabel>
                                        <FormControl>
@@ -337,8 +368,13 @@ const UpdateInfosForm = ({
                                              onValueChange={field.onChange}
                                              value={field.value}
                                              defaultValue={field.value}
+                                             name="city"
                                           >
-                                             <SelectTrigger className="bg-background">
+                                             <SelectTrigger
+                                                className="bg-background"
+                                                name="city"
+                                                id="city"
+                                             >
                                                 <SelectValue
                                                    placeholder="Ville"
                                                    defaultValue={field.value}
@@ -368,7 +404,10 @@ const UpdateInfosForm = ({
                               name="address"
                               render={({ field }) => (
                                  <FormItem>
-                                    <FormLabel className="text-xs">
+                                    <FormLabel
+                                       className="text-xs"
+                                       htmlFor="address"
+                                    >
                                        Adresse{" "}
                                     </FormLabel>
 
@@ -376,6 +415,9 @@ const UpdateInfosForm = ({
                                        <Input
                                           placeholder="5 rue de nulle part"
                                           {...field}
+                                          name="address"
+                                          id="address"
+                                          autoComplete="address"
                                        />
                                     </FormControl>
                                     <FormMessage />
@@ -386,7 +428,7 @@ const UpdateInfosForm = ({
                      </div>
                   </div>
 
-                  {/* Email, phone & password */}
+                  {/* Email & phone */}
                   <div>
                      <p className="font-semibold">Informations de connexion</p>
                      <div className="flex flex-col gap-2">
@@ -399,7 +441,10 @@ const UpdateInfosForm = ({
                                  name="email"
                                  render={({ field }) => (
                                     <FormItem>
-                                       <FormLabel className="text-xs">
+                                       <FormLabel
+                                          className="text-xs"
+                                          htmlFor="email"
+                                       >
                                           Email
                                        </FormLabel>
                                        <FormControl>
@@ -407,6 +452,9 @@ const UpdateInfosForm = ({
                                              type="email"
                                              placeholder="votre@email.fr"
                                              {...field}
+                                             name="email"
+                                             id="email"
+                                             autoComplete="email"
                                           />
                                        </FormControl>
                                        <FormMessage />
@@ -422,7 +470,10 @@ const UpdateInfosForm = ({
                                     name="phone"
                                     render={({ field }) => (
                                        <FormItem>
-                                          <FormLabel className="text-xs">
+                                          <FormLabel
+                                             className="text-xs"
+                                             htmlFor="phone"
+                                          >
                                              Téléphone{" "}
                                           </FormLabel>
                                           <FormControl>
@@ -430,6 +481,9 @@ const UpdateInfosForm = ({
                                                 type="tel"
                                                 placeholder="Numéro de téléphone"
                                                 {...field}
+                                                name="phone"
+                                                id="phone"
+                                                autoComplete="phone"
                                              />
                                           </FormControl>
                                           <FormMessage />
@@ -438,33 +492,6 @@ const UpdateInfosForm = ({
                                  />
                               </div>
                            </div>
-                        </div>
-                        {/* Passwords */}
-                        <div className="flex items-center w-full justify-between gap-5">
-                           {/* <div>
-                              <FormField
-                                 control={form.control}
-                                 name="currentPassword"
-                                 render={({ field }) => (
-                                    <FormItem>
-                                       <FormLabel className="text-xs">
-                                          Mot de passe{" "}
-                                       </FormLabel>
-
-                                       <FormControl>
-                                          <Input
-                                             placeholder="Mot de passe"
-                                             {...field}
-                                             type="password"
-                                             disabled
-                                          />
-                                       </FormControl>
-
-                                       <FormMessage />
-                                    </FormItem>
-                                 )}
-                              />
-                           </div> */}
                         </div>
                      </div>
                   </div>

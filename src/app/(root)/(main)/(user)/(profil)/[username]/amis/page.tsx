@@ -2,14 +2,20 @@ import ProfileSideBar from "@/components/navigation/components/ProfileSideBar";
 import { Friends } from "@/components/user/profile/pages/Friends";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+   title: "Mes amis",
+   description: "Page d'accueil d'Holydevs",
+};
 
 export default async function FriendsPage() {
    // Utilisateur connecté
    const { userId } = auth();
    if (!userId) return null;
    // Informations utilisateur
-   const user = await db.user.findUnique({
+   const user = await db.user.findFirst({
       where: {
          clerkId: userId,
       },
@@ -17,6 +23,9 @@ export default async function FriendsPage() {
          houses: {
             select: {
                id: true,
+               image: true,
+               title: true,
+               price: true,
             },
          },
          opinions: {

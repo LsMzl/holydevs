@@ -1,16 +1,23 @@
-"use client";
-import { Home, LayoutGrid, Pen, Plus, Search, Users } from "lucide-react";
-import Logo from "../../../public/logo/logo.png";
-import Image from "next/image";
+
+// React / Next
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "../shadcn/button";
-import { Input } from "../shadcn/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
+import Image from "next/image";
+
+// Types
 import { UserMenuProps } from "@/types/topNav";
+
+// UI Components
+import { cn } from "@/lib/utils";
 import { UserMenu } from "./components/UserMenu";
+import { buttonVariants } from "../shadcn/button";
 import { GuestMenu } from "./components/GuestMenu";
+
+// Images
 import Bell from "../../../public/icon/bell.png";
+import Logo from "../../../public/logo/logo.png";
+
+// Icons
+import { Home, LayoutGrid, Plus, Users } from "lucide-react";
 
 export const TopNav = ({
    userId,
@@ -72,15 +79,14 @@ export const TopNav = ({
                </Link>
             </div>
             {/* SearchBar */}
-            <div className="flex items-center flex-1">
-               <label htmlFor="searchBar">
-                  <Input
-                     placeholder="Recherchez une annonce, ville, catégorie..."
-                     name="searchBar"
-                     id="searchBar"
-                  />
-               </label>
-            </div>
+            {/* <div className="flex items-center flex-1">
+               <label htmlFor="searchBar" />
+               <input
+                  placeholder="Recherchez une annonce, ville, catégorie..."
+                  name="searchBar"
+                  id="searchBar"
+               />
+            </div> */}
          </div>
 
          {/* Right */}
@@ -99,7 +105,7 @@ export const TopNav = ({
                </Link>
             )}
 
-            <div className="relative md:ml-5">
+            <div className="md:ml-5">
                <Image
                   src={Bell}
                   alt="Icône de notification"

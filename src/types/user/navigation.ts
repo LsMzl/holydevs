@@ -8,6 +8,9 @@ export interface PublicationsSideNavTypes {
       interests: string | null;
       houses: {
          id: string;
+         image: string | null;
+         title: string;
+         price: number | null;
       }[];
       opinions: {
          id: string;
@@ -18,7 +21,7 @@ export interface PublicationsSideNavTypes {
             id: string;
             firstname: string | null;
             lastname: string | null;
-            username: string | null;
+            username: string;
             profilePicture: string | null;
          };
       }[];
@@ -28,9 +31,9 @@ export interface PublicationsSideNavTypes {
             id: string;
             firstname: string | null;
             lastname: string | null;
-            username: string | null;
+            username: string;
             profilePicture: string | null;
-         }
+         };
       }[];
    };
 }

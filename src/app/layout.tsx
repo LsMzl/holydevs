@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { frFR } from "@clerk/localizations";
+import { Toaster } from "@/components/shadcn/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
       <ClerkProvider localization={frFR}>
          <html lang="fr" suppressHydrationWarning>
             <body className={cn("w-full min-h-screen", inter.className)}>
+               <Toaster />
                <main>{children}</main>
             </body>
          </html>

@@ -14,19 +14,25 @@ export default async function MyProfile() {
    // Utilisateur connecté
    const { userId } = auth();
    if (!userId) return null;
+
    // Informations utilisateur
-   const user = await db.user.findFirst({
+   const user = await db.user.findUnique({
       where: {
          clerkId: userId,
       },
-      // select:{
-      //    id: true,
-      //    clerkId: true,
-      // },
-      include: {
+      select: {
+         id: true,
+         firstname: true,
+         profilePicture: true,
+         biography: true,
+         languages: true,
+         interests: true,
          houses: {
             select: {
                id: true,
+               image: true,
+               title: true,
+               price: true,
             },
          },
          opinions: {
@@ -37,11 +43,29 @@ export default async function MyProfile() {
          followers: {
             select: {
                id: true,
+               follower: {
+                  select: {
+                     id: true,
+                     firstname: true,
+                     lastname: true,
+                     username: true,
+                     profilePicture: true,
+                  },
+               },
             },
          },
          followings: {
             select: {
                id: true,
+               following: {
+                  select: {
+                     id: true,
+                     firstname: true,
+                     lastname: true,
+                     username: true,
+                     profilePicture: true,
+                  },
+               },
             },
          },
       },
@@ -53,7 +77,7 @@ export default async function MyProfile() {
          {/* Left */}
          <ProfileSideBar user={user} />
          {/* Right */}
-         <Publications/>
+         <Publications />
       </section>
    );
 }

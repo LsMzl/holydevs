@@ -202,8 +202,8 @@ model House {
   //! Une maison peut avoir plusieurs réservations
   bookings   Booking[]
   //! Une maison n'a qu'un seul propriétaire
-  user       User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String?
+  user       User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
   //! Une maison peut être dans 0 ou plusieurs favoris
   favourites Favourite[]
   //! Une maison peut avoir 0 ou plusieurs notes
