@@ -11,8 +11,9 @@ import {
    LinkedinIcon,
    MailIcon,
 } from "lucide-react";
+import { FooterTypes } from "@/types/Footer";
 
-export const Footer = () => {
+export const Footer = ({ currentUser }: FooterTypes) => {
    return (
       <footer className="w-full border-t bg-card mt-20 text-foreground/60">
          <div className="max-w-[1200px] flex flex-col mx-auto p-5">
@@ -41,12 +42,42 @@ export const Footer = () => {
                   </Link>
                   {/* Links */}
                   <div className="grid grid-cols-2 text-sm">
-                     <Link href="">Réservations</Link>
-                     <Link href="">Annonces</Link>
+                     <Link
+                        href={`/${currentUser.username}/reservations`}
+                        title="Voir mes réservations"
+                        className="hover:font-medium hover:underline hover:underline-offset-2"
+                     >
+                        Réservations
+                     </Link>
+                     <Link
+                        href={`/${currentUser.username}/annonces`}
+                        title="Voir mes annonces"
+                        className="hover:font-medium hover:underline hover:underline-offset-2"
+                     >
+                        Annonces
+                     </Link>
 
-                     <Link href="">Profil</Link>
-                     <Link href="">Réseau social</Link>
-                     <Link href="">Accueil</Link>
+                     <Link
+                        href={`/${currentUser.username}`}
+                        title="Voir mon profil"
+                        className="hover:font-medium hover:underline hover:underline-offset-2"
+                     >
+                        Profil
+                     </Link>
+                     <Link
+                        href="/posts"
+                        title="Réseau social"
+                        className="hover:font-medium hover:underline hover:underline-offset-2"
+                     >
+                        Réseau social
+                     </Link>
+                     <Link
+                        href="/"
+                        title="Retour à l'accueil"
+                        className="hover:font-medium hover:underline hover:underline-offset-2"
+                     >
+                        Accueil
+                     </Link>
                   </div>
                   {/* Réseaux sociaux */}
                   <div className="flex items-center gap-2 mb-10 mt-6">
@@ -122,16 +153,49 @@ export const Footer = () => {
             <div className="flex flex-col gap-3 mt-5 text-xs font-light">
                {/* top */}
                <div>
-                  <Link href="">Politique de confidentialité | </Link>
-                  <Link href="">Traitement de données | </Link>
-                  <Link href="">Accessibilité | </Link>
-                  <Link href=""></Link>
+                  <Link
+                     href=""
+                     className="hover:underline hover:underline-offset-2"
+                  >
+                     Politique de confidentialité |{" "}
+                  </Link>
+                  <Link
+                     href=""
+                     className="hover:underline hover:underline-offset-2"
+                  >
+                     Traitement de données |{" "}
+                  </Link>
+                  <Link
+                     href=""
+                     className="hover:underline hover:underline-offset-2"
+                  >
+                     Accessibilité |{" "}
+                  </Link>
+                  <Link
+                     href=""
+                     className="hover:underline hover:underline-offset-2"
+                  ></Link>
                </div>
                {/* Middle */}
                <div>
-                  <Link href="">Centre d'aide | </Link>
-                  <Link href="">Support client | </Link>
-                  <Link href="">Accueil des voyageurs | </Link>
+                  <Link
+                     href=""
+                     className="hover:underline hover:underline-offset-2"
+                  >
+                     Centre d'aide |{" "}
+                  </Link>
+                  <Link
+                     href=""
+                     className="hover:underline hover:underline-offset-2"
+                  >
+                     Support client |{" "}
+                  </Link>
+                  <Link
+                     href=""
+                     className="hover:underline hover:underline-offset-2"
+                  >
+                     Accueil des voyageurs |{" "}
+                  </Link>
                </div>
                {/* Bottom */}
                <div>

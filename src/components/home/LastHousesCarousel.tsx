@@ -22,6 +22,7 @@ const LastHousesCarousel = ({ houses }: LastHousesTypes) => {
          <Carousel
             opts={{
                align: "start",
+               loop: true,
             }}
             className="w-full relative"
          >

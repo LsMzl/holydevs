@@ -15,11 +15,17 @@ export default async function FriendsPage() {
    const { userId } = auth();
    if (!userId) return null;
    // Informations utilisateur
-   const user = await db.user.findFirst({
+   const user = await db.user.findUnique({
       where: {
          clerkId: userId,
       },
-      include: {
+      select: {
+         id: true,
+         firstname: true,
+         profilePicture: true,
+         biography: true,
+         languages: true,
+         interests: true,
          houses: {
             select: {
                id: true,
@@ -49,6 +55,7 @@ export default async function FriendsPage() {
          },
          followings: {
             select: {
+               id: true,
                following: {
                   select: {
                      id: true,

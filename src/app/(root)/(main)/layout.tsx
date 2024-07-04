@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { getUserByClerkId } from "@/actions/getUserByClerkId";
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { Footer } from "@/components/navigation/Footer";
+import { db } from "@/lib/prisma";
 
 export default async function MainLayout({
    children,
@@ -12,6 +13,16 @@ export default async function MainLayout({
    if (!userId) return null;
    // Informations utilisateur
    const user = await getUserByClerkId(userId);
+
+   const currentUser = await db.user.findFirst({
+      where: {
+         clerkId: userId,
+      },
+      select: {
+         username: true,
+      },
+   });
+   if(!currentUser) return null;
 
    return (
       <>
@@ -26,7 +37,7 @@ export default async function MainLayout({
          />
          <div className="hidden lg:block h-[56px]" />
          <main>{children}</main>
-         <Footer />
+         <Footer currentUser={currentUser} />
          <div className="lg:hidden h-[56px]" />
          <BottomNav
             userId={userId}

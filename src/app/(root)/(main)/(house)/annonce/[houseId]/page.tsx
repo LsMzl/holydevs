@@ -25,7 +25,7 @@ export default async function HousePage({ params }: HouseDetailsProps) {
          id: params.houseId,
       },
       select: {
-         //  id: true,
+         id: true,
          country: true,
          state: true,
          city: true,
@@ -41,6 +41,7 @@ export default async function HousePage({ params }: HouseDetailsProps) {
          bathroom: true,
          isAvailable: true,
          ownerId: true,
+         userId: true,
          types: {
             select: {
                type: {
@@ -74,6 +75,7 @@ export default async function HousePage({ params }: HouseDetailsProps) {
 
          user: {
             select: {
+               id: true,
                firstname: true,
                lastname: true,
                username: true,
@@ -91,8 +93,8 @@ export default async function HousePage({ params }: HouseDetailsProps) {
    }
 
    const propositionHouse = await db.house.findMany({
-      where :{
-         city: house.city
+      where: {
+         city: house.city,
       },
       select: {
          id: true,
@@ -100,9 +102,8 @@ export default async function HousePage({ params }: HouseDetailsProps) {
          image: true,
          price: true,
          city: true,
-
-      }
-   })
+      },
+   });
 
    /** Contient toutes les réservations d'une maison */
    // const bookings = await db.booking.findMany({
@@ -158,10 +159,7 @@ export default async function HousePage({ params }: HouseDetailsProps) {
             house={house}
             allOpinions={allOpinions}
             lastOpinions={lastOpinions}
-            propositionHouse={propositionHouse
-
-               
-            }
+            propositionHouse={propositionHouse}
          />
       </div>
    );

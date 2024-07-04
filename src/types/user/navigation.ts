@@ -21,7 +21,7 @@ export interface PublicationsSideNavTypes {
             id: string;
             firstname: string | null;
             lastname: string | null;
-            username: string;
+            username: string | null;
             profilePicture: string | null;
          };
       }[];
@@ -31,7 +31,7 @@ export interface PublicationsSideNavTypes {
             id: string;
             firstname: string | null;
             lastname: string | null;
-            username: string;
+            username: string | null;
             profilePicture: string | null;
          };
       }[];

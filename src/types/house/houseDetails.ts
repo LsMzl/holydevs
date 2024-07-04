@@ -1,6 +1,8 @@
+import { Booking } from "@prisma/client";
+
 export interface HouseDetailsTypes {
    house: {
-      // id: string;
+      id: string;
       country: string;
       state: string;
       city: string;
@@ -16,6 +18,7 @@ export interface HouseDetailsTypes {
       bathroom?: number | null;
       isAvailable: boolean;
       ownerId: string;
+      userId: string;
       types: {
          type: {
             name: string;
@@ -35,6 +38,7 @@ export interface HouseDetailsTypes {
          };
       }[];
       user: {
+         id: string;
          firstname: string | null;
          lastname: string | null;
          username: string | null;
@@ -49,7 +53,7 @@ export interface HouseDetailsTypes {
       city: string;
    }[];
 
-   //    bookings?: Booking[];
+   bookings?: Booking[];
    lastOpinions: {
       title: string | null;
       content: string;
@@ -72,6 +76,9 @@ export interface HouseDetailsTypes {
          profilePicture: string | null;
       };
    }[];
+   totalPrice: number;
+   startDate: Date;
+   endDate: Date;
 }
 
 export interface AllOpinionsTypes {

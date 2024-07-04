@@ -64,6 +64,7 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
                   </>
                )}
             </Link>
+            {/* Avis */}
             <span className="w-28 hover:bg-border/70 py-2">
                <div>
                   {user?.opinions.length === 0 && (
@@ -72,7 +73,7 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
                         <p className="text-sm">Avis</p>
                      </>
                   )}
-                  {user?.houses.length > 1 && (
+                  {user?.opinions.length > 1 && (
                      <>
                         <p className="font-semibold leading-5">
                            {user?.opinions.length}
@@ -124,7 +125,7 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
             </div>
             <div className="bg-background grid grid-cols-3 gap-3 justify-between">
                {user.followings.map((follower) => (
-                  <Link href={follower.following.username} key={follower.id}>
+                  <Link href={follower.following.username ?? ""} key={follower.id}>
                      <Image
                         src={follower.following.profilePicture ?? ""}
                         alt="Photo de profil"
