@@ -1,5 +1,5 @@
 "use client";
-import { Category, House, User } from "@prisma/client";
+
 import { v4 as uuidv4 } from "uuid";
 // import HouseCard from "../elements/cards/HouseCard";
 
@@ -7,8 +7,19 @@ import { v4 as uuidv4 } from "uuid";
 
 import { usePathname, useRouter } from "next/navigation";
 import { HouseListTypes } from "@/types/home/House";
-import CategoriesCarousel from "./CategoryCarousel";
+
 import HouseCard from "../house/HouseCard";
+
+import {
+   Carousel,
+   CarouselContent,
+   CarouselItem,
+   CarouselNext,
+   CarouselPrevious,
+} from "@/components/shadcn/carousel";
+import { Button } from "../shadcn/button";
+import { useState } from "react";
+
 // import CategoriesCarousel from "./Carousel";
 
 const HousesList = ({ categories, types, houses }: HouseListTypes) => {
@@ -16,6 +27,26 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
 
    const pathName = usePathname();
    const isMyHouses = pathName.includes("mes-annonces");
+   // console.log("houses", houses);
+
+   const [filter, setFilter] = useState("");
+
+
+   const handleFilter = (e: any) => {
+      setFilter(e.currentTarget.textContent);
+   };
+
+   const resetFilter = () => {
+      setFilter("");
+   };
+
+   // Filtrage des résultats selon la catégorie ou type selectionné
+   const filteredHouses = houses.filter(
+      (house) =>
+         house.categories[0].category.name.toLowerCase().includes(filter) ||
+         house.types[0].type.name.toLowerCase().includes(filter) ||
+         house.city.toLowerCase().includes(filter)
+   );
 
    return (
       <section className="mt-10">
@@ -29,7 +60,61 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
             </div>
          </div>
          {/* Categories Filter */}
-         <CategoriesCarousel categories={categories} types={types} />
+         <div className="">
+            <Carousel
+               opts={{
+                  align: "start",
+                  loop: true,
+                  dragFree: true,
+               }}
+               className="w-full relative pt-5"
+            >
+               <CarouselContent className="-ml-0">
+                  <Button
+                     size="sm"
+                     className="shadow hover:bg-secondary"
+                     onClick={() => resetFilter()}
+                  >
+                     Tout
+                  </Button>
+
+                  {types.map((type) => (
+                     <CarouselItem key={uuidv4()} className="basis-1/8">
+                        <Button
+                           size="sm"
+                           className="shadow hover:bg-primary hover:text-black capitalize"
+                           key={uuidv4()}
+                           variant={filter === type.name ? "default" : "secondary"}
+                           onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                              handleFilter(e)
+                           }
+                        >
+                           {type.name}
+                        </Button>
+                     </CarouselItem>
+                  ))}
+                  {categories.map((category) => (
+                     <CarouselItem key={uuidv4()} className="basis-1/8">
+                        <Button
+                           size="sm"
+                           className="shadow hover:bg-primary hover:text-black capitalize"
+                           key={uuidv4()}
+                           variant={filter === category.name ? "default" : "secondary"}
+                           onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                              handleFilter(e)
+                           }
+                        >
+                           {category.name}
+                        </Button>
+                     </CarouselItem>
+                  ))}
+               </CarouselContent>
+               <div className="absolute -top-4 right-12">
+                  <CarouselNext />
+                  <CarouselPrevious />
+               </div>
+            </Carousel>
+         </div>
          <div className="flex items-center justify-between mt-5">
             <div className="text-sm flex items-center gap-5 font-medium">
                <p>Autour de moi</p>
@@ -42,7 +127,7 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
             </div>
          </div>
          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-5 gap-y-5 mt-4">
-            {houses.map((house) => (
+            {filteredHouses.map((house) => (
                <HouseCard key={uuidv4()} house={house} />
             ))}
          </div>
