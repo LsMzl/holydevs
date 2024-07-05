@@ -1,4 +1,3 @@
-
 // React / Next
 import Link from "next/link";
 import Image from "next/image";
@@ -29,7 +28,7 @@ export const TopNav = ({
    username,
 }: UserMenuProps) => {
    return (
-      <nav className="hidden lg:flex items-center py-1 fixed w-full top-0 left-0 z-50 bg-card/80 shadow">
+      <nav className="hidden lg:flex py-1 fixed w-full top-0 left-0 z-50 bg-card/80 shadow">
          {/* left */}
          <div className="w-[20%] flex items-center justify-center">
             <Link

@@ -33,7 +33,7 @@ const HouseCard = ({ house }: HouseCardTypes) => {
                fill
                sizes="100%"
                alt="Photo d'une maison"
-               className="object-cover rounded-t-lg h-full w-full border-b-4 border-cyan-500 "
+               className=" object-cover rounded-t-lg h-full w-full border-b-4 border-cyan-500 "
             />
             {isMyHouses && (
                <Button

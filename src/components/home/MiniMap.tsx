@@ -7,13 +7,15 @@ import { v4 as uuidv4 } from "uuid";
 interface MiniMapProps {
    cityLatitude: number | null | undefined;
    cityLongitude: number | null | undefined;
+   // addressLatitude: number | null | undefined;
+   // addressLongitude: number | null | undefined;
 }
 
 const MiniMap = ({ cityLatitude, cityLongitude }: MiniMapProps) => {
    const markers = [
       {
-         latitude: 48.39,
-         longitude: -4.4806,
+         latitude: cityLatitude,
+         longitude: cityLongitude,
       },
    ];
 
@@ -35,7 +37,7 @@ const MiniMap = ({ cityLatitude, cityLongitude }: MiniMapProps) => {
          />
          {markers.map((marker) => (
             <Marker
-               position={[marker.latitude, marker.longitude]}
+               position={[marker?.latitude ?? 0, marker?.longitude ?? 0]}
                icon={customIcon}
                key={uuidv4()}
             >

@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
+   
    // User Datas
    const { userId } = auth();
    if (!userId) return <p>Vous n'êtes pas connecté</p>;

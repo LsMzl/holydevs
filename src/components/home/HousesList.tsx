@@ -18,35 +18,86 @@ import {
    CarouselPrevious,
 } from "@/components/shadcn/carousel";
 import { Button } from "../shadcn/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-// import CategoriesCarousel from "./Carousel";
+import "../../../public/css/style.css";
+import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuLabel,
+   DropdownMenuSeparator,
+   DropdownMenuTrigger,
+} from "../shadcn/dropdown-menu";
+import {
+   ArrowDownNarrowWide,
+   ArrowUpNarrowWide,
+   LayoutGridIcon,
+} from "lucide-react";
 
 const HousesList = ({ categories, types, houses }: HouseListTypes) => {
    const router = useRouter();
-
    const pathName = usePathname();
    const isMyHouses = pathName.includes("mes-annonces");
-   // console.log("houses", houses);
 
-   const [filter, setFilter] = useState("");
+   // Filters
+   const [categoryFilter, setCategoryFilter] = useState("");
+   const [typeFilter, setTypeFilter] = useState("");
 
+   const [sortedHouses, setSortedHouses] = useState("");
 
-   const handleFilter = (e: any) => {
-      setFilter(e.currentTarget.textContent);
+   // Categories & types filter
+   const handleCategoryFilter = (e: any) => {
+      setCategoryFilter(e.currentTarget.textContent);
+   };
+   const handleTypeFilter = (e: any) => {
+      setTypeFilter(e.currentTarget.textContent);
    };
 
    const resetFilter = () => {
-      setFilter("");
+      setCategoryFilter("");
+      setTypeFilter("");
+   };
+
+   // Price filter
+   const handlePriceAsc = () => {
+      setSortedHouses("asc");
+   };
+
+   const handlePriceDesc = () => {
+      setSortedHouses("desc");
    };
 
    // Filtrage des résultats selon la catégorie ou type selectionné
-   const filteredHouses = houses.filter(
+   let filteredHouses = houses.filter(
       (house) =>
-         house.categories[0].category.name.toLowerCase().includes(filter) ||
-         house.types[0].type.name.toLowerCase().includes(filter) ||
-         house.city.toLowerCase().includes(filter)
+         house.categories[0].category.name
+            .toLowerCase()
+            .includes(categoryFilter) &&
+         house.types[0].type.name.toLowerCase().includes(typeFilter)
    );
+
+   if (sortedHouses === "asc") {
+      filteredHouses = houses
+         .sort((a, b) => (a.price ?? 0) - (b.price ?? 0))
+         .filter(
+            (house) =>
+               house.categories[0].category.name
+                  .toLowerCase()
+                  .includes(categoryFilter) &&
+               house.types[0].type.name.toLowerCase().includes(typeFilter)
+         );
+   } else if (sortedHouses === "desc") {
+      filteredHouses = houses
+         .sort((a, b) => (b.price ?? 0) - (a.price ?? 0))
+         .filter(
+            (house) =>
+               house.categories[0].category.name
+                  .toLowerCase()
+                  .includes(categoryFilter) &&
+               house.types[0].type.name.toLowerCase().includes(typeFilter)
+         );
+   }
 
    return (
       <section className="mt-10">
@@ -69,7 +120,7 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                }}
                className="w-full relative pt-5"
             >
-               <CarouselContent className="-ml-0">
+               <CarouselContent className="max-md:ml-4 -ml-0">
                   <Button
                      size="sm"
                      className="shadow hover:bg-secondary"
@@ -84,10 +135,16 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                            size="sm"
                            className="shadow hover:bg-primary hover:text-black capitalize"
                            key={uuidv4()}
-                           variant={filter === type.name ? "default" : "secondary"}
-                           onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                              handleFilter(e)
+                           variant={
+                              typeFilter === type.name ? "default" : "link"
                            }
+                           onClick={(
+                              e: React.MouseEvent<HTMLButtonElement>
+                           ) => {
+                              typeFilter === type.name
+                                 ? resetFilter()
+                                 : handleTypeFilter(e);
+                           }}
                         >
                            {type.name}
                         </Button>
@@ -99,10 +156,18 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                            size="sm"
                            className="shadow hover:bg-primary hover:text-black capitalize"
                            key={uuidv4()}
-                           variant={filter === category.name ? "default" : "secondary"}
-                           onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                              handleFilter(e)
+                           variant={
+                              categoryFilter === category.name
+                                 ? "default"
+                                 : "secondary"
                            }
+                           onClick={(
+                              e: React.MouseEvent<HTMLButtonElement>
+                           ) => {
+                              categoryFilter === category.name
+                                 ? resetFilter()
+                                 : handleCategoryFilter(e);
+                           }}
                         >
                            {category.name}
                         </Button>
@@ -116,20 +181,58 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
             </Carousel>
          </div>
          <div className="flex items-center justify-between mt-5">
-            <div className="text-sm flex items-center gap-5 font-medium">
-               <p>Autour de moi</p>
-               <p className="underline decoration-cyan-500 decoration-2 underline-offset-4">
-                  Partout dans le monde
-               </p>
+            <div className="text-sm flex items-center gap-5 font-medium houseFilter">
+               <p className="cursor-pointer">Autour de moi</p>
+               <p className="cursor-pointer">Partout dans le monde</p>
             </div>
             <div className="hidden md:block">
-               <p>Trier par</p>
+               <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                     <Button
+                        className="flex items-center gap-2 cursor-pointer"
+                        variant="ghost"
+                     >
+                        <p className="text-md">Trier</p>
+                        <LayoutGridIcon className="h-5 w-5" />
+                     </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="p-1" align="end">
+                     <DropdownMenuLabel>Prix</DropdownMenuLabel>
+                     <DropdownMenuSeparator />
+                     <DropdownMenuItem>
+                        <div
+                           className="flex items-center gap-2 group cursor-pointer"
+                           onClick={() => handlePriceAsc()}
+                        >
+                           <ArrowUpNarrowWide className="h-5 w-5" />
+                           <p className="group-hover:font-medium">Croissant</p>
+                        </div>
+                     </DropdownMenuItem>
+                     <DropdownMenuItem>
+                        <div
+                           className="flex items-center gap-2 group"
+                           onClick={() => handlePriceDesc()}
+                        >
+                           <ArrowDownNarrowWide className="h-5 w-5" />
+                           <p className="cursor-pointer group-hover:font-medium">
+                              Décroissant
+                           </p>
+                        </div>
+                     </DropdownMenuItem>
+                  </DropdownMenuContent>
+               </DropdownMenu>
             </div>
          </div>
          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-5 gap-y-5 mt-4">
-            {filteredHouses.map((house) => (
-               <HouseCard key={uuidv4()} house={house} />
-            ))}
+            {filteredHouses.length === 0 ? (
+               <p className="w-[490px]">
+                  Aucune annonce ne correspond à votre recherche...
+               </p>
+            ) : (
+               filteredHouses.map((house) => (
+                  <HouseCard key={uuidv4()} house={house} />
+               ))
+            )}
          </div>
       </section>
    );
