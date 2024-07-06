@@ -15,7 +15,7 @@ import Tag from "../../../public/icon/tag.png";
 import Wallet from "../../../public/icon/wallet.png";
 import Star from "../../../public/icon/star.png";
 
-const HouseCard = ({ house }: HouseCardTypes) => {
+export const HouseCardInline = ({ house }: HouseCardTypes) => {
    const router = useRouter();
 
    const pathName = usePathname();
@@ -23,17 +23,16 @@ const HouseCard = ({ house }: HouseCardTypes) => {
 
    const { getCountryByCode } = useLocation();
    const country = getCountryByCode(house.country);
-
    return (
-      <div className="flex flex-col bg-card/20 rounded-lg max-w-[300px] overflow-hidden border border-card/50 shadow">
+      <div className="shadow bg-card/20 rounded-lg border border-card/50 flex h-[220px]">
          {/* Illustration */}
-         <div className=" h-[150px] relative rounded-lg aspect-square w-full hover:scale-100">
+         <div className="h-full relative rounded-lg aspect-square hover:scale-100 w-[40%]">
             <Image
                src={house.image ?? ""}
                fill
                sizes="100%"
                alt="Photo d'une maison"
-               className=" object-cover rounded-t-lg h-full w-full border-b-4 border-cyan-500 "
+               className=" object-cover rounded-l-lg h-full w-full border-r-4 border-cyan-500 "
             />
             {isMyHouses && (
                <Button
@@ -46,9 +45,9 @@ const HouseCard = ({ house }: HouseCardTypes) => {
             )}
          </div>
          {/* Details */}
-         <div className="p-5">
+         <div className="p-3 w-[60%]">
             <div className="">
-               <p className="text-md font-semibold w-[200px] text-ellipsis overflow-hidden whitespace-nowrap">
+               <p className="text-lg font-semibold w-[200px] text-ellipsis overflow-hidden whitespace-nowrap">
                   {house.title}
                </p>
                <p className="text-xs font-medium text-gray-400">
@@ -130,5 +129,3 @@ const HouseCard = ({ house }: HouseCardTypes) => {
       </div>
    );
 };
-
-export default HouseCard;

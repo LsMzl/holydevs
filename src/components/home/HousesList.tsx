@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { usePathname, useRouter } from "next/navigation";
 import { HouseListTypes } from "@/types/home/House";
 
-import HouseCard from "../house/HouseCard";
+import HouseCard from "../house/HouseCardGrid";
 
 import {
    Carousel,
@@ -32,8 +32,12 @@ import {
 import {
    ArrowDownNarrowWide,
    ArrowUpNarrowWide,
+   ChevronDown,
    LayoutGridIcon,
+   RotateCcwIcon,
+   StretchHorizontalIcon,
 } from "lucide-react";
+import { HouseCardInline } from "../house/HouseCardInline";
 
 const HousesList = ({ categories, types, houses }: HouseListTypes) => {
    const router = useRouter();
@@ -43,6 +47,7 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
    // Filters
    const [categoryFilter, setCategoryFilter] = useState("");
    const [typeFilter, setTypeFilter] = useState("");
+   const [display, setDisplay] = useState("grid");
 
    const [sortedHouses, setSortedHouses] = useState("");
 
@@ -57,15 +62,6 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
    const resetFilter = () => {
       setCategoryFilter("");
       setTypeFilter("");
-   };
-
-   // Price filter
-   const handlePriceAsc = () => {
-      setSortedHouses("asc");
-   };
-
-   const handlePriceDesc = () => {
-      setSortedHouses("desc");
    };
 
    // Filtrage des résultats selon la catégorie ou type selectionné
@@ -185,55 +181,92 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                <p className="cursor-pointer">Autour de moi</p>
                <p className="cursor-pointer">Partout dans le monde</p>
             </div>
-            <div className="hidden md:block">
-               <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                     <Button
-                        className="flex items-center gap-2 cursor-pointer"
-                        variant="ghost"
-                     >
-                        <p className="text-md">Trier</p>
-                        <LayoutGridIcon className="h-5 w-5" />
-                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="p-1" align="end">
-                     <DropdownMenuLabel>Prix</DropdownMenuLabel>
-                     <DropdownMenuSeparator />
-                     <DropdownMenuItem>
-                        <div
-                           className="flex items-center gap-2 group cursor-pointer"
-                           onClick={() => handlePriceAsc()}
+            <div className="flex items-center ">
+               <div className="hidden md:block">
+                  {/* Sort Menu */}
+                  <DropdownMenu>
+                     <DropdownMenuTrigger asChild>
+                        <Button
+                           className="flex items-center gap-1 cursor-pointer"
+                           variant="ghost"
                         >
-                           <ArrowUpNarrowWide className="h-5 w-5" />
-                           <p className="group-hover:font-medium">Croissant</p>
-                        </div>
-                     </DropdownMenuItem>
-                     <DropdownMenuItem>
-                        <div
-                           className="flex items-center gap-2 group"
-                           onClick={() => handlePriceDesc()}
-                        >
-                           <ArrowDownNarrowWide className="h-5 w-5" />
-                           <p className="cursor-pointer group-hover:font-medium">
-                              Décroissant
-                           </p>
-                        </div>
-                     </DropdownMenuItem>
-                  </DropdownMenuContent>
-               </DropdownMenu>
+                           <p className="text-md">Trier</p>
+                           <ChevronDown className="h-5 w-5" />
+                        </Button>
+                     </DropdownMenuTrigger>
+                     <DropdownMenuContent className="p-1" align="end">
+                        <DropdownMenuLabel>Prix</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                           <div
+                              className="flex items-center gap-2 group cursor-pointer"
+                              onClick={() => setSortedHouses("asc")}
+                           >
+                              <ArrowUpNarrowWide className="h-4 w-4" />
+                              <p className="group-hover:font-medium">
+                                 Croissant
+                              </p>
+                           </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                           <div
+                              className="flex items-center gap-2 group"
+                              onClick={() => setSortedHouses("desc")}
+                           >
+                              <ArrowDownNarrowWide className="h-4 w-4" />
+                              <p className="cursor-pointer group-hover:font-medium">
+                                 Décroissant
+                              </p>
+                           </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                           <div className="flex items-center gap-2 group">
+                              <RotateCcwIcon className="h-4 w-4" />
+                              <p className="cursor-pointer group-hover:font-medium">
+                                 Réinitialiser
+                              </p>
+                           </div>
+                        </DropdownMenuItem>
+                     </DropdownMenuContent>
+                  </DropdownMenu>
+               </div>
+               {display === "grid" ? (
+                  <Button
+                     variant="ghost"
+                     size="sm"
+                     onClick={() => setDisplay("inline")}
+                  >
+                     <StretchHorizontalIcon className="h-5 w-5" />
+                  </Button>
+               ) : (
+                  <Button
+                     variant="ghost"
+                     size="sm"
+                     onClick={() => setDisplay("grid")}
+                  >
+                     <LayoutGridIcon className="h-5 w-5" />
+                  </Button>
+               )}
             </div>
          </div>
-         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-5 gap-y-5 mt-4">
-            {filteredHouses.length === 0 ? (
-               <p className="w-[490px]">
-                  Aucune annonce ne correspond à votre recherche...
-               </p>
-            ) : (
-               filteredHouses.map((house) => (
+
+         {filteredHouses.length === 0 ? (
+            <p className="w-[490px]">
+               Aucune annonce ne correspond à votre recherche...
+            </p>
+         ) : display === "grid" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-5 gap-y-5 mt-4">
+               {filteredHouses.map((house) => (
                   <HouseCard key={uuidv4()} house={house} />
-               ))
-            )}
-         </div>
+               ))}
+            </div>
+         ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5 mt-4">
+               {filteredHouses.map((house) => (
+                  <HouseCardInline key={uuidv4()} house={house} />
+               ))}
+            </div>
+         )}
       </section>
    );
 };

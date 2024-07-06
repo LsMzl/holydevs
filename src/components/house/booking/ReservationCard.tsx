@@ -43,6 +43,7 @@ export const ReservationCard = ({ house }: ReservationCardTypes) => {
                <Image
                   src={house.image ?? ""}
                   fill
+                  sizes="100%"
                   alt={house.title ?? ""}
                   className="object-cover rounded-l"
                />
