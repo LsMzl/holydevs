@@ -125,7 +125,10 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
             </div>
             <div className="bg-background grid grid-cols-3 gap-3 justify-between">
                {user.followings.map((follower) => (
-                  <Link href={follower.following.username ?? ""} key={follower.id}>
+                  <Link
+                     href={follower.following.username ?? ""}
+                     key={follower.id}
+                  >
                      <Image
                         src={follower.following.profilePicture ?? ""}
                         alt="Photo de profil"
@@ -158,11 +161,11 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
                                  alt="Photo de l'annonce"
                                  fill
                                  sizes="100%"
-                                 className="rounded"
+                                 className="rounded object-cover"
                               />
                            </div>
-                           <div>
-                              <p className="text-sm font-medium">
+                           <div className="self-center">
+                              <p className="text-sm font-medium w-[120px] text-ellipsis whitespace-nowrap overflow-hidden">
                                  {house.title}
                               </p>
                               <p className="text-xs">Localisation</p>

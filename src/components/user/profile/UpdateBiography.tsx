@@ -27,7 +27,8 @@ import { Button } from "@/components/shadcn/button";
 import { Check, Loader2, X } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { UpdateBiographyTypes, UpdateProfileTypes } from "@/types/user/profile";
+import { UpdateBiographyTypes } from "@/types/user/updateProfile";
+
 
 interface UpdateBiographyProps {
    biography: string;

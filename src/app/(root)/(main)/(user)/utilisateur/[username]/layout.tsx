@@ -30,6 +30,7 @@ import Message from "../../../../../../../public/icon/comments.png";
 // Queries
 import { getUserByClerkId } from "@/actions/getUserByClerkId";
 import { BlockAndFollowInteraction } from "@/components/social/BlockAndFollowInteraction";
+import { redirect } from "next/navigation";
 
 interface ProfilPageProps {
    params: {
@@ -56,7 +57,7 @@ export default async function FriendLayout({
          },
       },
    });
-   if (!user) return <h1>Cette utilisateur n'existe pas</h1>;
+   if (!user) redirect('/utilisateurs');
 
    // Utilisateur connecté
    const { userId } = auth();
@@ -109,7 +110,7 @@ export default async function FriendLayout({
       <main className="flex flex-col items-center gap-5">
          {/* Haut de la page */}
          <div className="bg-gradient-to-b from-gray-500 to-background w-full border-b pb-5">
-            <div className="w-full max-w-[1400px] mx-auto">
+            <div className="w-full max-w-[1200px] mx-auto">
                {/* Cover picture & informations */}
                <section>
                   {/* Cover picture */}

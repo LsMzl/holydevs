@@ -16,8 +16,6 @@ import React, { useState } from "react";
 export const ReservationCard = ({ house }: ReservationCardTypes) => {
     // React, Next
    const router = useRouter();
-   console.log('booking', house.bookings)
-   console.log('house', house)
 
    // Paiement
    const [bookingIsLoading, setBookingIsLoading] = useState(false);

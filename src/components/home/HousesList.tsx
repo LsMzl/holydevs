@@ -1,26 +1,29 @@
 "use client";
-
-import { v4 as uuidv4 } from "uuid";
-// import HouseCard from "../elements/cards/HouseCard";
-
-// import CountryFilter from "./CountryFilter";
-
-import { usePathname, useRouter } from "next/navigation";
-import { HouseListTypes } from "@/types/home/House";
-
-import HouseCard from "../house/HouseCardGrid";
-
-import {
-   Carousel,
-   CarouselContent,
-   CarouselItem,
-   CarouselNext,
-   CarouselPrevious,
-} from "@/components/shadcn/carousel";
-import { Button } from "../shadcn/button";
+// React / Next
 import { useEffect, useState } from "react";
 
-import "../../../public/css/style.css";
+// Hooks
+import useLocation from "@/app/hooks/useLocations";
+
+// Components
+import HouseCard from "../house/HouseCardGrid";
+import { HouseCardInline } from "../house/HouseCardInline";
+
+// Types
+import { HouseListTypes } from "@/types/home/House";
+
+// Libraries
+import { v4 as uuidv4 } from "uuid";
+import { ICity, IState } from "country-state-city";
+
+// UI Components
+import {
+   Select,
+   SelectContent,
+   SelectItem,
+   SelectTrigger,
+   SelectValue,
+} from "../shadcn/select";
 import {
    DropdownMenu,
    DropdownMenuContent,
@@ -30,6 +33,16 @@ import {
    DropdownMenuTrigger,
 } from "../shadcn/dropdown-menu";
 import {
+   Carousel,
+   CarouselContent,
+   CarouselItem,
+   CarouselNext,
+   CarouselPrevious,
+} from "@/components/shadcn/carousel";
+import { Button } from "../shadcn/button";
+
+// Icons
+import {
    ArrowDownNarrowWide,
    ArrowUpNarrowWide,
    ChevronDown,
@@ -37,13 +50,11 @@ import {
    RotateCcwIcon,
    StretchHorizontalIcon,
 } from "lucide-react";
-import { HouseCardInline } from "../house/HouseCardInline";
+
+// Style
+import "../../../public/css/style.css";
 
 const HousesList = ({ categories, types, houses }: HouseListTypes) => {
-   const router = useRouter();
-   const pathName = usePathname();
-   const isMyHouses = pathName.includes("mes-annonces");
-
    // Filters
    const [categoryFilter, setCategoryFilter] = useState("");
    const [typeFilter, setTypeFilter] = useState("");
@@ -58,19 +69,54 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
    const handleTypeFilter = (e: any) => {
       setTypeFilter(e.currentTarget.textContent);
    };
-
    const resetFilter = () => {
       setCategoryFilter("");
       setTypeFilter("");
    };
 
-   // Filtrage des résultats selon la catégorie ou type selectionné
+   // Location filter
+   const [country, setCountry] = useState("");
+   const [state, setState] = useState("");
+   const [city, setCity] = useState("");
+   const [states, setStates] = useState<IState[]>([]);
+   const [cities, setCities] = useState<ICity[]>([]);
+   const { getAllCountries, getCountryStates, getStateCities } = useLocation();
+
+   const countries = getAllCountries();
+
+   useEffect(() => {
+      const countryStates = getCountryStates(country);
+
+      if (countryStates) {
+         setStates(countryStates);
+         setState("");
+         setCity("");
+      }
+   }, [country]);
+   useEffect(() => {
+      const stateCities = getStateCities(country, state);
+
+      if (stateCities) {
+         setCities(stateCities);
+         setCity("");
+      }
+   }, [country, state]);
+   const handleClear = () => {
+      setCountry("");
+      setState("");
+      setCity("");
+   };
+
+   // Filtrage des résultats selon la catégorie, type et localisation selectionné
    let filteredHouses = houses.filter(
       (house) =>
          house.categories[0].category.name
             .toLowerCase()
             .includes(categoryFilter) &&
-         house.types[0].type.name.toLowerCase().includes(typeFilter)
+         house.types[0].type.name.toLowerCase().includes(typeFilter) &&
+         house.country.includes(country) &&
+         house.state.includes(state) &&
+         house.city.includes(city)
    );
 
    if (sortedHouses === "asc") {
@@ -81,7 +127,10 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                house.categories[0].category.name
                   .toLowerCase()
                   .includes(categoryFilter) &&
-               house.types[0].type.name.toLowerCase().includes(typeFilter)
+               house.types[0].type.name.toLowerCase().includes(typeFilter) &&
+               house.country.includes(country) &&
+               house.state.includes(state) &&
+               house.city.includes(city)
          );
    } else if (sortedHouses === "desc") {
       filteredHouses = houses
@@ -91,21 +140,21 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                house.categories[0].category.name
                   .toLowerCase()
                   .includes(categoryFilter) &&
-               house.types[0].type.name.toLowerCase().includes(typeFilter)
+               house.types[0].type.name.toLowerCase().includes(typeFilter) &&
+               house.country.includes(country) &&
+               house.state.includes(state) &&
+               house.city.includes(city)
          );
    }
 
    return (
       <section className="mt-10">
          <div className="flex items-center gap-2 md:gap-5 mt-3 md:mt-4">
-            <h2 className="text-xl md:text-2xl font-semibold">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2">
                Toutes les annonces
             </h2>
-            <div className="flex items-center md:gap-2 md:mt-1.5">
-               <p>en</p>
-               {/* <CountryFilter /> */}
-            </div>
          </div>
+         <div className="bg-foreground/5 rounded-lg p-2 shadow">
          {/* Categories Filter */}
          <div className="">
             <Carousel
@@ -114,12 +163,12 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                   loop: true,
                   dragFree: true,
                }}
-               className="w-full relative pt-5"
+               className="w-full relative"
             >
                <CarouselContent className="max-md:ml-4 -ml-0">
                   <Button
                      size="sm"
-                     className="shadow hover:bg-secondary"
+                     className="shadow hover:bg-foreground/20 bg-foreground/10 text-foreground"
                      onClick={() => resetFilter()}
                   >
                      Tout
@@ -129,16 +178,16 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                      <CarouselItem key={uuidv4()} className="basis-1/8">
                         <Button
                            size="sm"
-                           className="shadow hover:bg-primary hover:text-black capitalize"
+                           className="shadow hover:bg-purple-500 capitalize hover:no-underline"
                            key={uuidv4()}
                            variant={
-                              typeFilter === type.name ? "default" : "link"
+                              typeFilter === type.name ? "selected" : "type"
                            }
                            onClick={(
                               e: React.MouseEvent<HTMLButtonElement>
                            ) => {
                               typeFilter === type.name
-                                 ? resetFilter()
+                                 ? setTypeFilter("")
                                  : handleTypeFilter(e);
                            }}
                         >
@@ -150,18 +199,18 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                      <CarouselItem key={uuidv4()} className="basis-1/8">
                         <Button
                            size="sm"
-                           className="shadow hover:bg-primary hover:text-black capitalize"
+                           className="shadow hover:bg-cyan-400 capitalize hover:no-underline"
                            key={uuidv4()}
                            variant={
                               categoryFilter === category.name
-                                 ? "default"
-                                 : "secondary"
+                                 ? "selected"
+                                 : "category"
                            }
                            onClick={(
                               e: React.MouseEvent<HTMLButtonElement>
                            ) => {
                               categoryFilter === category.name
-                                 ? resetFilter()
+                                 ? setCategoryFilter("")
                                  : handleCategoryFilter(e);
                            }}
                         >
@@ -170,28 +219,92 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                      </CarouselItem>
                   ))}
                </CarouselContent>
-               <div className="absolute -top-4 right-12">
+               <div className="absolute bottom-[70px] right-10">
                   <CarouselNext />
                   <CarouselPrevious />
                </div>
             </Carousel>
          </div>
-         <div className="flex items-center justify-between mt-5">
-            <div className="text-sm flex items-center gap-5 font-medium houseFilter">
-               <p className="cursor-pointer">Autour de moi</p>
-               <p className="cursor-pointer">Partout dans le monde</p>
+         <div className="flex items-center justify-between mt-3">
+            {/* <LocationFilter /> */}
+            <div className="flex items-center gap-1 bg-foreground/10 p-0.5 rounded-lg">
+               {/* Pays */}
+               <div>
+                  <Select
+                     value={country}
+                     onValueChange={(value) => setCountry(value)}
+                  >
+                     <SelectTrigger className="hover:bg-foreground/10 bg-transparent border-none">
+                        <SelectValue placeholder="Pays" />
+                     </SelectTrigger>
+                     <SelectContent>
+                        {countries.map((country) => (
+                           <SelectItem value={country.isoCode} key={uuidv4()}>
+                              {country.name}
+                           </SelectItem>
+                        ))}
+                     </SelectContent>
+                  </Select>
+               </div>
+               {/* Régions */}
+               <div className="w-full">
+                  <Select
+                     value={state}
+                     onValueChange={(value) => setState(value)}
+                  >
+                     <SelectTrigger
+                        className="hover:bg-foreground/10 bg-transparent border-none"
+                        disabled={country === ""}
+                     >
+                        <SelectValue placeholder="Région" />
+                     </SelectTrigger>
+                     <SelectContent>
+                        {!!states.length &&
+                           states.map((state) => (
+                              <SelectItem value={state.isoCode} key={uuidv4()}>
+                                 {state.name}
+                              </SelectItem>
+                           ))}
+                     </SelectContent>
+                  </Select>
+               </div>
+               {/* Villes */}
+               <div>
+                  <Select
+                     value={city}
+                     onValueChange={(value) => setCity(value)}
+                  >
+                     <SelectTrigger
+                        className="hover:bg-foreground/10 bg-transparent border-none"
+                        disabled={country === "" || state === ""}
+                     >
+                        <SelectValue placeholder="Ville" />
+                     </SelectTrigger>
+                     <SelectContent>
+                        {!!cities.length &&
+                           cities.map((city) => (
+                              <SelectItem value={city.name} key={uuidv4()}>
+                                 {city.name}
+                              </SelectItem>
+                           ))}
+                     </SelectContent>
+                  </Select>
+               </div>
+               <div
+                  className="text-red-500 cursor-pointer"
+                  onClick={() => handleClear()}
+               >
+                  <RotateCcwIcon className="h-5 w-5 ml-1 mr-2 hover:animate-spin-fast" />
+               </div>
             </div>
-            <div className="flex items-center ">
+            <div className="flex items-center gap-2">
+               {/* Sort Menu */}
                <div className="hidden md:block">
-                  {/* Sort Menu */}
                   <DropdownMenu>
                      <DropdownMenuTrigger asChild>
-                        <Button
-                           className="flex items-center gap-1 cursor-pointer"
-                           variant="ghost"
-                        >
-                           <p className="text-md">Trier</p>
-                           <ChevronDown className="h-5 w-5" />
+                        <Button className="flex items-center gap-1 cursor-pointer bg-foreground/10 hover:bg-foreground/20">
+                           <p className="text-md text-foreground">Trier</p>
+                           <ChevronDown className="h-5 w-5 text-foreground" />
                         </Button>
                      </DropdownMenuTrigger>
                      <DropdownMenuContent className="p-1" align="end">
@@ -230,24 +343,27 @@ const HousesList = ({ categories, types, houses }: HouseListTypes) => {
                      </DropdownMenuContent>
                   </DropdownMenu>
                </div>
+               {/* Vue grille & liste */}
                {display === "grid" ? (
                   <Button
-                     variant="ghost"
-                     size="sm"
+                     className="bg-foreground/10 px-2.5 hover:bg-foreground/20"
                      onClick={() => setDisplay("inline")}
+                     title="Vue liste"
                   >
-                     <StretchHorizontalIcon className="h-5 w-5" />
+                     <StretchHorizontalIcon className="h-5 w-5 text-foreground" />
                   </Button>
                ) : (
                   <Button
-                     variant="ghost"
-                     size="sm"
+                     className="bg-foreground/10 px-2.5 hover:bg-foreground/20"
                      onClick={() => setDisplay("grid")}
+                     title="Vue grille"
                   >
-                     <LayoutGridIcon className="h-5 w-5" />
+                     <LayoutGridIcon className="h-5 w-5 text-foreground" />
                   </Button>
                )}
             </div>
+         </div>
+
          </div>
 
          {filteredHouses.length === 0 ? (

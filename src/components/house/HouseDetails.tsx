@@ -49,6 +49,7 @@ import LeafletMap from "./LeafletMap";
 import { PropositionCarousel } from "./PropositionCarousel";
 import useBookHouse from "@/app/hooks/useBookHouse";
 import { DateRangePicker } from "./booking/DateRangePicker";
+import { HouseDescriptionDialog } from "./details/HouseDescriptionDialog";
 
 const HouseDetails = ({
    house,
@@ -126,16 +127,6 @@ const HouseDetails = ({
             description: <Link href={"/sign-in"}>Connexion</Link>,
          });
       }
-
-      //? pas sur de devoir mettre ça
-      // if (!house?.userId) {
-      //    return toast({
-      //       variant: "destructive",
-      //       description:
-      //          "Une erreur s'est produite, veuillez réessayer plus tard",
-      //    });
-      // }
-      console.log('userId', house.user.id)
 
       //? Si l'utilisateur à bien selectionné des dates de réservation
       if (date?.from && date?.to) {
@@ -341,9 +332,10 @@ const HouseDetails = ({
                   <p className="mt-5 md:mt-8 mb-2 text-md md:text-xl font-medium">
                      En savoir plus sur le logement
                   </p>
-                  <p className="text-sm md:text-base h-20 font-light overflow-y-auto">
+                  <p className="text-sm md:text-base h-[68px] font-light overflow-hidden text-ellipsis">
                      {house?.description}
                   </p>
+                  <HouseDescriptionDialog house={house}/>
                   {/* Date de mise en ligne */}
                   <p className=" md:pb-5 mt-2 text-xs">
                      Mis en ligne le{" "}
@@ -540,7 +532,7 @@ const HouseDetails = ({
                   )}
                </div>
                <div>
-                  <AddOpinionForm />
+                  <AddOpinionForm house={house} />
                </div>
             </div>
 

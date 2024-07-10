@@ -24,5 +24,29 @@ export interface FriendsPageType {
          profilePicture: string | null;
       };
    }[];
-   
+}
+
+export interface ProfileHouseCardTypes {
+   house: {
+      id: string;
+      image: string | null;
+      title: string;
+      price: number | null;
+      description: string;
+      country: string;
+      city: string;
+      types: {
+         type: {
+            name: string;
+         };
+      }[];
+      categories: {
+         category: {
+            name: string;
+         };
+      }[];
+      Opinions: {
+         id: string;
+      }[];
+   };
 }

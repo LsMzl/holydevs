@@ -29,7 +29,8 @@ import { Check, Loader2, X } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { AvatarInput } from "@/components/shadcn/avatarInput";
-import { UpdateAvatarTypes, UpdateProfileTypes } from "@/types/user/profile";
+import { UpdateAvatarTypes } from "@/types/user/updateProfile";
+
 
 interface UpdateAvatarProps {
    avatar: string;

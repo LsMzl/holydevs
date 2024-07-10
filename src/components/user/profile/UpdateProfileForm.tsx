@@ -17,7 +17,7 @@ import { Button } from "@/components/shadcn/button";
 import { Avatar, AvatarImage } from "@/components/shadcn/avatar";
 
 // Types
-import { UpdateProfileTypes } from "@/types/user/profile";
+
 import { format, setDefaultOptions } from "date-fns";
 import { fr } from "date-fns/locale";
 import UpdateAvatar from "./UpdateAvatar";
@@ -25,6 +25,7 @@ import UpdateCoverPicture from "./UpdateCoverPicture";
 import UpdateBiography from "./UpdateBiography";
 import { UpdateLanguages } from "./UpdateLanguages";
 import { UpdateInterest } from "./UpdateInterest";
+import { UpdateProfileTypes } from "@/types/user/updateProfile";
 
 const UpdateProfileForm = ({
    biography,

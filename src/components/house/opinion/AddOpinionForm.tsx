@@ -31,6 +31,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 import { toast } from "@/components/shadcn/use-toast";
+import { HouseDetailsTypes } from "@/types/house/houseDetails";
 
 const formSchema = z.object({
    title: z
@@ -41,7 +42,7 @@ const formSchema = z.object({
    }),
 });
 
-const AddOpinionForm = () => {
+const AddOpinionForm = ({ house }: HouseDetailsTypes) => {
    const [isLoading, setIsLoading] = useState(false);
    const router = useRouter();
 
@@ -56,7 +57,7 @@ const AddOpinionForm = () => {
    function onSubmit(values: z.infer<typeof formSchema>) {
       setIsLoading(true);
       axios
-         .post(`../api/opinion/${house?.id}`, values)
+         .post(`/api/opinion/${house.id}`, values)
          .then((res) => {
             toast({
                variant: "success",
@@ -84,9 +85,7 @@ const AddOpinionForm = () => {
                   + Avis
                </Button>
                {/* Screen */}
-               <Button className="hidden md:block">
-                  Mettre un avis
-               </Button>
+               <Button className="hidden md:block">Mettre un avis</Button>
             </div>
          </DialogTrigger>
          <DialogContent>

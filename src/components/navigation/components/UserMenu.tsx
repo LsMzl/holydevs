@@ -77,7 +77,7 @@ export function UserMenu({
                <DropdownMenuItem className="flex items-center gap-1 hover:text-gray-500 cursor-pointer">
                   <Calendar size={15} />
                   <Link
-                     href="/mes-reservations"
+                     href={`/${username}/reservations`}
                      title="Réservations de l'utilisateur"
                   >
                      Mes réservations
@@ -87,7 +87,7 @@ export function UserMenu({
                {/* Annonces */}
                <DropdownMenuItem className="flex items-center gap-1 hover:text-gray-500 cursor-pointer">
                   <Notebook size={15} />
-                  <Link href="/mes-annonces" title="Liste de mes annonces">
+                  <Link href={`/${username}/annonces`} title="Liste de mes annonces">
                      Mes annonces
                   </Link>
                </DropdownMenuItem>

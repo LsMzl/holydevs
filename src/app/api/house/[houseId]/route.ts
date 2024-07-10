@@ -5,7 +5,6 @@
  * @creation 02.06.2024 Louis Mazzella
  */
 
-
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -83,6 +82,81 @@ export async function PATCH(
       return NextResponse.json(house);
    } catch (error) {
       console.log("Error at api/annonce/annonceId PATCH", error);
+      return new NextResponse("Internal server error", { status: 500 });
+   }
+}
+export async function DELETE(
+   req: Request,
+   { params }: { params: { houseId: string } }
+) {
+   try {
+      // Récupération de l'id de l'utilisateur connecté.
+      const { userId } = auth();
+      const user = await db.user.findFirst({
+         where: {
+            clerkId: userId,
+         },
+         select: {
+            houses: {
+               select: {
+                  id: true,
+               },
+            },
+         },
+      });
+
+      //! Pas d'annonce trouvée
+      if (!params.houseId) {
+         return new NextResponse("Identifiant de l'annonce non trouvé", {
+            status: 401,
+         });
+      }
+
+      //! Pas d'utilisateur trouvé
+      if (!userId) {
+         return new NextResponse("Non autorisé", { status: 401 });
+      }
+
+      await db.typesOnHouses.deleteMany({
+         where: {
+            houseId: params.houseId,
+         },
+      });
+
+      await db.categoriesOnHouses.deleteMany({
+         where: {
+            houseId: params.houseId,
+         },
+      });
+
+      await db.featuresOnHouses.deleteMany({
+         where: {
+            houseId: params.houseId,
+         },
+      });
+
+      // suppression maison
+      const house = await db.house.delete({
+         where: {
+            id: params.houseId,
+         },
+      });
+
+      //? Si plus de maison, passage de propriétaire à false
+      if (user?.houses.length === 0) {
+         await db.user.update({
+            where: {
+               clerkId: userId,
+            },
+            data: {
+               isOwner: false,
+            },
+         });
+      }
+
+      return NextResponse.json("");
+   } catch (error) {
+      console.log("Error at api/annonce/annonceId DELETE", error);
       return new NextResponse("Internal server error", { status: 500 });
    }
 }

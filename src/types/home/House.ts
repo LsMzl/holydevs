@@ -33,6 +33,7 @@ export interface HouseListTypes {
       image: string | null;
       title: string;
       city: string;
+      state: string;
       country: string;
       price: number | null;
       user: {

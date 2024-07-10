@@ -80,6 +80,7 @@ export default async function Home() {
          image: true,
          title: true,
          city: true,
+         state: true,
          country: true,
          price: true,
          userId: true,

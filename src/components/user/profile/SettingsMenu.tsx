@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 // Components
 import {
    Sheet,
@@ -16,7 +16,6 @@ import { Button } from "@/components/shadcn/button";
 import { Settings } from "lucide-react";
 
 import { Label } from "@/components/shadcn/label";
-// import UpdateInfosForm from "./UpdateInfosForm";
 import {
    AlertDialog,
    AlertDialogAction,
@@ -30,6 +29,9 @@ import {
 } from "@/components/shadcn/alert-dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/radio-group";
 import UpdateInfosForm from "./UpdateInfosForm";
+import axios from "axios";
+import { toast } from "@/components/shadcn/use-toast";
+import { useRouter } from "next/navigation";
 
 interface SettingsMenuProps {
    lastname: string;
@@ -52,6 +54,24 @@ const SettingsMenu = ({
    email,
    phone,
 }: SettingsMenuProps) => {
+   // States
+   const [isLoading, setIsLoading] = useState<boolean>(false);
+   const router = useRouter()
+
+   // Delete Profile
+   const handleDeleteProfile = () => {
+      axios
+         .delete("/api/user/profile/delete")
+         .then((res) => {router.push('/')})
+         .catch((error) => {
+            console.log(error);
+            toast({
+               variant: "destructive",
+               description: "Oups, une erreur est survenue...",
+            });
+            setIsLoading(false);
+         });
+   };
    return (
       <Sheet>
          <SheetTrigger asChild>
@@ -68,8 +88,8 @@ const SettingsMenu = ({
                <SheetTitle>Paramètres</SheetTitle>
                <SheetDescription>
                   {" "}
-                  Make changes to your profile here. Sauvegardez vos changements
-                  une fois terminé.
+                  Menu des paramètres de votre compte. Sauvegardez vos
+                  changements une fois terminé.
                </SheetDescription>
             </SheetHeader>
             <div className="flex flex-col mt-5 gap-5">
@@ -106,7 +126,10 @@ const SettingsMenu = ({
                </div>
                {/* Suppression du compte */}
                <AlertDialog>
-                  <AlertDialogTrigger asChild className="flex justify-end">
+                  <AlertDialogTrigger
+                     asChild
+                     className="flex justify-end absolute bottom-2 right-2"
+                  >
                      <p className="text-xs text-red-500 font-semibold cursor-pointer hover:animate-pulse">
                         Supprimer mon compte
                      </p>
@@ -124,7 +147,10 @@ const SettingsMenu = ({
                      </AlertDialogHeader>
                      <AlertDialogFooter>
                         <AlertDialogCancel>Annuler</AlertDialogCancel>
-                        <AlertDialogAction className="bg-red-500 text-white hover:text-black hover:bg-secondary hover:shadow">
+                        <AlertDialogAction
+                           className="bg-red-500 text-white hover:text-black hover:bg-secondary hover:shadow"
+                           onClick={handleDeleteProfile}
+                        >
                            Supprimer
                         </AlertDialogAction>
                      </AlertDialogFooter>
