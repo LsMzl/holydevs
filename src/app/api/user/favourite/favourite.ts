@@ -2,7 +2,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
-export const switchLike = async (postId: string) => {
+export const switchFavourite = async (houseId: string) => {
    // Utilisateur connecté
    const { userId } = auth();
    if (!userId) {
@@ -21,23 +21,23 @@ export const switchLike = async (postId: string) => {
    }
 
    try {
-      const existingLike = await db.like.findFirst({
+      const existingFav = await db.favourite.findFirst({
          where: {
-            postId: postId,
+            houseId: houseId,
             userId: currentUserId.id,
          },
       });
 
-      if (existingLike) {
-         await db.like.delete({
+      if (existingFav) {
+         await db.favourite.delete({
             where: {
-               id: existingLike.id,
+               id: existingFav.id,
             },
          });
       } else {
-         await db.like.create({
+         await db.favourite.create({
             data: {
-               postId: postId,
+               houseId: houseId,
                userId: currentUserId.id,
             },
          });

@@ -14,35 +14,30 @@ import { useUser } from "@clerk/nextjs";
 // import MiniMap from "../user/MiniMap";
 
 // Type
-import { MainSideNaveUser } from "@/types/MainSideNav";
+import { MainSideNavUser } from "@/types/MainSideNav";
 
 // Data
 
 // Images
 import House from "../../../public/icon/house.png";
 import Booking from "../../../public/icon/booking.png";
-import Fav from "../../../public/icon/favourite.png";
 
-import { Separator } from "../shadcn/separator";
 import { Avatar, AvatarImage } from "../shadcn/avatar";
 import { buttonVariants } from "../shadcn/button";
-import { sideNavLinks } from "@/data/navigationData";
 import Image from "next/image";
 
 import Banner from "../../../public/img/banniere.jpg";
-import MiniMap from "../home/MiniMap";
 import useLocation from "@/app/hooks/useLocations";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { number } from "zod";
+import { UserFavourite } from "../user/favourite/UserFavourite";
 
-const MainSideNav = ({ user }: MainSideNaveUser) => {
+const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
    const { getStateCities } = useLocation();
    const cities = getStateCities(user?.country ?? "", user?.state ?? "");
    const city = cities?.filter((city) => city.name === user?.city);
    if (!city) return <p>Position non trouvée</p>;
-   const pathname = usePathname();
 
    // User position
    const [latitude, setLatitude] = useState(0);
@@ -68,9 +63,6 @@ const MainSideNav = ({ user }: MainSideNaveUser) => {
          console.error("Geolocation is not supported by this browser.");
       }
    }, []);
-
-   // localStorage.setItem("latitude", latitude.toString());
-   // localStorage.setItem("longitude", longitude.toString());
 
    const markers = [
       {
@@ -182,105 +174,87 @@ const MainSideNav = ({ user }: MainSideNaveUser) => {
             )}
          </div>
 
-         <section className="rounded py-3 bg-card/30 shadow">
-            {/* Links */}
-            <div className="flex flex-col gap-1">
-               <Link
-                  href=""
-                  className={cn(
-                     buttonVariants({ variant: "ghost" }),
-                     "flex items-center gap-2 justify-start w-full"
-                  )}
-               >
-                  <Image
-                     src={House}
-                     alt="Logo du lien"
-                     width={16}
-                     height={16}
-                     className="w-4 h-4"
-                  />
-                  Mes annonces
-               </Link>
-               <Link
-                  href=""
-                  className={cn(
-                     buttonVariants({ variant: "ghost" }),
-                     "flex items-center gap-2 justify-start w-full"
-                  )}
-               >
-                  <Image
-                     src={Booking}
-                     alt="Logo du lien"
-                     width={16}
-                     height={16}
-                     className="w-4 h-4"
-                  />
-                  Mes réservations
-               </Link>
-               <Link
-                  href=""
-                  className={cn(
-                     buttonVariants({ variant: "ghost" }),
-                     "flex items-center gap-2 justify-start w-full"
-                  )}
-               >
-                  <Image
-                     src={Fav}
-                     alt="Logo du lien"
-                     width={16}
-                     height={16}
-                     className="w-4 h-4"
-                  />
-                  Mes favoris
-               </Link>
-            </div>
+         {/* Links */}
+         <div className="flex flex-col gap-1 rounded py-3 px-2 bg-card/30 shadow">
+            <Link
+               href={`/${user?.username}/annonces`}
+               className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "flex items-center gap-2 justify-start w-full"
+               )}
+            >
+               <Image
+                  src={House}
+                  alt="Logo du lien"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4"
+               />
+               Mes annonces
+            </Link>
+            <Link
+               href={`/${user?.username}/reservations`}
+               className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "flex items-center gap-2 justify-start w-full"
+               )}
+            >
+               <Image
+                  src={Booking}
+                  alt="Logo du lien"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4"
+               />
+               Mes réservations
+            </Link>
+            <UserFavourite favourites={favourites} />
+         </div>
 
-            <Separator className="my-5" />
-            {/* Friends */}
-            <div className="flex flex-col gap-1 px-3 font-medium">
-               <p className="text-sm font-medium mb-3">Discussions récentes</p>
-               <div className="flex items-center gap-2">
-                  <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
-                     <AvatarImage
-                        src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=userEmail`}
-                     />
-                  </Avatar>
-                  <p className="text-xs">Harry Cover</p>
-               </div>
-               <div className="flex items-center gap-2">
-                  <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
-                     <AvatarImage
-                        src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=usgfderEmagfdgfdgfil`}
-                     />
-                  </Avatar>
-                  <p className="text-xs">Nom de l'utilisateur</p>
-               </div>
-               <div className="flex items-center gap-2">
-                  <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
-                     <AvatarImage
-                        src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=usejrtyhsdhfrEmail`}
-                     />
-                  </Avatar>
-                  <p className="text-xs">Nom de l'utilisateur</p>
-               </div>
-               <div className="flex items-center gap-2">
-                  <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
-                     <AvatarImage
-                        src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=userEmajnfgdhtrhrtil`}
-                     />
-                  </Avatar>
-                  <p className="text-xs">Nom de l'utilisateur</p>
-               </div>
-               <div className="flex items-center gap-2">
-                  <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
-                     <AvatarImage
-                        src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=userEmjgfdjrtjyail`}
-                     />
-                  </Avatar>
-                  <p className="text-xs">Nom de l'utilisateur</p>
-               </div>
+         {/* Friends */}
+         <div className="flex flex-col gap-1 px-3 font-medium rounded py-3 bg-card/30 shadow">
+            <p className="text-sm font-medium mb-3">Discussions récentes</p>
+            <div className="flex items-center gap-2">
+               <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
+                  <AvatarImage
+                     src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=userEmail`}
+                  />
+               </Avatar>
+               <p className="text-xs">Harry Cover</p>
             </div>
-         </section>
+            <div className="flex items-center gap-2">
+               <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
+                  <AvatarImage
+                     src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=usgfderEmagfdgfdgfil`}
+                  />
+               </Avatar>
+               <p className="text-xs">Nom de l'utilisateur</p>
+            </div>
+            <div className="flex items-center gap-2">
+               <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
+                  <AvatarImage
+                     src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=usejrtyhsdhfrEmail`}
+                  />
+               </Avatar>
+               <p className="text-xs">Nom de l'utilisateur</p>
+            </div>
+            <div className="flex items-center gap-2">
+               <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
+                  <AvatarImage
+                     src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=userEmajnfgdhtrhrtil`}
+                  />
+               </Avatar>
+               <p className="text-xs">Nom de l'utilisateur</p>
+            </div>
+            <div className="flex items-center gap-2">
+               <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
+                  <AvatarImage
+                     src={`https://api.dicebear.com/8.x/fun-emoji/svg?seed=userEmjgfdjrtjyail`}
+                  />
+               </Avatar>
+               <p className="text-xs">Nom de l'utilisateur</p>
+            </div>
+         </div>
       </aside>
    );
 };

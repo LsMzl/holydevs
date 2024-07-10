@@ -72,7 +72,6 @@ export default async function HousePage({ params }: HouseDetailsProps) {
                },
             },
          },
-
          user: {
             select: {
                id: true,
@@ -82,6 +81,16 @@ export default async function HousePage({ params }: HouseDetailsProps) {
                profilePicture: true,
             },
          },
+         rates: {
+            select:{
+               rate: true,
+            }
+         },
+         favourites: {
+            select: {
+               userId: true,
+            },
+         }
       },
    });
    if (!house) {
@@ -160,6 +169,9 @@ export default async function HousePage({ params }: HouseDetailsProps) {
             allOpinions={allOpinions}
             lastOpinions={lastOpinions}
             propositionHouse={propositionHouse}
+            totalPrice={0}
+            startDate={new Date}
+            endDate={new Date}
          />
       </div>
    );

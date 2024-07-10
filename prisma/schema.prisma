@@ -85,7 +85,7 @@ model User {
 //* Notes sur les maisons
 model Rates {
   id        String   @id @default(uuid())
-  rate      Int
+  rate      Float
   //! Une note n'a qu'un seul auteur
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String

@@ -14,7 +14,6 @@ import { LastOpinionsTypes } from "@/types/house/houseDetails";
 
 
 const OpinionsCarousel = ({ lastOpinions }: LastOpinionsTypes) => {
-   console.log("Carousel", lastOpinions);
    return (
       <div className="">
          <Carousel

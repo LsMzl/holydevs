@@ -1,6 +1,6 @@
 import { LucideIcon } from "lucide-react";
 
-export interface MainSideNaveUser {
+export interface MainSideNavUser {
    user: {
       id: string;
       firstname: string | null;
@@ -13,6 +13,20 @@ export interface MainSideNaveUser {
       country: string | null;
       state: string | null;
    } | null;
+   favourites: {
+      house: {
+         id: string;
+         title: string;
+      };
+   }[];
+}
+export interface MainSideNavFavouriteTypes {
+   favourites: {
+      house: {
+         id: string;
+         title: string;
+      };
+   }[];
 }
 
 export interface MainSideNavData {

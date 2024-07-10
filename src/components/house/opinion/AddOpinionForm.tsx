@@ -31,7 +31,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 import { toast } from "@/components/shadcn/use-toast";
-import { HouseDetailsTypes } from "@/types/house/houseDetails";
+import { AddOpinionFormTypes } from "@/types/house/houseDetails";
 
 const formSchema = z.object({
    title: z
@@ -42,7 +42,7 @@ const formSchema = z.object({
    }),
 });
 
-const AddOpinionForm = ({ house }: HouseDetailsTypes) => {
+const AddOpinionForm = ({ house }: AddOpinionFormTypes) => {
    const [isLoading, setIsLoading] = useState(false);
    const router = useRouter();
 
@@ -61,7 +61,7 @@ const AddOpinionForm = ({ house }: HouseDetailsTypes) => {
          .then((res) => {
             toast({
                variant: "success",
-               description: "Informations modifiées avec succès !",
+               description: "Avis publié avec succès !",
             });
             setIsLoading(false);
             router.refresh();

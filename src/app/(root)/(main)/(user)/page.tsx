@@ -22,7 +22,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-   
    // User Datas
    const { userId } = auth();
    if (!userId) return <p>Vous n'êtes pas connecté</p>;
@@ -41,6 +40,20 @@ export default async function Home() {
          city: true,
          country: true,
          state: true,
+      },
+   });
+
+   const userFav = await db.favourite.findMany({
+      where: {
+         userId: currentUser?.id,
+      },
+      include: {
+         house: {
+            select: {
+               id: true,
+               title: true,
+            },
+         },
       },
    });
 
@@ -119,7 +132,7 @@ export default async function Home() {
    return (
       <div className="flex items-start gap-5 mt-5 max-w-[1700px] mx-auto">
          <div className="max-lg:hidden w-[20%]">
-            <MainSideNav user={currentUser} />
+            <MainSideNav user={currentUser} favourites={userFav} />
          </div>
          <div className="max-lg:w-full max-lg:mx-2 w-[80%] mx-2">
             {/* Last Houses carousel */}

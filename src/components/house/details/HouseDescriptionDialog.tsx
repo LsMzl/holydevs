@@ -10,10 +10,10 @@ import {
    DialogTitle,
    DialogTrigger,
 } from "@/components/shadcn/dialog";
-import { HouseDetailsTypes } from "@/types/house/houseDetails";
+import { DescriptionDialogTypes, HouseDetailsTypes } from "@/types/house/houseDetails";
 import { Separator } from "@/components/shadcn/separator";
 
-export const HouseDescriptionDialog = ({ house }: HouseDetailsTypes) => {
+export const HouseDescriptionDialog = ({ house }: DescriptionDialogTypes) => {
    return (
       <Dialog>
          <DialogTrigger asChild>

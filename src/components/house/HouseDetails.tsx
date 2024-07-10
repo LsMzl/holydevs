@@ -39,6 +39,7 @@ import { cn } from "@/lib/utils";
 // Images
 import Share from "../../../public/icon/share.png";
 import Star from "../../../public/icon/star.png";
+import Comments from "../../../public/icon/comments.png";
 import Pin from "../../../public/icon/location.png";
 import NoFav from "../../../public/icon/noFavourite.png";
 import Fav from "../../../public/icon/Favourite.png";
@@ -50,6 +51,8 @@ import { PropositionCarousel } from "./PropositionCarousel";
 import useBookHouse from "@/app/hooks/useBookHouse";
 import { DateRangePicker } from "./booking/DateRangePicker";
 import { HouseDescriptionDialog } from "./details/HouseDescriptionDialog";
+import { NotationSystem } from "./notation/NotationSystem";
+import { FavouriteInteraction } from "./details/FavouriteInteraction";
 
 const HouseDetails = ({
    house,
@@ -58,6 +61,13 @@ const HouseDetails = ({
    propositionHouse,
    bookings,
 }: HouseDetailsTypes) => {
+   // Notation
+   const totalRates = house.rates.reduce(
+      (acc, currentValue) => acc + currentValue.rate,
+      0
+   );
+   const averageRate = totalRates / house.rates.length;
+
    // localisation
    const { getCountryByCode, getStateByCode, getStateCities } = useLocation();
    const country = getCountryByCode(house?.country ?? "");
@@ -141,7 +151,6 @@ const HouseDetails = ({
          };
          // Mise à jour des données de réservation
          setHouseData(bookingHouseData);
-         
 
          // Envoie des données de réservation à l'API
          fetch("/api/booking/create-payment-intent", {
@@ -162,7 +171,7 @@ const HouseDetails = ({
                paiement_intent_id: paymentIntentId,
             }),
          })
-         .then((res) => {
+            .then((res) => {
                setBookingIsLoading(false);
                if (res.status === 401) {
                   return toast({
@@ -205,13 +214,19 @@ const HouseDetails = ({
                {/* Types */}
                <div className="space-x-2">
                   {house.types.map((item) => (
-                     <Badge variant="secondary" key={uuidv4()}>
+                     <Badge
+                        variant="secondary"
+                        key={uuidv4()}
+                        className="capitalize"
+                     >
                         {item.type.name}
                      </Badge>
                   ))}
                   {/* Categories */}
                   {house.categories.map((item) => (
-                     <Badge key={uuidv4()}>{item.category.name}</Badge>
+                     <Badge key={uuidv4()} className="capitalize">
+                        {item.category.name}
+                     </Badge>
                   ))}
                </div>
             </div>
@@ -229,25 +244,8 @@ const HouseDetails = ({
                   <p className="hidden md:block md:text-sm">Partager</p>
                </form>
                {/* Favourite */}
-               <form className="flex items-center gap-1">
-                  <Image
-                     src={NoFav}
-                     alt="Icône de partage"
-                     height={20}
-                     width={20}
-                     className="h-5 w-5 hover:animate-bounce cursor-pointer"
-                  />
-                  <Image
-                     src={Fav}
-                     alt="Icône de partage"
-                     height={20}
-                     width={20}
-                     className="h-5 w-5 hover:animate-bounce cursor-pointer"
-                  />
-                  <p className="hidden md:block md:text-sm">
-                     Ajouter aux favoris
-                  </p>
-               </form>
+               <FavouriteInteraction house={house} />
+               
             </div>
          </div>
          <p className="mb-3 text-sm">{house?.introduction}</p>
@@ -281,16 +279,18 @@ const HouseDetails = ({
                            {country?.name}, {state?.name}, {house?.city}
                         </p>
                      </div>
-                     <div className="flex items-center gap-1">
-                        <Image
-                           src={Star}
-                           alt="Icône de note du logement"
-                           height={20}
-                           width={20}
-                           className="h-5 w-5"
-                        />
-                        <p>4,5</p>
-                     </div>
+                     {house.rates.length >= 1 && (
+                        <div className="flex items-center gap-1">
+                           <Image
+                              src={Star}
+                              alt="Icône de note du logement"
+                              height={20}
+                              width={20}
+                              className="h-5 w-5"
+                           />
+                           <p>{averageRate}</p>
+                        </div>
+                     )}
                   </div>
 
                   {/* Nombre de chambre etc */}
@@ -335,7 +335,7 @@ const HouseDetails = ({
                   <p className="text-sm md:text-base h-[68px] font-light overflow-hidden text-ellipsis">
                      {house?.description}
                   </p>
-                  <HouseDescriptionDialog house={house}/>
+                  <HouseDescriptionDialog house={house} />
                   {/* Date de mise en ligne */}
                   <p className=" md:pb-5 mt-2 text-xs">
                      Mis en ligne le{" "}
@@ -508,29 +508,36 @@ const HouseDetails = ({
             {/* <section> */}
             <Separator className="mt-10" />
             {/* Avis */}
-            <p className="text-md md:text-xl font-medium mt-5">
+            <p className="text-md md:text-xl font-medium mt-5 mb-3">
                Avis utilisateurs
             </p>
             <div className="flex justify-between items-center">
-               <div className="flex items-center gap-2">
-                  {allOpinions.length < 1 ? (
-                     <p className="max-md:text-sm">
-                        Aucun avis n'a été écrit pour le moment
-                     </p>
-                  ) : (
-                     <>
-                        <Image
-                           src={Star}
-                           alt="Icône de note du logement"
-                           height={20}
-                           width={20}
-                           className="h-5 w-5"
-                        />
-                        <p>{allOpinions.length} avis</p>
-                        <AllOpinionsDialog allOpinions={allOpinions} />
-                     </>
-                  )}
+               <div className="flex items-center gap-3">
+                  <div>
+                     <NotationSystem house={house} averageRate={averageRate} />
+                  </div>
+
+                  <div>
+                     {allOpinions.length < 1 ? (
+                        <p className="max-md:text-sm">
+                           Aucun avis n'a été écrit pour le moment
+                        </p>
+                     ) : (
+                        <div className="flex items-center gap-2 border rounded-full py-0.5 pr-0.5 pl-2 bg-foreground/5">
+                           <Image
+                              src={Comments}
+                              alt="Icône de note du logement"
+                              height={20}
+                              width={20}
+                              className="h-5 w-5"
+                           />
+                           <p>{allOpinions.length} avis</p>
+                           <AllOpinionsDialog allOpinions={allOpinions} />
+                        </div>
+                     )}
+                  </div>
                </div>
+
                <div>
                   <AddOpinionForm house={house} />
                </div>

@@ -44,6 +44,12 @@ export interface HouseDetailsTypes {
          username: string | null;
          profilePicture: string | null;
       };
+      rates: {
+         rate: number;
+      }[];
+      favourites: {
+         userId: string;
+      }[];
    };
    propositionHouse: {
       id: string;
@@ -76,6 +82,7 @@ export interface HouseDetailsTypes {
          profilePicture: string | null;
       };
    }[];
+
    totalPrice: number;
    startDate: Date;
    endDate: Date;
@@ -118,6 +125,11 @@ export interface PropositionHousesTypes {
       city: string;
    }[];
 }
+export interface AddOpinionFormTypes {
+   house: {
+      id: string;
+   };
+}
 
 export interface PropositionHouseTypes {
    house: {
@@ -126,5 +138,36 @@ export interface PropositionHouseTypes {
       image: string | null;
       price: number | null;
       city: string;
+   };
+}
+
+export interface NotationSystemTypes {
+   house: {
+      id: string;
+      rates: {
+         rate: number;
+      }[];
+   };
+   averageRate: number;
+}
+export interface DescriptionDialogTypes {
+   house: {
+      description: string;
+   };
+}
+
+export interface FavouriteInteractionTypes {
+   house: {
+      id: string;
+      favourites: {
+         userId: string;
+      }[];
+      user: {
+         id: string;
+         firstname: string | null;
+         lastname: string | null;
+         username: string | null;
+         profilePicture: string | null;
+      };
    };
 }
