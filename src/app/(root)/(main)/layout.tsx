@@ -2,9 +2,10 @@ import { TopNav } from "@/components/navigation/TopNav";
 import { auth } from "@clerk/nextjs/server";
 import { getUserByClerkId } from "@/actions/getUserByClerkId";
 import { BottomNav } from "@/components/navigation/BottomNav";
-import { Footer } from "@/components/navigation/Footer";
+
 import { db } from "@/lib/prisma";
 import { FooterMobile } from "@/components/navigation/FooterMobile";
+import { Footer } from "@/components/navigation/Footer";
 
 export default async function MainLayout({
    children,
