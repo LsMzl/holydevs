@@ -5,7 +5,7 @@ import { BottomNav } from "@/components/navigation/BottomNav";
 
 import { db } from "@/lib/prisma";
 import { FooterMobile } from "@/components/navigation/FooterMobile";
-import { MainFooter } from "@/components/navigation/Footer";
+import { FooterScreen } from "@/components/navigation/FooterScreen";
 
 
 export default async function MainLayout({
@@ -44,7 +44,7 @@ export default async function MainLayout({
             <FooterMobile currentUser={currentUser} />
          </div>
          <div className="hidden md:block">
-            <MainFooter currentUser={currentUser} />
+            <FooterScreen currentUser={currentUser} />
          </div>
          <div className="lg:hidden h-[56px]" />
          <BottomNav

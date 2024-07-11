@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { FooterTypes } from "@/types/Footer";
 
-export const MainFooter = ({ currentUser }: FooterTypes) => {
+export const FooterScreen = ({ currentUser }: FooterTypes) => {
    return (
       <footer className="w-full border-t bg-card mt-20 text-foreground/60">
          <div className="max-w-[1200px] flex flex-col mx-auto p-5">
