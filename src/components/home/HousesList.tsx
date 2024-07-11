@@ -55,6 +55,7 @@ import {
 import "../../../public/css/style.css";
 
 const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
+   
    // Filters
    const [categoryFilter, setCategoryFilter] = useState("");
    const [typeFilter, setTypeFilter] = useState("");

@@ -7,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-   return <SignIn />;
+   return (
+      <div className="max-w-[1200px] mx-auto">
+         <SignIn />
+      </div>
+   );
 }

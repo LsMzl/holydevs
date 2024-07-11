@@ -1,3 +1,4 @@
+'use client'
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
@@ -5,17 +6,16 @@ import { Icon } from "leaflet";
 import { v4 as uuidv4 } from "uuid";
 
 interface MiniMapProps {
-   cityLatitude: number | null | undefined;
-   cityLongitude: number | null | undefined;
-   // addressLatitude: number | null | undefined;
-   // addressLongitude: number | null | undefined;
+   latitude: number | null | undefined;
+   longitude: number | null | undefined;
+
 }
 
-const MiniMap = ({ cityLatitude, cityLongitude }: MiniMapProps) => {
+const MiniMap = ({ latitude, longitude }: MiniMapProps) => {
    const markers = [
       {
-         latitude: cityLatitude,
-         longitude: cityLongitude,
+         latitude: latitude,
+         longitude: longitude,
       },
    ];
 
@@ -27,7 +27,7 @@ const MiniMap = ({ cityLatitude, cityLongitude }: MiniMapProps) => {
    return (
       <MapContainer
          // Coordonnées géographiques du logement (latitude, longitude)
-         center={[Number(cityLatitude), Number(cityLongitude)]}
+         center={[Number(latitude), Number(longitude)]}
          zoom={12}
          className="h-[200px] rounded-md z-50 shadow"
       >

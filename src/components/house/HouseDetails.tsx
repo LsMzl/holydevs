@@ -1,19 +1,10 @@
 "use client";
-// Database
-import { Booking, House, User } from "@prisma/client";
+import dynamic from "next/dynamic";
 
-// Hooks
-// import useLocation from "@/hooks/useLocations";
-
-// Components
-// import { Typography } from "../ui/design-system/Typography";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-// import { Button } from "../ui/button";
-// import LeafletMap from "./LeafletMap";
-// import Container from "../elements/Container";
 
 // Icons
-import { Dot, Heart, Loader, MessageCircle, Wand2 } from "lucide-react";
+import { Dot, Loader, MessageCircle, Wand2 } from "lucide-react";
 
 // React / Next
 import React, { useEffect, useMemo, useState } from "react";
@@ -23,18 +14,17 @@ import Link from "next/link";
 // Libraries
 import { differenceInCalendarDays, eachDayOfInterval, format } from "date-fns";
 import { DateRange } from "react-day-picker";
-
-import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-
 import { v4 as uuidv4 } from "uuid";
-import useLocation from "@/app/hooks/useLocations";
+
+// UI Components
 import { toast } from "../shadcn/use-toast";
 import { Badge } from "../shadcn/badge";
 import { Button, buttonVariants } from "../shadcn/button";
 import { Separator } from "../shadcn/separator";
-import { HouseDetailsTypes } from "@/types/house/houseDetails";
 import { cn } from "@/lib/utils";
+
+// Types
+import { HouseDetailsTypes } from "@/types/house/houseDetails";
 
 // Images
 import Share from "../../../public/icon/share.png";
@@ -46,15 +36,20 @@ import Pin from "../../../public/icon/location.png";
 import AllOpinionsDialog from "./opinion/AllOpinionsDialog";
 import AddOpinionForm from "./opinion/AddOpinionForm";
 import OpinionsCarousel from "./opinion/OpinionsCarousel";
-import LeafletMap from "./LeafletMap";
 import { PropositionCarousel } from "./PropositionCarousel";
 import { HouseDescriptionDialog } from "./details/HouseDescriptionDialog";
 import { NotationSystem } from "./notation/NotationSystem";
 import { FavouriteInteraction } from "./details/FavouriteInteraction";
 import { DateRangePicker } from "./booking/DateRangePicker";
+const LeafletMap = dynamic(() => import("./LeafletMap"), {
+   ssr: false,
+});
 
 // Hooks
 import useBookHouse from "@/app/hooks/useBookHouse";
+import useLocation from "@/app/hooks/useLocations";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 // Libraries
 import { fr } from "date-fns/locale";
@@ -593,7 +588,6 @@ const HouseDetails = ({
                   <OpinionsCarousel lastOpinions={lastOpinions} />
                )}
             </div>
-            {/* </section> */}
 
             {/* Localisation */}
             <section>
@@ -603,8 +597,8 @@ const HouseDetails = ({
 
                {/* Map */}
                <LeafletMap
-                  cityLatitude={Number(city[0].latitude) || null || undefined}
-                  cityLongitude={Number(city[0].longitude) || null || undefined}
+                  cityLatitude={Number(city[0].latitude)}
+                  cityLongitude={Number(city[0].longitude)}
                />
             </section>
             {/* Annonces similaires */}

@@ -2,16 +2,9 @@
 // React / Next
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
-
-// import { Typography } from "../ui/design-system/Typography";
+import dynamic from 'next/dynamic'
 
 import { cn } from "@/lib/utils";
-// import LocationFilter from "./LocationFilter";
-
-import { useUser } from "@clerk/nextjs";
-// import MiniMap from "../user/MiniMap";
 
 // Type
 import { MainSideNavUser } from "@/types/MainSideNav";
@@ -21,6 +14,9 @@ import { MainSideNavUser } from "@/types/MainSideNav";
 // Images
 import House from "../../../public/icon/house.png";
 import Booking from "../../../public/icon/booking.png";
+import { UserFavourite } from "../user/favourite/UserFavourite";
+
+
 
 import { Avatar, AvatarImage } from "../shadcn/avatar";
 import { buttonVariants } from "../shadcn/button";
@@ -28,10 +24,10 @@ import Image from "next/image";
 
 import Banner from "../../../public/img/banniere.jpg";
 import useLocation from "@/app/hooks/useLocations";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { Icon } from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { UserFavourite } from "../user/favourite/UserFavourite";
+
+const MiniMap = dynamic(() => import('../home/MiniMap'), {
+   ssr: false,
+ })
 
 const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
    // States
@@ -66,17 +62,6 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
    const city = cities?.filter((city) => city.name === user?.city);
    if (!city) return <p>Position non trouvée</p>;
 
-   const markers = [
-      {
-         latitude: latitude,
-         longitude: longitude,
-      },
-   ];
-
-   const customIcon = new Icon({
-      iconUrl: "https://img.icons8.com/?size=48&id=13800&format=png",
-      iconSize: [38, 38],
-   });
 
    return (
       <aside
@@ -149,30 +134,7 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
                   </p>
                </div>
             ) : (
-               <MapContainer
-                  // Coordonnées géographiques du logement (latitude, longitude)
-                  center={[latitude, longitude]}
-                  zoom={12}
-                  className="h-[200px] rounded-md z-30 shadow"
-               >
-                  <TileLayer
-                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  {markers.map((marker) => (
-                     <Marker
-                        position={[
-                           marker?.latitude ?? 0,
-                           marker?.longitude ?? 0,
-                        ]}
-                        icon={customIcon}
-                        key={uuidv4()}
-                     >
-                        {/* //TODO: Trouver infos à mettre dans la popup */}
-                        <Popup>Votre position</Popup>
-                     </Marker>
-                  ))}
-               </MapContainer>
+               <MiniMap latitude={latitude} longitude={longitude}/>
             )}
          </div>
 

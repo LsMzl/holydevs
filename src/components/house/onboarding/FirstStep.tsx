@@ -35,11 +35,7 @@ import axios from "axios";
 import { toast } from "@/components/shadcn/use-toast";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/shadcn/button";
-import { Loader2, Pen } from "lucide-react";
-import {
-   HouseOnboardingFirstStepTypes,
-   HouseOnboardingTypes,
-} from "@/types/house/onboarding";
+import { Loader2 } from "lucide-react";
 import { Input } from "@/components/shadcn/input";
 import { Textarea } from "@/components/shadcn/textarea";
 import useLocation from "@/app/hooks/useLocations";
@@ -121,6 +117,10 @@ const FirstStep = () => {
       axios
          .post("/api/house", values)
          .then((res) => {
+            toast({
+               variant: "success",
+               description: "Plus qu'une étape ! ",
+            });
             setIsLoading(false);
             router.push(`/annonce/ajouter/${res.data.id}`);
          })
@@ -129,7 +129,7 @@ const FirstStep = () => {
             toast({
                variant: "destructive",
                description:
-                  "Une erreur est survenue veuillez réessayer plus tard.",
+                  "Une erreur est survenue, veuillez réessayer plus tard.",
             });
             setIsLoading(false);
          });
@@ -221,6 +221,7 @@ const FirstStep = () => {
                                     <Input
                                        placeholder="Maison au bord de la mer..."
                                        id="title"
+
                                        {...field}
                                     />
                                  </FormControl>
@@ -240,7 +241,7 @@ const FirstStep = () => {
                                     Phrase d'introduction
                                  </FormLabel>
                                  <FormDescription>
-                                    Renseignez un titre pour votre annonce
+                                    Renseignez une intro pour votre annonce
                                  </FormDescription>
                                  <FormControl>
                                     <Input
