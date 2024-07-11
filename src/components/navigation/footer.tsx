@@ -82,23 +82,26 @@ export const Footer = ({ currentUser }: FooterTypes) => {
                   {/* Réseaux sociaux */}
                   <div className="flex items-center gap-2 mb-10 mt-6">
                      <a
-                        href=""
+                        href="https://www.facebook.com/ls.mzl"
                         className="p-1 bg-foreground/5 text-primary/70 rounded group"
                         title="Facebook"
+                        target="_blank"
                      >
                         <FacebookIcon className="group-hover:animate-spin-fast" />
                      </a>
                      <a
-                        href=""
+                        href="https://github.com/LsMzl"
                         className="p-1 bg-foreground/5 text-primary/70 rounded group"
                         title="Github"
+                        target="_blank"
                      >
                         <GithubIcon className="group-hover:animate-spin-fast" />
                      </a>
                      <a
-                        href=""
+                        href="https://www.linkedin.com/in/louis-mazzella-5509292a2/"
                         className="p-1 bg-foreground/5 text-primary/70 rounded group"
                         title="LinkedIn"
+                        target="_blank"
                      >
                         <LinkedinIcon className="group-hover:animate-spin-fast" />
                      </a>
@@ -110,9 +113,10 @@ export const Footer = ({ currentUser }: FooterTypes) => {
                         <MailIcon className="group-hover:animate-spin-fast" />
                      </a>
                      <a
-                        href=""
+                        href="https://louismzl.web.app/"
                         className="p-1 bg-foreground/5 text-primary/70 rounded group"
                         title="Portfolio"
+                        target="_blank"
                      >
                         <EarthIcon className="group-hover:animate-spin-fast" />
                      </a>
@@ -154,38 +158,34 @@ export const Footer = ({ currentUser }: FooterTypes) => {
                {/* top */}
                <div>
                   <Link
-                     href=""
-                     className="hover:underline hover:underline-offset-2"
-                  >
-                     Politique de confidentialité |{" "}
-                  </Link>
-                  <Link
-                     href=""
+                     href="/aide/RGPD"
                      className="hover:underline hover:underline-offset-2"
                   >
                      Traitement de données |{" "}
                   </Link>
                   <Link
-                     href=""
+                     href="/aide/accessibilite"
                      className="hover:underline hover:underline-offset-2"
                   >
                      Accessibilité |{" "}
                   </Link>
                   <Link
-                     href=""
+                     href="/aide/conditions-generales"
                      className="hover:underline hover:underline-offset-2"
-                  ></Link>
+                  >
+                     Conditions générales
+                  </Link>
                </div>
                {/* Middle */}
                <div>
                   <Link
-                     href=""
+                     href="/aide"
                      className="hover:underline hover:underline-offset-2"
                   >
                      Centre d'aide |{" "}
                   </Link>
                   <Link
-                     href=""
+                     href="/aide/support-client"
                      className="hover:underline hover:underline-offset-2"
                   >
                      Support client |{" "}
@@ -194,7 +194,7 @@ export const Footer = ({ currentUser }: FooterTypes) => {
                      href=""
                      className="hover:underline hover:underline-offset-2"
                   >
-                     Accueil des voyageurs |{" "}
+                     Accueil des voyageurs{" "}
                   </Link>
                </div>
                {/* Bottom */}

@@ -52,6 +52,29 @@ export default async function Home() {
             select: {
                id: true,
                title: true,
+               country: true,
+               state: true,
+               city: true,
+               price: true,
+               image: true,
+               types: {
+                  select: {
+                     type: {
+                        select: {
+                           name: true,
+                        },
+                     },
+                  },
+               },
+               categories: {
+                  select: {
+                     category: {
+                        select: {
+                           name: true,
+                        },
+                     },
+                  },
+               },
             },
          },
       },

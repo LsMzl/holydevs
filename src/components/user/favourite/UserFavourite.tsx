@@ -1,25 +1,27 @@
 "use client";
 import React from "react";
+import Image from "next/image";
+
+// UI Components
 import {
    Dialog,
-   DialogClose,
    DialogHeader,
    DialogContent,
    DialogTitle,
    DialogTrigger,
    DialogDescription,
 } from "@/components/shadcn/dialog";
+import { buttonVariants } from "@/components/shadcn/button";
+import { Separator } from "@/components/shadcn/separator";
 
 // Image
 import Fav from "../../../../public/icon/favourite.png";
+
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/shadcn/button";
-import Image from "next/image";
-import { Separator } from "@/components/shadcn/separator";
-import {
-   MainSideNavFavouriteTypes,
-   MainSideNavUser,
-} from "@/types/MainSideNav";
+import { MainSideNavFavouriteTypes } from "@/types/MainSideNav";
+
+// Components
+import { FavouriteCard } from "./FavouriteCard";
 
 export const UserFavourite = ({ favourites }: MainSideNavFavouriteTypes) => {
    return (
@@ -53,11 +55,15 @@ export const UserFavourite = ({ favourites }: MainSideNavFavouriteTypes) => {
                </DialogDescription>
             </DialogHeader>
             <Separator />
-            <div className="flex flex-col rounded w-full">
+            <div className="flex flex-col rounded w-full gap-5">
                {favourites.length === 0 ? (
-                  <p className="text-sm">Vous n'avez ajouté aucune annonce dans vos favoris</p>
+                  <p className="text-sm">
+                     Vous n'avez ajouté aucune annonce dans vos favoris
+                  </p>
                ) : (
-                  <div></div>
+                  favourites.map((favourite) => (
+                     <FavouriteCard favourite={favourite} />
+                  ))
                )}
             </div>
          </DialogContent>

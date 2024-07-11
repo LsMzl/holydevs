@@ -17,6 +17,21 @@ export interface MainSideNavUser {
       house: {
          id: string;
          title: string;
+         country: string;
+         state: string;
+         city: string;
+         price: number | null;
+         image: string | null;
+         types: {
+            type: {
+               name: string;
+            };
+         }[];
+         categories: {
+            category: {
+               name: string;
+            };
+         }[];
       };
    }[];
 }
@@ -25,8 +40,46 @@ export interface MainSideNavFavouriteTypes {
       house: {
          id: string;
          title: string;
+         country: string;
+         state: string;
+         city: string;
+         price: number | null;
+         image: string | null;
+         types: {
+            type: {
+               name: string;
+            };
+         }[];
+         categories: {
+            category: {
+               name: string;
+            };
+         }[];
       };
    }[];
+}
+export interface FavouriteCardTypes {
+   favourite: {
+      house: {
+         id: string;
+         title: string;
+         country: string;
+         state: string;
+         city: string;
+         price: number | null;
+         image: string | null;
+         types: {
+            type: {
+               name: string;
+            };
+         }[];
+         categories: {
+            category: {
+               name: string;
+            };
+         }[];
+      };
+   };
 }
 
 export interface MainSideNavData {
