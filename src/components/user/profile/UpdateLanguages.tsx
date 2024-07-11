@@ -25,9 +25,10 @@ import { Button } from "@/components/shadcn/button";
 import { Check, Loader2, X } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { UpdateLanguagesTypes } from "@/types/user/profile";
+
 import { useState } from "react";
 import { Input } from "@/components/shadcn/input";
+import { UpdateLanguagesTypes } from "@/types/user/updateProfile";
 
 const formSchema = z.object({
    languages: z.string().optional(),

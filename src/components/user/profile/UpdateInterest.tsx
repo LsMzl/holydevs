@@ -25,17 +25,18 @@ import { Button } from "@/components/shadcn/button";
 import { Check, Loader2, X } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { UpdateInterestsTypes } from "@/types/user/profile";
+
 import { useState } from "react";
 import { Input } from "@/components/shadcn/input";
+import { UpdateInterestsTypes } from "@/types/user/updateProfile";
 
 const formSchema = z.object({
    interests: z.string().optional(),
 });
 
 export const UpdateInterest = ({ interests }: UpdateInterestsTypes) => {
-   const router = useRouter();
    const [isLoading, setIsLoading] = useState<boolean>(false);
+   const router = useRouter();
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),

@@ -30,7 +30,6 @@ const HouseCardGrid = ({ house, user }: HouseCardTypes) => {
 
    // Propriétaire de l'annonce ?
    const isMyHouse: boolean = house.user.id === user?.id;
-   console.log('isMyHouse', house.user.id, user?.id)
 
    const { getCountryByCode } = useLocation();
    const country = getCountryByCode(house.country);

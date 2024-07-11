@@ -15,7 +15,9 @@ export async function POST(req: Request) {
       }
 
       const user = await getUserByClerkId(userId);
-      if (!user) return null;
+      if (!user){
+         return new NextResponse("Non autorisé", { status: 401 });
+      }
 
       const dbUser = {
          id: user.id,

@@ -1,9 +1,7 @@
-import FirstStep from '@/components/house/onboarding/FirstStep'
-import { HouseOnboardingTypes } from '@/types/house/onboarding'
-import React from 'react'
+import FirstStep from "@/components/house/onboarding/FirstStep";
+import { HouseOnboardingFirstStepTypes} from "@/types/house/onboarding";
+import React from "react";
 
-export default function AddHouseFirstStep({house}: HouseOnboardingTypes) {
-  return (
-    <FirstStep house={house}/>
-  )
+export default function AddHouseFirstStep() {
+   return <FirstStep/>;
 }

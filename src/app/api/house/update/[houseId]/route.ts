@@ -31,7 +31,12 @@ export async function PATCH(
             features: true,
          },
       });
-      if (!currentHouse) return null;
+      //! Pas de maison trouvée
+      if (!currentHouse) {
+         return new NextResponse("Annonce non trouvée", {
+            status: 401,
+         });
+      }
 
       await db.typesOnHouses.updateMany({
          where: {
@@ -58,9 +63,6 @@ export async function PATCH(
       const houseDbFeatures = currentHouse.features.map(
          (feature) => feature.featureId
       );
-
-      console.log("body", bodyFeatures);
-      console.log("existing", houseDbFeatures);
 
       const addedFeatures = bodyFeatures.filter(
          (feature: string) => !houseDbFeatures.includes(feature)

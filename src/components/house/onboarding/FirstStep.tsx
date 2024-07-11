@@ -15,10 +15,7 @@ import {
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import useLocation from "@/hooks/useLocations";
-// import { ICity, IState } from "country-state-city";
-// import { Input } from "@/components/ui/input";
-// import { Textarea } from "@/components/ui/textarea";
+
 import {
    Select,
    SelectContent,
@@ -39,7 +36,10 @@ import { toast } from "@/components/shadcn/use-toast";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/shadcn/button";
 import { Loader2, Pen } from "lucide-react";
-import { HouseOnboardingTypes } from "@/types/house/onboarding";
+import {
+   HouseOnboardingFirstStepTypes,
+   HouseOnboardingTypes,
+} from "@/types/house/onboarding";
 import { Input } from "@/components/shadcn/input";
 import { Textarea } from "@/components/shadcn/textarea";
 import useLocation from "@/app/hooks/useLocations";
@@ -67,24 +67,24 @@ const formSchema = z.object({
    }),
 });
 
-const FirstStep = ({ house }: HouseOnboardingTypes) => {
+const FirstStep = () => {
    const [states, setStates] = useState<IState[]>([]);
    const [cities, setCities] = useState<ICity[]>([]);
+   const [isLoading, setIsLoading] = useState(false);
    const { getAllCountries, getCountryStates, getStateCities } = useLocation();
    const router = useRouter();
    const countries = getAllCountries();
-   const [isLoading, setIsLoading] = useState(false);
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         title: house?.title,
-         introduction: house?.introduction || "",
-         description: house?.description,
-         country: house?.country,
-         state: house?.state,
-         city: house?.city,
-         address: house?.address,
+         title: "",
+         introduction: "",
+         description: "",
+         country: "",
+         state: "",
+         city: "",
+         address: "",
       },
    });
 

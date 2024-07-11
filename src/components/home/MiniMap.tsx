@@ -27,7 +27,7 @@ const MiniMap = ({ cityLatitude, cityLongitude }: MiniMapProps) => {
    return (
       <MapContainer
          // Coordonnées géographiques du logement (latitude, longitude)
-         center={[`${cityLatitude}`, `${cityLongitude}`]}
+         center={[Number(cityLatitude), Number(cityLongitude)]}
          zoom={12}
          className="h-[200px] rounded-md z-50 shadow"
       >

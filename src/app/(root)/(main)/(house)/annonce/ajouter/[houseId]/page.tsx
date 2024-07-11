@@ -17,6 +17,10 @@ export default async function AddHouseSecondStep({ params }: AddHouseProps) {
       where: {
          id: params.houseId,
       },
+      select: {
+         id: true,
+         
+      }
    });
    // Categories Datas
    const categories = await getAllCategories();
