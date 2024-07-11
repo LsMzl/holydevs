@@ -32,21 +32,26 @@ interface MyBookingsClientProps {
 }
 
 const MyBookingsClient: React.FC<MyBookingsClientProps> = ({ booking }) => {
-   // React, Next
-   const router = useRouter();
-   const pathName = usePathname();
+   // States
+   // Paiement
+   const [bookingIsLoading, setBookingIsLoading] = useState(false);
 
-   // Clerk
-   const { userId } = useAuth();
-
-   const { House } = booking;
-
+   //Hooks
    const {
       setHouseData,
       paymentIntentId,
       setClientSecret,
       setPaymentIntentId,
    } = useBookHouse();
+   const router = useRouter();
+   const pathName = usePathname();
+   const { getCountryByCode, getStateByCode } = useLocation();
+
+   // Clerk
+   const { userId } = useAuth();
+
+   const { House } = booking;
+
    // Libraries
    const { toast } = useToast();
 
@@ -55,7 +60,6 @@ const MyBookingsClient: React.FC<MyBookingsClientProps> = ({ booking }) => {
    }
 
    // Localisation
-   const { getCountryByCode, getStateByCode } = useLocation();
    const country = getCountryByCode(House.country);
    const state = getStateByCode(House.country, House.state);
 
@@ -67,9 +71,6 @@ const MyBookingsClient: React.FC<MyBookingsClientProps> = ({ booking }) => {
       booking.endDate,
       booking.startDate
    );
-
-   // Paiement
-   const [bookingIsLoading, setBookingIsLoading] = useState(false);
 
    const handleBookHouse = () => {
       //! Pas d'utilisateur connecté
@@ -108,7 +109,6 @@ const MyBookingsClient: React.FC<MyBookingsClientProps> = ({ booking }) => {
             },
             // Identifiant de la transaction
             paiement_intent_id: paymentIntentId,
-            
          }),
       })
          .then((res) => {

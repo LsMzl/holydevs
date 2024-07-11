@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { frFR } from "@clerk/localizations";
 import { Toaster } from "@/components/shadcn/toaster";
-import ReactQueryProvider from "@/components/provider/ReactQueryProvider";
+// import ReactQueryProvider from "@/components/provider/ReactQueryProvider";
+import { ThemeProvider } from "@/components/provider/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,10 +22,17 @@ export default function RootLayout({
       <ClerkProvider localization={frFR}>
          <html lang="fr" suppressHydrationWarning>
             <body className={cn("w-full min-h-screen", inter.className)}>
-               <Toaster />
-               <ReactQueryProvider>
+               <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                  disableTransitionOnChange
+               >
+                  <Toaster />
+                  {/* <ReactQueryProvider> */}
                   <main>{children}</main>
-               </ReactQueryProvider>
+                  {/* </ReactQueryProvider> */}
+               </ThemeProvider>
             </body>
          </html>
       </ClerkProvider>

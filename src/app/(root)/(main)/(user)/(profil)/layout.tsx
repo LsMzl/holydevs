@@ -95,7 +95,7 @@ export default async function MainLayout({
                      {/* Menu Buttons Screen */}
                      <div className=" mt-2 items-center gap-2 hidden md:flex ">
                         <Link
-                           href="/mes-annonces"
+                           href={`/${user.username}/annonces`}
                            className={cn(
                               buttonVariants(),
                               "flex gap-1 font-semibold"

@@ -41,18 +41,24 @@ import Share from "../../../public/icon/share.png";
 import Star from "../../../public/icon/star.png";
 import Comments from "../../../public/icon/comments.png";
 import Pin from "../../../public/icon/location.png";
-import NoFav from "../../../public/icon/noFavourite.png";
-import Fav from "../../../public/icon/Favourite.png";
+
+// Components
 import AllOpinionsDialog from "./opinion/AllOpinionsDialog";
 import AddOpinionForm from "./opinion/AddOpinionForm";
 import OpinionsCarousel from "./opinion/OpinionsCarousel";
 import LeafletMap from "./LeafletMap";
 import { PropositionCarousel } from "./PropositionCarousel";
-import useBookHouse from "@/app/hooks/useBookHouse";
-import { DateRangePicker } from "./booking/DateRangePicker";
 import { HouseDescriptionDialog } from "./details/HouseDescriptionDialog";
 import { NotationSystem } from "./notation/NotationSystem";
 import { FavouriteInteraction } from "./details/FavouriteInteraction";
+import { DateRangePicker } from "./booking/DateRangePicker";
+
+// Hooks
+import useBookHouse from "@/app/hooks/useBookHouse";
+
+// Libraries
+import { fr } from "date-fns/locale";
+import { setDefaultOptions } from "date-fns";
 
 const HouseDetails = ({
    house,
@@ -60,13 +66,34 @@ const HouseDetails = ({
    lastOpinions,
    propositionHouse,
    bookings,
+   user,
 }: HouseDetailsTypes) => {
+   // States
+   const [date, setDate] = useState<DateRange | undefined>();
+   const [totalPrice, setTotalPrice] = useState(0);
+   const [days, setDays] = useState(0);
+   const [bookingIsLoading, setBookingIsLoading] = useState(false);
+
+   // Hooks
+   const {
+      setHouseData,
+      paymentIntentId,
+      setClientSecret,
+      setPaymentIntentId,
+   } = useBookHouse();
+   const { userId } = useAuth();
+   const router = useRouter();
+
+   setDefaultOptions({ locale: fr });
    // Notation
    const totalRates = house.rates.reduce(
       (acc, currentValue) => acc + currentValue.rate,
       0
    );
-   const averageRate = totalRates / house.rates.length;
+   const averageRate = Number((totalRates / house.rates.length).toFixed(2));
+
+   // Propriétaire de l'annonce ?
+   const isMyHouse: boolean = house.userId === user?.id;
 
    // localisation
    const { getCountryByCode, getStateByCode, getStateCities } = useLocation();
@@ -74,21 +101,6 @@ const HouseDetails = ({
    const state = getStateByCode(house?.country ?? "", house?.state ?? "");
    const cities = getStateCities(house.country ?? "", house?.state ?? "");
    const city = cities?.filter((city) => city.name === house.city);
-   if (!city) return;
-
-   const { userId } = useAuth();
-   const router = useRouter();
-
-   const [date, setDate] = useState<DateRange | undefined>();
-   const [totalPrice, setTotalPrice] = useState(0);
-   const [days, setDays] = useState(0);
-   const [bookingIsLoading, setBookingIsLoading] = useState(false);
-   const {
-      setHouseData,
-      paymentIntentId,
-      setClientSecret,
-      setPaymentIntentId,
-   } = useBookHouse();
 
    // Calcul du nombre de jours et du prix
    useEffect(() => {
@@ -126,6 +138,7 @@ const HouseDetails = ({
          dates = [...dates, ...range];
       });
       return dates;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [bookings]);
 
    const handleBookHouse = () => {
@@ -243,9 +256,8 @@ const HouseDetails = ({
                   />
                   <p className="hidden md:block md:text-sm">Partager</p>
                </form>
-               {/* Favourite */}
-               <FavouriteInteraction house={house} />
-               
+               {/* Ajout aux favoris si pas propriétaire */}
+               {!isMyHouse && <FavouriteInteraction house={house} />}
             </div>
          </div>
          <p className="mb-3 text-sm">{house?.introduction}</p>
@@ -288,7 +300,7 @@ const HouseDetails = ({
                               width={20}
                               className="h-5 w-5"
                            />
-                           <p>{averageRate}</p>
+                           <p>{averageRate}/5</p>
                         </div>
                      )}
                   </div>
@@ -440,69 +452,75 @@ const HouseDetails = ({
                </div>
 
                {/* Right section */}
-               <div className="md:w-[30%] overflow-hidden">
-                  <div className=" md:rounded-xl md:border md:shadow-md md:p-5">
-                     <h4 className="font-medium text-xl mb-3">Réservation</h4>
+               {/* Affichage du calendrier seulement si utilisateur pas propriétaire de la maison */}
+               {!isMyHouse && (
+                  <div className="md:w-[30%] overflow-hidden">
+                     <div className=" md:rounded-xl md:border md:shadow-md md:p-5">
+                        <h4 className="font-medium text-xl mb-3">
+                           Réservation
+                        </h4>
 
-                     {/* Calendrier */}
-                     <div className="mb-5">
-                        <p className="text-sm mb-2">
-                           Choisissez les dates de votre séjour
+                        {/* Calendrier */}
+                        <div className="mb-5">
+                           <p className="text-sm mb-2">
+                              Choisissez les dates de votre séjour
+                           </p>
+                           <DateRangePicker
+                              date={date}
+                              setDate={setDate}
+                              disabledDates={disabledDates}
+                           />
+                        </div>
+
+                        {/* Reservation Button */}
+                        {/* //TODO: Si connecté, lien vers page de réservation, sinon lien vers page de connexion et toast pour indiqué qu'il doit être connecté pour réserver*/}
+                        <Button
+                           onClick={() => handleBookHouse()}
+                           disabled={bookingIsLoading}
+                           type="button"
+                           className="w-full text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-yellow-500"
+                        >
+                           {bookingIsLoading ? (
+                              <Loader className="mr-2 h-4 w-4" />
+                           ) : (
+                              <Wand2 className="mr-2 h-4 w-4" />
+                           )}
+                           {bookingIsLoading ? "Chargement" : "Réserver"}
+                        </Button>
+
+                        <p className="text-center my-3 md:text-sm">
+                           Lorem ipsum dolor sit amet consectetur adipisicing
+                           elit.
                         </p>
-                        <DateRangePicker
-                           date={date}
-                           setDate={setDate}
-                           disabledDates={disabledDates}
-                        />
-                     </div>
 
-                     {/* Reservation Button */}
-                     {/* //TODO: Si connecté, lien vers page de réservation, sinon lien vers page de connexion et toast pour indiqué qu'il doit être connecté pour réserver*/}
-                     <Button
-                        onClick={() => handleBookHouse()}
-                        disabled={bookingIsLoading}
-                        type="button"
-                        className="w-full text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-yellow-500"
-                     >
-                        {bookingIsLoading ? (
-                           <Loader className="mr-2 h-4 w-4" />
-                        ) : (
-                           <Wand2 className="mr-2 h-4 w-4" />
-                        )}
-                        {bookingIsLoading ? "Chargement" : "Réserver"}
-                     </Button>
-
-                     <p className="text-center my-3 md:text-sm">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                     </p>
-
-                     {/* Reservation Details */}
-                     <div className="text-lg flex flex-col gap-1 ">
-                        <div className="flex items-center justify-between">
-                           <p>
-                              {house?.price} € x {days} nuits
-                           </p>
-                           <p>{totalPrice} €</p>
-                        </div>
-                        <div className="flex items-center justify-between">
-                           <p>
-                              {house?.price} € x {days} nuits
-                           </p>
-                           <p>{totalPrice} €</p>
-                        </div>
-                        <div className="flex items-center justify-between pb-5 border-b">
-                           <p>
-                              {house?.price} € x {days} nuits
-                           </p>
-                           <p>{totalPrice} €</p>
-                        </div>
-                        <div className="pt-3 font-semibold flex items-center justify-between">
-                           <p>Total</p>
-                           <p>{totalPrice} €</p>
+                        {/* Reservation Details */}
+                        <div className="text-lg flex flex-col gap-1 ">
+                           <div className="flex items-center justify-between">
+                              <p>
+                                 {house?.price} € x {days} nuits
+                              </p>
+                              <p>{totalPrice} €</p>
+                           </div>
+                           <div className="flex items-center justify-between">
+                              <p>
+                                 {house?.price} € x {days} nuits
+                              </p>
+                              <p>{totalPrice} €</p>
+                           </div>
+                           <div className="flex items-center justify-between pb-5 border-b">
+                              <p>
+                                 {house?.price} € x {days} nuits
+                              </p>
+                              <p>{totalPrice} €</p>
+                           </div>
+                           <div className="pt-3 font-semibold flex items-center justify-between">
+                              <p>Total</p>
+                              <p>{totalPrice} €</p>
+                           </div>
                         </div>
                      </div>
                   </div>
-               </div>
+               )}
             </div>
 
             {/* <section> */}
@@ -513,9 +531,32 @@ const HouseDetails = ({
             </p>
             <div className="flex justify-between items-center">
                <div className="flex items-center gap-3">
-                  <div>
-                     <NotationSystem house={house} averageRate={averageRate} />
-                  </div>
+                  {/* Système de notation si pas propriétaire */}
+                  {!isMyHouse ? (
+                     <div>
+                        <NotationSystem
+                           house={house}
+                           averageRate={averageRate}
+                        />
+                     </div>
+                  ) : (
+                     <div className="flex items-center justify-center gap-2 border rounded-full p-2 w-[170px] bg-foreground/5 group hover:shadow">
+                        <Image
+                           src={Star}
+                           alt="Icône de note du logement"
+                           height={20}
+                           width={20}
+                           className="h-5 w-5 group-hover:animate-spin-fast"
+                        />
+                        {house.rates.length === 0 ? (
+                           <p>Aucune note</p>
+                        ) : (
+                           <p>
+                              {averageRate}/5 | {house.rates.length} notes
+                           </p>
+                        )}
+                     </div>
+                  )}
 
                   <div>
                      {allOpinions.length < 1 ? (
@@ -538,9 +579,12 @@ const HouseDetails = ({
                   </div>
                </div>
 
-               <div>
-                  <AddOpinionForm house={house} />
-               </div>
+               {/* Affichage du formulaire d'avis si pas propriétaire */}
+               {!isMyHouse && (
+                  <div>
+                     <AddOpinionForm house={house} />
+                  </div>
+               )}
             </div>
 
             {/* Carousel avis */}

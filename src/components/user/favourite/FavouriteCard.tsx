@@ -17,7 +17,7 @@ export const FavouriteCard = ({ favourite }: FavouriteCardTypes) => {
    const { getCountryByCode } = useLocation();
    const country = getCountryByCode(favourite.house.country);
    return (
-      <div className="shadow bg-card/20 rounded-lg border border-card/50 flex h-[150px]">
+      <div className="shadow bg-card/20 rounded-lg border border-card/50 flex h-[150px] relative">
          {/* Illustration */}
          <div className="h-full relative rounded-lg aspect-square hover:scale-100 w-[40%]">
             <Image
@@ -64,15 +64,16 @@ export const FavouriteCard = ({ favourite }: FavouriteCardTypes) => {
                   <p className="text-xs">{favourite.house.price}€ /nuit</p>
                </span>
             </div>
-         </div>
-         <div className="flex justify-between">
             <Button
                size="sm"
                onClick={() => router.push(`/annonce/${favourite.house.id}`)}
-               title="Lien vers la page contenant les détails de l'annonce"
+               title="Lien vers la page de détails de l'annonce"
+               className="absolute bottom-2 right-2"
             >
                Voir
             </Button>
+         </div>
+         <div className="flex justify-between">
          </div>
       </div>
    );

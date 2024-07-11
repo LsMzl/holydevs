@@ -71,8 +71,6 @@ const formSchema = z.object({
 });
 
 export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
-   //
-
    // States
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [states, setStates] = useState<IState[]>([]);
@@ -108,6 +106,7 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
       if (countryStates) {
          setStates(countryStates);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [form.watch("country")]);
 
    /** Récupération des états d'un pays lors d'un changement dans le formulaire */
@@ -119,6 +118,7 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
       if (stateCities) {
          setCities(stateCities);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [form.watch("country"), form.watch("state")]);
 
    function onSubmit(values: z.infer<typeof formSchema>) {
@@ -305,18 +305,15 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
                                        value={field.value}
                                        defaultValue={field.value}
                                        name="country"
-                                       
                                     >
                                        <SelectTrigger
                                           className="bg-background"
                                           name="country"
                                           id="country"
-                                          
                                        >
                                           <SelectValue
                                              placeholder="Pays"
                                              defaultValue={field.value}
-                                             
                                           />
                                        </SelectTrigger>
                                        <SelectContent>
@@ -324,7 +321,6 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
                                              <SelectItem
                                                 key={country.isoCode}
                                                 value={country.isoCode}
-                                                
                                              >
                                                 {country.name}
                                              </SelectItem>
@@ -398,7 +394,6 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
                                        value={field.value}
                                        defaultValue={field.value}
                                        name="city"
-                                       
                                     >
                                        <SelectTrigger
                                           className="bg-background"

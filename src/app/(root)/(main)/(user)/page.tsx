@@ -42,6 +42,14 @@ export default async function Home() {
          state: true,
       },
    });
+   const owner = await db.user.findFirst({
+      where: {
+         clerkId: userId
+      },
+      select: {
+         id: true,
+      },
+   });
 
    const userFav = await db.favourite.findMany({
       where: {
@@ -149,6 +157,11 @@ export default async function Home() {
                },
             },
          },
+         rates: {
+            select: {
+               rate: true,
+            },
+         },
       },
    });
 
@@ -188,7 +201,12 @@ export default async function Home() {
             </div>
 
             {/* Houses List */}
-            <HousesList categories={categories} types={types} houses={houses} />
+            <HousesList
+               categories={categories}
+               types={types}
+               houses={houses}
+               user={owner}
+            />
          </div>
       </div>
    );

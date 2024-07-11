@@ -30,8 +30,6 @@ export const NotationSystem = ({ house, averageRate }: NotationSystemTypes) => {
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const router = useRouter();
 
-
-
    const handleNotation = () => {
       axios
          .post(`/api/notation/${house.id}`, value)
@@ -85,9 +83,7 @@ export const NotationSystem = ({ house, averageRate }: NotationSystemTypes) => {
                <Rating
                   name="simple-controlled"
                   size="large"
-                  // defaultValue={averageRate ?? 0}
                   value={value}
-                  precision={0.5}
                   onChange={(event, newValue) => {
                      setValue(Number(newValue));
                   }}

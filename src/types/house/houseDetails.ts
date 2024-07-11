@@ -82,6 +82,9 @@ export interface HouseDetailsTypes {
          profilePicture: string | null;
       };
    }[];
+   user: {
+      id: string;
+   } | null
 
    totalPrice: number;
    startDate: Date;

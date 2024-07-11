@@ -4,6 +4,7 @@ import { getUserByClerkId } from "@/actions/getUserByClerkId";
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { Footer } from "@/components/navigation/Footer";
 import { db } from "@/lib/prisma";
+import { FooterMobile } from "@/components/navigation/FooterMobile";
 
 export default async function MainLayout({
    children,
@@ -22,7 +23,7 @@ export default async function MainLayout({
          username: true,
       },
    });
-   if(!currentUser) return null;
+   if (!currentUser) return null;
 
    return (
       <>
@@ -37,7 +38,12 @@ export default async function MainLayout({
          />
          <div className="hidden lg:block h-[56px]" />
          <main>{children}</main>
-         <Footer currentUser={currentUser} />
+         <div className="md:hidden">
+            <FooterMobile currentUser={currentUser} />
+         </div>
+         <div className="hidden md:block">
+            <Footer currentUser={currentUser} />
+         </div>
          <div className="lg:hidden h-[56px]" />
          <BottomNav
             userId={userId}

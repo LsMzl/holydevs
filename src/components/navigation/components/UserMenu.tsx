@@ -28,6 +28,7 @@ import {
 import { Button } from "@/components/shadcn/button";
 import { Avatar, AvatarImage } from "@/components/shadcn/avatar";
 import { UserMenuProps } from "@/types/topNav";
+import { ThemeToggle } from "@/components/provider/ThemeToggle";
 
 export function UserMenu({
    userMail,
@@ -111,7 +112,7 @@ export function UserMenu({
                   title="Passage du thème clair à sombre"
                >
                   <SunMoon size={15} />
-                  {/* <ThemeToggle /> */}
+                  <ThemeToggle />
                </DropdownMenuItem>
 
                {/* Déconnexion */}

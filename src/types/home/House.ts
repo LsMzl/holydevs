@@ -54,7 +54,13 @@ export interface HouseListTypes {
             id: string;
          };
       }[];
+      rates: {
+         rate: number;
+      }[];
    }[];
+   user: {
+      id: string;
+   } | null;
 }
 
 export interface HouseCardTypes {
@@ -83,7 +89,13 @@ export interface HouseCardTypes {
             id: string;
          };
       }[];
+      rates: {
+         rate: number;
+      }[];
    };
+   user: {
+      id: string;
+   } | null;
 }
 
 export interface CategoryCarouselTypes {
@@ -95,4 +107,5 @@ export interface CategoryCarouselTypes {
       name: string;
       id: string;
    }[];
+   
 }

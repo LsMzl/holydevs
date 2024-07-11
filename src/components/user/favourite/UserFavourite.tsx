@@ -23,6 +23,7 @@ import { MainSideNavFavouriteTypes } from "@/types/MainSideNav";
 // Components
 import { FavouriteCard } from "./FavouriteCard";
 
+import { v4 as uuidv4 } from "uuid";
 export const UserFavourite = ({ favourites }: MainSideNavFavouriteTypes) => {
    return (
       <Dialog>
@@ -62,7 +63,7 @@ export const UserFavourite = ({ favourites }: MainSideNavFavouriteTypes) => {
                   </p>
                ) : (
                   favourites.map((favourite) => (
-                     <FavouriteCard favourite={favourite} />
+                     <FavouriteCard favourite={favourite} key={uuidv4()} />
                   ))
                )}
             </div>

@@ -1,12 +1,10 @@
-import useLocation from "@/app/hooks/useLocations";
 import ProfileSideBar from "@/components/navigation/components/ProfileSideBar";
-import { Button } from "@/components/shadcn/button";
-import { Separator } from "@/components/shadcn/separator";
 import { ProfileHouseCard } from "@/components/user/profile/pages/ProfileHouseCard";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import Image from "next/image";
 import React from "react";
+
+import { v4 as uuidv4 } from "uuid";
 
 export default async function Annonces() {
    // Utilisateur connecté
@@ -119,7 +117,9 @@ export default async function Annonces() {
                {annonces.length === 0 ? (
                   <p>Vous n'avez pas encore ajouté d'annonces</p>
                ) : (
-                  annonces.map((house) => <ProfileHouseCard house={house} />)
+                  annonces.map((house) => (
+                     <ProfileHouseCard house={house} key={uuidv4()} />
+                  ))
                )}
             </div>
          </div>

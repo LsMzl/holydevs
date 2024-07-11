@@ -15,11 +15,21 @@ import Tag from "../../../public/icon/tag.png";
 import Wallet from "../../../public/icon/wallet.png";
 import Star from "../../../public/icon/star.png";
 
-export const HouseCardInline = ({ house }: HouseCardTypes) => {
+export const HouseCardInline = ({ house, user }: HouseCardTypes) => {
    const router = useRouter();
 
    const pathName = usePathname();
    const isMyHouses = pathName.includes("mes-annonces");
+
+   // Notation
+   const totalRates = house.rates.reduce(
+      (acc, currentValue) => acc + currentValue.rate,
+      0
+   );
+   const averageRate = Number((totalRates / house.rates.length).toFixed(2));
+
+   // Propriétaire de l'annonce ?
+   const isMyHouse: boolean = house.user.id === user?.id;
 
    const { getCountryByCode } = useLocation();
    const country = getCountryByCode(house.country);
@@ -34,15 +44,6 @@ export const HouseCardInline = ({ house }: HouseCardTypes) => {
                alt="Photo d'une maison"
                className=" object-cover rounded-l-lg h-full w-full border-r-4 border-cyan-500 "
             />
-            {isMyHouses && (
-               <Button
-                  onClick={() => router.push(`/annonce/modifier/${house.id}`)}
-                  //   variant="hollow"
-                  className="absolute z-10 bottom-2 right-2"
-               >
-                  Editer
-               </Button>
-            )}
          </div>
          {/* Details */}
          <div className="p-3 w-[60%]">
@@ -108,13 +109,27 @@ export const HouseCardInline = ({ house }: HouseCardTypes) => {
             </div>
             <Separator className="my-3" />
             <div className="flex justify-between">
-               <Button
-                  size="sm"
-                  onClick={() => router.push(`/annonce/${house.id}`)}
-                  title="Lien vers la page contenant les détails de l'annonce"
-               >
-                  Voir
-               </Button>
+               <div className="flex justify-start item-center gap-2">
+                  <Button
+                     size="sm"
+                     onClick={() => router.push(`/annonce/${house.id}`)}
+                     title="Lien vers la page contenant les détails de l'annonce"
+                  >
+                     Voir
+                  </Button>
+                  {isMyHouse && (
+                     <Button
+                        size="sm"
+                        onClick={() =>
+                           router.push(`/annonce/${house.id}/modifier`)
+                        }
+                        title="Lien vers la page de modification de l'annonce"
+                        variant="secondary"
+                     >
+                        Modifier
+                     </Button>
+                  )}
+               </div>
                <div className="flex items-center gap-1">
                   <Image
                      src={Star}
@@ -122,7 +137,11 @@ export const HouseCardInline = ({ house }: HouseCardTypes) => {
                      width={15}
                      height={15}
                   />
-                  <p className="text-sm">4.5</p>
+                  {house.rates.length >= 1 ? (
+                     <p className="text-sm">{averageRate}/5</p>
+                  ) : (
+                     <p className="text-sm">0</p>
+                  )}
                </div>
             </div>
          </div>

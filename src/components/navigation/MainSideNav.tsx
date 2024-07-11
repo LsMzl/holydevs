@@ -34,16 +34,13 @@ import "leaflet/dist/leaflet.css";
 import { UserFavourite } from "../user/favourite/UserFavourite";
 
 const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
-   const { getStateCities } = useLocation();
-   const cities = getStateCities(user?.country ?? "", user?.state ?? "");
-   const city = cities?.filter((city) => city.name === user?.city);
-   if (!city) return <p>Position non trouvée</p>;
-
+   // States
    // User position
    const [latitude, setLatitude] = useState(0);
    const [longitude, setLongitude] = useState(0);
    const [isLoading, setIsLoading] = useState(false);
 
+   //Hooks
    useEffect(() => {
       setIsLoading(true);
       if (navigator.geolocation) {
@@ -63,6 +60,11 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
          console.error("Geolocation is not supported by this browser.");
       }
    }, []);
+
+   const { getStateCities } = useLocation();
+   const cities = getStateCities(user?.country ?? "", user?.state ?? "");
+   const city = cities?.filter((city) => city.name === user?.city);
+   if (!city) return <p>Position non trouvée</p>;
 
    const markers = [
       {

@@ -1,11 +1,12 @@
 import { toast } from "@/components/shadcn/use-toast";
 import { db } from "@/lib/prisma";
-import { id } from "date-fns/locale";
+
 import { redirect } from "next/navigation";
 import React from "react";
-import { useRouter } from "next/router";
+
 import HouseDetails from "@/components/house/HouseDetails";
 import { Metadata } from "next";
+import { auth } from "@clerk/nextjs/server";
 
 export const metadata: Metadata = {
    title: "Annonce",
@@ -19,6 +20,16 @@ interface HouseDetailsProps {
 }
 
 export default async function HousePage({ params }: HouseDetailsProps) {
+   // Utilisateur connecté
+   const { userId } = auth();
+   const currentUser = await db.user.findFirst({
+      where: {
+         clerkId: userId,
+      },
+      select: {
+         id: true,
+      },
+   })
    // Données annonce
    const house = await db.house.findUnique({
       where: {
@@ -172,6 +183,7 @@ export default async function HousePage({ params }: HouseDetailsProps) {
             totalPrice={0}
             startDate={new Date}
             endDate={new Date}
+            user={currentUser}
          />
       </div>
    );

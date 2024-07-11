@@ -15,6 +15,7 @@ import { AllOpinionsTypes } from "@/types/house/houseDetails";
 import Image from "next/image";
 
 import Link from "next/link";
+import {v4 as uuidv4} from 'uuid'
 
 interface AllOpinionsDialog {
    
@@ -35,7 +36,7 @@ const AllOpinionsDialog = ({ allOpinions }: AllOpinionsTypes) => {
             <Separator className="my-2" />
             <div className="space-y-3">
                {allOpinions.map((opinion) => (
-                  <div className="bg-card/50 rounded-lg flex items-center p-3  w-full">
+                  <div className="bg-card/50 rounded-lg flex items-center p-3 w-full" key={uuidv4()}>
                      <Link
                         href={`/user/${opinion.author.username}`}
                         title={`Profil de ${opinion.author.firstname} ${opinion.author.lastname}`}

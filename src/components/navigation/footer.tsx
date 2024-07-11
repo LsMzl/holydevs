@@ -200,8 +200,8 @@ export const Footer = ({ currentUser }: FooterTypes) => {
                {/* Bottom */}
                <div>
                   <p>
-                     ©2024 Holydevs. Ce site à été réalisé dans le cadre d'un
-                     projet de fin de formation.
+                     ©2024 Holydevs. Ceci est un site factice, ayant été réalisé
+                     dans le cadre d'un projet de fin de formation.
                   </p>
                   <Badge
                      variant="outline"

@@ -96,6 +96,7 @@ const FirstStep = ({ house }: HouseOnboardingTypes) => {
       if (countryStates) {
          setStates(countryStates);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [form.watch("country")]);
 
    /** Récupération des états d'un pays lors d'un changement dans le formulaire */
@@ -107,6 +108,7 @@ const FirstStep = ({ house }: HouseOnboardingTypes) => {
       if (stateCities) {
          setCities(stateCities);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [form.watch("country"), form.watch("state")]);
 
    /**
