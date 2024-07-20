@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { frFR } from "@clerk/localizations";
 import { Toaster } from "@/components/shadcn/toaster";
-// import ReactQueryProvider from "@/components/provider/ReactQueryProvider";
 import { ThemeProvider } from "@/components/provider/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,9 +28,9 @@ export default function RootLayout({
                   disableTransitionOnChange
                >
                   <Toaster />
-                  {/* <ReactQueryProvider> */}
+
                   <main>{children}</main>
-                  {/* </ReactQueryProvider> */}
+
                </ThemeProvider>
             </body>
          </html>

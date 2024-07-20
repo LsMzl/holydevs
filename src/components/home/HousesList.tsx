@@ -52,7 +52,7 @@ import {
 } from "lucide-react";
 
 // Style
-import "../../../public/css/style.css";
+// import "../../../public/css/style.css";
 
 const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
    
@@ -226,7 +226,6 @@ const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
                </Carousel>
             </div>
             <div className="flex items-center justify-between mt-3">
-               {/* <LocationFilter /> */}
                <div className="flex items-center gap-1 bg-foreground/10 p-0.5 rounded-lg">
                   {/* Pays */}
                   <div>

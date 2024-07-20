@@ -40,6 +40,8 @@ import {
    SelectValue,
 } from "@/components/shadcn/select";
 
+
+// Zod Schema
 const formSchema = z.object({
    firstname: z.string().min(2, {
       message: "Votre prénom doit contenir au moins 2 caractères",
@@ -120,6 +122,11 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [form.watch("country"), form.watch("state")]);
+
+   const handleClick = () => {
+      console.log("first")
+   }
+
 
    function onSubmit(values: z.infer<typeof formSchema>) {
       console.log("onSubmit", values);
@@ -422,6 +429,30 @@ export const UserFirstStep = ({ user }: UserOnboardingTypes) => {
                            )}
                         />
                      </div>
+                     {/* Adresse */}
+                     <FormField
+                           control={form.control}
+                           name="address"
+                           render={({ field }) => (
+                              <FormItem>
+                                 <FormLabel htmlFor="address">
+                                    Adresse{" "}
+                                    <span className="text-red-500">*</span>
+                                 </FormLabel>
+                                 <FormControl>
+                                    <Input
+                                       type="text"
+                                       placeholder="15 rue ici"
+                                       {...field}
+                                       id="address"
+                                       name="address"
+                                       autoComplete="true"
+                                    />
+                                 </FormControl>
+                                 <FormMessage />
+                              </FormItem>
+                           )}
+                        />
 
                      <Button
                         disabled={isLoading}

@@ -88,7 +88,10 @@ export function UserMenu({
                {/* Annonces */}
                <DropdownMenuItem className="flex items-center gap-1 hover:text-gray-500 cursor-pointer">
                   <Notebook size={15} />
-                  <Link href={`/${username}/annonces`} title="Liste de mes annonces">
+                  <Link
+                     href={`/${username}/annonces`}
+                     title="Liste de mes annonces"
+                  >
                      Mes annonces
                   </Link>
                </DropdownMenuItem>
@@ -121,8 +124,9 @@ export function UserMenu({
                   title="Déconnexion utilisateur"
                >
                   <LogOut size={15} />
-                  <SignOutButton />
-                  {/* <Link href="/">Déconnexion</Link> */}
+                  <SignOutButton redirectUrl="/connexion">
+                     Déconnexion
+                  </SignOutButton>
                </DropdownMenuItem>
             </DropdownMenuGroup>
          </DropdownMenuContent>

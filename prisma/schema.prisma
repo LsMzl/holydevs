@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -22,15 +22,15 @@ model User {
   lastname              String?
   username                String?  @unique
   phone                 String?
-  profilePicture        String?  @db.LongText
-  coverPicture          String?  @db.LongText
+  profilePicture        String?  @db.Text
+  coverPicture          String?  @db.Text
   // Localisation
   country               String?
   state                 String?
   city                  String?
   address               String?
   // Informations complémentaires
-  biography             String?  @db.LongText
+  biography             String?  @db.Text
   interests             String?
   languages             String?
   // Identifiants
@@ -100,8 +100,8 @@ model Rates {
 //* Avis clients sur les maisons
 model Opinion {
   id        String   @id @default(uuid())
-  title     String?  @db.TinyText
-  content   String   @db.LongText
+  title     String?  @db.VarChar(255)
+  content   String   @db.Text
   // Création, modification
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -176,9 +176,9 @@ model House {
   updatedAt    DateTime @default(now())
   // Informations
   title        String   @db.Text
-  image        String?  @db.LongText
+  image        String?  @db.Text
   introduction String?
-  description  String   @db.LongText
+  description  String   @db.Text
   // Propriétaire
   ownerId      String
   price        Int?
@@ -292,7 +292,7 @@ model Booking {
 model Post {
   id        String   @id @default(uuid())
   content   String   @db.Text
-  image     String?  @db.LongText
+  image     String?  @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   //! Un post n'a qu'un seul auteur
@@ -414,22 +414,3 @@ enum Role {
   ADMIN
 }
 
-// model Session {
-//   id        Int      @id @default(autoincrement())
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   expiresAt DateTime
-//   handle    String   @unique
-//   user      User?    @relation(fields: [userId], references: [id])
-//   userId    String?
-// }
-
-// model VerificationToken {
-//   id        Int      @id @default(autoincrement())
-//   token     String   @unique
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   expiresAt DateTime
-//   user      User?    @relation(fields: [userId], references: [id])
-//   userId    String?
-// }

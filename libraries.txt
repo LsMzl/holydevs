@@ -9,3 +9,6 @@ npm install @clerk/localizations
 
 sign-up -> inscription
 sign-in -> connexion
+
+
+pFiWg0Uhk9VI2hCx
