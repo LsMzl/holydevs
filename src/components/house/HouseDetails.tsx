@@ -212,13 +212,72 @@ const HouseDetails = ({
       }
    };
    return (
-      <div className="mt-10 max-w-[1400px] mb-20 mx-auto max-lg:mx-2 max-md:mt-5">
-         <div className="flex justify-between items-center ">
-            <div className="flex items-center gap-3">
-               {/* Titre de l'annonce */}
-               <h1 className="font-medium text-xl md:text-3xl">
-                  {house?.title}
-               </h1>
+      <div className="mt-5 max-w-[1400px] mx-auto px-2">
+         {/* Top */}
+         <div className="flex flex-col ">
+            {/* Mobile */}
+            <div className="md:hidden">
+               <div className="flex justify-between items-center">
+                  {/* Titre de l'annonce */}
+                  <h1 className="font-medium text-lg w-[310px] overflow-hidden text-ellipsis whitespace-nowrap">
+                     {house?.title}
+                  </h1>
+                  {/* Right */}
+                  <div className="flex items-center gap-5">
+                     <Image
+                        src={Share}
+                        alt="Icône de partage"
+                        height={20}
+                        width={20}
+                        className="h-5 w-5 hover:animate-bounce cursor-pointer"
+                     />
+                     {!isMyHouse && <FavouriteInteraction house={house} />}
+                  </div>
+               </div>
+
+               <div className="space-x-2 mb-2">
+                  {/* Types */}
+                  {house.types.map((item) => (
+                     <Badge
+                        variant="secondary"
+                        key={uuidv4()}
+                        className="capitalize"
+                     >
+                        {item.type.name}
+                     </Badge>
+                  ))}
+                  {/* Categories */}
+                  {house.categories.map((item) => (
+                     <Badge key={uuidv4()} className="capitalize">
+                        {item.category.name}
+                     </Badge>
+                  ))}
+               </div>
+            </div>
+            {/* Screen */}
+            <div className="hidden md:block">
+               {/* Top */}
+               <div className="flex items-center justify-between">
+                  {/* Titre de l'annonce */}
+                  <h1 className="font-medium text-2xl lg:text-3xl lg:w-[850px] w-[500px] overflow-hidden text-ellipsis whitespace-nowrap">
+                     {house?.title}
+                  </h1>
+                  {/* Interaction */}
+                  <div className="flex items-center gap-5">
+                     {/* Share */}
+                     <form>
+                        <Image
+                           src={Share}
+                           alt="Icône de partage"
+                           height={20}
+                           width={20}
+                           className="h-5 w-5 hover:animate-bounce cursor-pointer"
+                        />
+                     </form>
+                     {/* Ajout aux favoris si pas propriétaire */}
+                     {!isMyHouse && <FavouriteInteraction house={house} />}
+                  </div>
+               </div>
                {/* Types */}
                <div className="space-x-2">
                   {house.types.map((item) => (
@@ -237,25 +296,12 @@ const HouseDetails = ({
                      </Badge>
                   ))}
                </div>
-            </div>
-            {/* Share & Save */}
-            <div className="flex items-center gap-2 md:gap-5">
-               {/* Share */}
-               <form className="flex items-center gap-1">
-                  <Image
-                     src={Share}
-                     alt="Icône de partage"
-                     height={20}
-                     width={20}
-                     className="h-5 w-5 hover:animate-bounce cursor-pointer"
-                  />
-                  <p className="hidden md:block md:text-sm">Partager</p>
-               </form>
-               {/* Ajout aux favoris si pas propriétaire */}
-               {!isMyHouse && <FavouriteInteraction house={house} />}
+               <p className="my-3 text-sm lg:w-[850px]">
+                  {house?.introduction}
+               </p>
             </div>
          </div>
-         <p className="mb-3 text-sm">{house?.introduction}</p>
+
          {/* //TODO: Mettre un carousel de photos*/}
          {/* Illustration */}
          <div className="relative w-full h-[200px] md:h-[450px] bg-background mb-3 md:mb-5">

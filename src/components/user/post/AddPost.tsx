@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
-import House from "../../../../public/img/house.jpg";
+import React, { useState, useTransition } from "react";
 import Smiley from "../../../../public/logo/smile.png";
 import Picture from "../../../../public/logo/picture.png";
 import Video from "../../../../public/logo/play.png";
@@ -23,10 +22,7 @@ import {
    FormMessage,
 } from "@/components/shadcn/form";
 import { Textarea } from "@/components/shadcn/textarea";
-import {
-   Check,
-   LoaderCircleIcon,
-} from "lucide-react";
+import { Check, LoaderCircleIcon } from "lucide-react";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
 import { useRouter } from "next/navigation";
@@ -34,30 +30,24 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "@/components/shadcn/use-toast";
-import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import { cn } from "@/lib/utils";
-import { db } from "@/lib/prisma";
 import { PublicationsPageType } from "@/types/user/profilePages";
-
-const formSchema = z.object({
-   // Identité
-   content: z.string().min(5, {
-      message: "Votre post doit contenir au moins 5 caractères",
-   }),
-   image: z.string().optional(),
-});
+import { postCreateSchema } from "@/schema/socialSchema";
+import { FormError } from "@/components/ui/formError";
+import { postCreate } from "@/actions/social/post";
 
 export const AddPost = ({ currentUser }: PublicationsPageType) => {
    // States
-   const [isLoading, setIsLoading] = useState(false);
+   const [isLoading, startTransition] = useTransition();
    const [isPickerVisible, setIsPickerVisible] = useState(false);
-   const router = useRouter();
+   const [error, setError] = useState<string | undefined>("");
    const [files, setFiles] = useState<File[]>([]);
 
+   const router = useRouter();
 
-   const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
+   const form = useForm<z.infer<typeof postCreateSchema>>({
+      resolver: zodResolver(postCreateSchema),
       defaultValues: {
          content: "",
          image: "",
@@ -100,25 +90,27 @@ export const AddPost = ({ currentUser }: PublicationsPageType) => {
       form.setValue("content", form.getValues("content") + emoji.emoji);
    };
 
-   function onSubmit(values: z.infer<typeof formSchema>) {
-      setIsLoading(true);
-      axios
-         .post(`/api/user/post`, values)
-         .then((res) => {
-            setIsLoading(false);
-            router.refresh();
-            localStorage.clear();
-            form.reset();
-         })
-         .catch((err) => {
-            console.log(err);
-            toast({
-               variant: "destructive",
-               description:
-                  "Une erreur est survenue, veuillez réessayer plus tard",
-            });
-            setIsLoading(false);
-         });
+   function onSubmit(values: z.infer<typeof postCreateSchema>) {
+      setError("");
+      startTransition(() => {
+         postCreate(values)
+            .then((data) => {
+               if (data?.error) {
+                  setError(data.error);
+               }
+               if (data?.success) {
+                  toast({
+                     title: "✔️ Succès",
+                     variant: "default",
+                     description: `${data.success}`,
+                  });
+                  localStorage.clear();
+                  form.reset();
+                  router.refresh();
+               }
+            })
+            .catch(() => setError("Une erreur est survenue"));
+      });
    }
 
    return (
@@ -281,6 +273,13 @@ export const AddPost = ({ currentUser }: PublicationsPageType) => {
                                  />
                               </div>
                            </div>
+
+                           {/* Affichage des erreurs */}
+                           {error && (
+                              <div className="mt-2">
+                                 <FormError message={error} />
+                              </div>
+                           )}
 
                            {/* Button */}
                            <DialogClose asChild>

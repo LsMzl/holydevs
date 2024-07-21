@@ -8,7 +8,7 @@ import { db } from "@/lib/prisma";
  */
 export const getUserByClerkId = async (userId: string) => {
    try {
-      const user = await db.user.findUnique({
+      const user = await db.user.findFirst({
          where: {
             clerkId: userId,
          },

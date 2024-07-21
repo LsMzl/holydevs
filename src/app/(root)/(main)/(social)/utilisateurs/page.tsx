@@ -1,4 +1,3 @@
-import { Button } from "@/components/shadcn/button";
 import { db } from "@/lib/prisma";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -10,6 +9,7 @@ import House from "../../../../../../public/icon/home-button.png";
 
 // Libraries
 import { v4 as uuidv4 } from "uuid";
+import Link from "next/link";
 
 export const metadata: Metadata = {
    title: "Tous les membres",
@@ -39,12 +39,14 @@ export default async function AllUsers() {
    if (!allUsers) return <h1>Aucun utilisateur trouvé.</h1>;
 
    return (
-      <section className="bg-card rounded-lg p-2 shadow">
+      <section>
          <h1 className="text-2xl font-semibold mb-5">Rechercher des membres</h1>
-         <div className=" grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+         <div className=" grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
             {allUsers.length > 1 &&
                allUsers.map((user) => (
-                  <div
+                  <Link
+                  href={`/utilisateur/${user.username}`}
+                  title={`Visiter le profil de ${user.firstname} ${user.lastname}`}
                      className="flex flex-col shadow rounded-lg bg-card"
                      key={uuidv4()}
                   >
@@ -116,7 +118,7 @@ export default async function AllUsers() {
                            </div>
                         </div>
                      </div>
-                  </div>
+                  </Link>
                ))}
          </div>
       </section>

@@ -30,14 +30,12 @@ import axios from "axios";
 import { Button } from "@/components/shadcn/button";
 import { Check, Loader2, X } from "lucide-react";
 import { CoverPictureInput } from "@/components/shadcn/coverPictureInput";
+import { coverPictureSchema } from "@/schema/userSchemas";
 
 interface UpdateCoverPictureProps {
    coverPicture: string;
 }
 
-const formSchema = z.object({
-   coverPicture: z.string().optional(),
-});
 
 const UpdateCoverPicture = ({ coverPicture }: UpdateCoverPictureProps) => {
    const router = useRouter();
@@ -53,8 +51,8 @@ const UpdateCoverPicture = ({ coverPicture }: UpdateCoverPictureProps) => {
       string | ArrayBuffer | null
    >(null);
 
-   const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
+   const form = useForm<z.infer<typeof coverPictureSchema>>({
+      resolver: zodResolver(coverPictureSchema),
       defaultValues: {
          coverPicture: "",
       },
@@ -99,7 +97,7 @@ const UpdateCoverPicture = ({ coverPicture }: UpdateCoverPictureProps) => {
       }
    };
 
-   function onSubmit(values: z.infer<typeof formSchema>) {
+   function onSubmit(values: z.infer<typeof coverPictureSchema>) {
       // Récupération de l'image uploadée
       values.coverPicture = imagePreview?.toString();
       setIsLoading(true);

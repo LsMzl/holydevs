@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 interface HouseDetailsProps {
    params: {
       houseId: string;
+      title: string;
    };
 }
 

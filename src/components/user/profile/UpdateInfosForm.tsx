@@ -43,6 +43,7 @@ import {
 } from "@/components/shadcn/select";
 import { ICity, IState } from "country-state-city";
 import useLocation from "@/app/hooks/useLocations";
+import { updateInfoSchema } from "@/schema/userSchemas";
 
 interface UpdateUserProps {
    lastname: string;
@@ -54,26 +55,6 @@ interface UpdateUserProps {
    email: string;
    phone: string;
 }
-
-const formSchema = z.object({
-   // Identité
-   firstname: z.string().min(2, {
-      message: "Votre prénom doit contenir au moins 3 caractères",
-   }),
-   lastname: z.string().min(2, {
-      message: "Votre prénom doit contenir au moins 3 caractères",
-   }),
-
-   // Localisation
-   country: z.string().optional(),
-   state: z.string().optional(),
-   city: z.string().optional(),
-   address: z.string().optional(),
-
-   // Informations de connexion
-   email: z.string().optional(),
-   phone: z.string().optional(),
-});
 
 const UpdateInfosForm = ({
    firstname,
@@ -98,8 +79,8 @@ const UpdateInfosForm = ({
 
    // const countries = getAllCountries();
 
-   const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
+   const form = useForm<z.infer<typeof updateInfoSchema>>({
+      resolver: zodResolver(updateInfoSchema),
       defaultValues: {
          lastname: lastname ?? "",
          firstname: firstname ?? "",
@@ -135,7 +116,7 @@ const UpdateInfosForm = ({
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [form.watch("country"), form.watch("state")]);
 
-   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+   const onSubmit = async (values: z.infer<typeof updateInfoSchema>) => {
       setIsLoading(true);
       //? Modifications informations utilisateur
       axios

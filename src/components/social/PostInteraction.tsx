@@ -11,7 +11,8 @@ import Share from "../../../public/icon/share.png";
 import Send from "../../../public/icon/send.png";
 
 import { useOptimistic, useState } from "react";
-import { switchLike } from "@/app/api/social/like";
+import { switchLike } from "@/actions/social/like";
+
 
 export const PostInteraction = ({ post, user }: PostTypes) => {
    const likes = post.likes.map((like) => like.userId);

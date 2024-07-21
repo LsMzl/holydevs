@@ -7,15 +7,14 @@ import { db } from "@/lib/prisma";
 import { FooterMobile } from "@/components/navigation/FooterMobile";
 import { FooterScreen } from "@/components/navigation/FooterScreen";
 
-
 export default async function MainLayout({
    children,
 }: Readonly<{ children: React.ReactNode }>) {
    // Utilisateur connecté
    const { userId } = auth();
-   if (!userId) return null;
+
    // Informations utilisateur
-   const user = await getUserByClerkId(userId);
+   const user = await getUserByClerkId(userId ?? "");
 
    const currentUser = await db.user.findFirst({
       where: {
@@ -25,7 +24,6 @@ export default async function MainLayout({
          username: true,
       },
    });
-   if (!currentUser) return null;
 
    return (
       <>

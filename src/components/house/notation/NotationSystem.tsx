@@ -1,13 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import Rating from "@mui/material/Rating";
 
 import {
    Dialog,
-   DialogClose,
    DialogContent,
-   DialogDescription,
-   DialogFooter,
    DialogHeader,
    DialogTitle,
    DialogTrigger,
@@ -16,42 +13,46 @@ import { Separator } from "@/components/shadcn/separator";
 
 import Star from "../../../../public/icon/star.png";
 import Image from "next/image";
-import {
-   HouseDetailsTypes,
-   NotationSystemTypes,
-} from "@/types/house/houseDetails";
+import { NotationSystemTypes } from "@/types/house/houseDetails";
 import { Button } from "@/components/shadcn/button";
-import axios from "axios";
 import { toast } from "@/components/shadcn/use-toast";
 import { useRouter } from "next/navigation";
+import { notation } from "@/actions/interaction/notation";
 
 export const NotationSystem = ({ house, averageRate }: NotationSystemTypes) => {
+   // States
    const [value, setValue] = useState<number>(0);
-   const [isLoading, setIsLoading] = useState<boolean>(false);
+   const [isLoading, startTransition] = useTransition();
    const router = useRouter();
 
    const handleNotation = () => {
-      axios
-         .post(`/api/notation/${house.id}`, value)
-         .then((res) => {
-            setIsLoading(true);
-            toast({
-               variant: "success",
-               description: "Merci pour votre note!",
-            });
-            setIsLoading(false);
-            router.refresh();
-         })
-         .catch((error) => {
-            console.log(error);
-            toast({
-               variant: "destructive",
-               description:
-                  "Une erreur est survenue lors de la notation. Veuillez réessayer plus tard.",
-            });
-            setIsLoading(false);
-            router.push(`/annonce/${house.id}`);
-         });
+      startTransition(() => {
+         notation(value, house.id)
+            .then((data) => {
+               if (data?.error) {
+                  toast({
+                     title: "❌ Erreur",
+                     variant: "destructive",
+                     description: `${data.error}`,
+                  });
+               }
+               if (data?.success) {
+                  toast({
+                     title: "✔️ Succès",
+                     variant: "default",
+                     description: `${data.success}`,
+                  });
+                  router.push(`/annonce/${house.id}`);
+               }
+            })
+            .catch(() =>
+               toast({
+                  title: "❌ Erreur",
+                  variant: "destructive",
+                  description: `Une erreur est survenue...`,
+               })
+            );
+      });
    };
 
    return (

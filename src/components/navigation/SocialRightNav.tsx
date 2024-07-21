@@ -21,7 +21,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
    acceptFollowRequest,
    declineFollowRequest,
-} from "@/app/api/social/blockAndFollow";
+} from "@/actions/social/blockAndFollow";
 
 export const SocialRightNav = ({
    lastUsers,

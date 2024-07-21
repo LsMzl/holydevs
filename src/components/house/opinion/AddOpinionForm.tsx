@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 
 import {
    Dialog,
@@ -32,49 +32,50 @@ import axios from "axios";
 
 import { toast } from "@/components/shadcn/use-toast";
 import { AddOpinionFormTypes } from "@/types/house/houseDetails";
-
-const formSchema = z.object({
-   title: z
-      .string()
-      .min(2, { message: "Le titre doit contenir au moins 2 caractères" }),
-   content: z.string().min(5, {
-      message: "Votre avis doit contenir au moins 5 caractères",
-   }),
-});
+import { opinionSchema } from "@/schema/houseSchema";
+import { opinion } from "@/actions/interaction/avis";
 
 const AddOpinionForm = ({ house }: AddOpinionFormTypes) => {
-   const [isLoading, setIsLoading] = useState(false);
+   // States
+   const [isLoading, startTransition] = useTransition();
    const router = useRouter();
 
-   const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
+   const form = useForm<z.infer<typeof opinionSchema>>({
+      resolver: zodResolver(opinionSchema),
       defaultValues: {
          title: "",
          content: "",
       },
    });
 
-   function onSubmit(values: z.infer<typeof formSchema>) {
-      setIsLoading(true);
-      axios
-         .post(`/api/opinion/${house.id}`, values)
-         .then((res) => {
-            toast({
-               variant: "success",
-               description: "Avis publié avec succès !",
-            });
-            setIsLoading(false);
-            router.refresh();
-         })
-         .catch((error) => {
-            console.log(error);
-            toast({
-               variant: "destructive",
-               description:
-                  "Une erreur est survenue, veuillez réessayer plus tard",
-            });
-            setIsLoading(false);
-         });
+   function onSubmit(values: z.infer<typeof opinionSchema>) {
+      startTransition(() => {
+         opinion(values, house.id)
+            .then((data) => {
+               if (data?.error) {
+                  toast({
+                     title: "❌ Erreur",
+                     variant: "destructive",
+                     description: `${data.error}`,
+                  });
+               }
+               if (data?.success) {
+                  toast({
+                     title: "✔️ Succès",
+                     variant: "default",
+                     description: `${data.success}`,
+                  });
+                  router.push(`/annonce/${house.id}`);
+               }
+            })
+            .catch(() =>
+               toast({
+                  title: "❌ Erreur",
+                  variant: "destructive",
+                  description: `Une erreur est survenue...`,
+               })
+            );
+      });
    }
    return (
       <Dialog>

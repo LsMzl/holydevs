@@ -14,7 +14,7 @@ import hourglass from "../../../public/icon/hourglass.png";
 import { BlockAndFollowTypes } from "@/types/social/SocialInteractions";
 
 // Api
-import { switchBlock, switchFollow } from "@/app/api/social/blockAndFollow";
+import { switchBlock, switchFollow } from "@/actions/social/blockAndFollow";
 
 export const BlockAndFollowInteraction = ({
    userId,

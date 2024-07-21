@@ -55,7 +55,6 @@ import {
 // import "../../../public/css/style.css";
 
 const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
-   
    // Filters
    const [categoryFilter, setCategoryFilter] = useState("");
    const [typeFilter, setTypeFilter] = useState("");
@@ -165,7 +164,7 @@ const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
                   }}
                   className="w-full relative"
                >
-                  <CarouselContent className="max-md:ml-4 -ml-0">
+                  <CarouselContent className=" -ml-0">
                      <Button
                         size="sm"
                         className="shadow hover:bg-foreground/20 bg-foreground/10 text-foreground"
@@ -219,14 +218,11 @@ const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
                         </CarouselItem>
                      ))}
                   </CarouselContent>
-                  <div className="absolute bottom-[70px] right-10">
-                     <CarouselNext />
-                     <CarouselPrevious />
-                  </div>
                </Carousel>
             </div>
             <div className="flex items-center justify-between mt-3">
-               <div className="flex items-center gap-1 bg-foreground/10 p-0.5 rounded-lg">
+               {/* Localisation filter */}
+               <div className="flex items-center gap-1 bg-foreground/10 md:p-0.5 rounded-lg">
                   {/* Pays */}
                   <div>
                      <Select
@@ -255,7 +251,7 @@ const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
                         onValueChange={(value) => setState(value)}
                      >
                         <SelectTrigger
-                           className="hover:bg-foreground/10 bg-transparent border-none"
+                           className="hover:bg-foreground/10 bg-transparent border-none p-0"
                            disabled={country === ""}
                         >
                            <SelectValue placeholder="Région" />

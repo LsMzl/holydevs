@@ -8,8 +8,10 @@ export const metadata: Metadata = {
 
 export default function Page() {
    return (
-      <div className="max-w-[350px] mx-auto mt-10 md:mt-20">
-         <SignIn />
+      <div className="h-screen w-full flex items-center">
+         <div className="max-w-[350px] mx-auto">
+            <SignIn />
+         </div>
       </div>
    );
 }

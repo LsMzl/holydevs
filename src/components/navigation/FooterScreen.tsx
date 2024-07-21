@@ -15,8 +15,8 @@ import { FooterTypes } from "@/types/Footer";
 
 export const FooterScreen = ({ currentUser }: FooterTypes) => {
    return (
-      <footer className="w-full border-t bg-card mt-20 text-foreground/60">
-         <div className="max-w-[1200px] flex flex-col mx-auto p-5">
+      <footer className="w-full border-t bg-card mt-10 text-foreground/60">
+         <div className="max-w-[1400px] flex flex-col mx-auto p-5">
             {/* Haut */}
             <div className="flex justify-center items-center gap-20 border-b">
                {/* Left */}
@@ -43,14 +43,14 @@ export const FooterScreen = ({ currentUser }: FooterTypes) => {
                   {/* Links */}
                   <div className="grid grid-cols-2 text-sm">
                      <Link
-                        href={`/${currentUser.username}/reservations`}
+                        href={`/${currentUser?.username}/reservations`}
                         title="Voir mes réservations"
                         className="hover:font-medium hover:underline hover:underline-offset-2"
                      >
                         Réservations
                      </Link>
                      <Link
-                        href={`/${currentUser.username}/annonces`}
+                        href={`/${currentUser?.username}/annonces`}
                         title="Voir mes annonces"
                         className="hover:font-medium hover:underline hover:underline-offset-2"
                      >
@@ -58,7 +58,7 @@ export const FooterScreen = ({ currentUser }: FooterTypes) => {
                      </Link>
 
                      <Link
-                        href={`/${currentUser.username}`}
+                        href={`/${currentUser?.username}`}
                         title="Voir mon profil"
                         className="hover:font-medium hover:underline hover:underline-offset-2"
                      >

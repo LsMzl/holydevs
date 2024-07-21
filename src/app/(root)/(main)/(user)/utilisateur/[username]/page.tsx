@@ -72,9 +72,10 @@ export default async function UserProfile({
          },
       },
    });
+   
    if (!user) redirect("/");
    return (
-      <section className="flex items-start gap-5">
+      <section className="flex items-start gap-5 max-w-[1200px] mx-auto">
          {/* Left */}
          <aside className="hidden w-[27%] md:flex flex-col gap-5">
             <div className="flex items-center justify-center text-center rounded m-auto bg-card w-full">
@@ -199,13 +200,13 @@ export default async function UserProfile({
                   <p className="text-sm text-cyan-500">Voir tout</p>
                </div>
                <div className="bg-background grid grid-cols-3 gap-3 justify-between">
-                  {user.followings.map((follower) => (
+                  {user.followers.map((follower) => (
                      <Link
-                        href={follower.following.username ?? ""}
+                        href={follower.follower.username ?? ""}
                         key={follower.id}
                      >
                         <Image
-                           src={follower.following.profilePicture ?? ""}
+                           src={follower.follower.profilePicture ?? ""}
                            alt="Photo de profil"
                            width={70}
                            height={70}

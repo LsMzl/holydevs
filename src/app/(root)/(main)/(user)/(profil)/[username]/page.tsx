@@ -3,22 +3,27 @@ import { Publications } from "@/components/user/profile/pages/Publications";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import React from "react";
+
+type Props = {
+   params: {username: string}
+}
 
 export const metadata: Metadata = {
    title: "Mon profil",
    description: "Page d'accueil d'Holydevs",
 };
 
-export default async function MyProfile() {
+export default async function MyProfile({params}: Props) {
    // Utilisateur connecté
    const { userId } = auth();
    if (!userId) return null;
 
    // Informations utilisateur
-   const user = await db.user.findUnique({
+   const user = await db.user.findFirst({
       where: {
-         clerkId: userId,
+         username: params.username,
       },
       select: {
          id: true,
@@ -70,7 +75,7 @@ export default async function MyProfile() {
          },
       },
    });
-   if (!user) return <h1>Vous n'êtes pas connecté</h1>;
+   if (!user) redirect('/');
 
    return (
       <section className="flex items-start gap-5">

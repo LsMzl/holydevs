@@ -71,8 +71,8 @@ export default async function SocialLayout({
          <div className="max-lg:hidden w-[20%] static top-0 left-0 self-start">
             <SocialLeftNav user={user} />
          </div>
-         <div className="max-lg:w-full max-lg:mx-2 w-[60%]">{children}</div>
-         <div className="max-lg:hidden w-[20%] static top-0 right-0">
+         <div className="max-lg:mx-2 max-xl:w-[80%]">{children}</div>
+         <div className="max-xl:hidden w-[20%] static top-0 right-0">
             <SocialRightNav lastUsers={lastUsers} requests={requests} />
          </div>
       </main>

@@ -35,7 +35,7 @@ const HouseCardGrid = ({ house, user }: HouseCardTypes) => {
    const country = getCountryByCode(house.country);
 
    return (
-      <div className="flex flex-col bg-card/20 rounded-lg max-w-[300px] overflow-hidden border border-card/50 shadow">
+      <div className="flex flex-col bg-card/20 rounded-lg w-full md:max-w-[300px] overflow-hidden border border-card/50 shadow">
          {/* Illustration */}
          <div className=" h-[150px] relative rounded-lg aspect-square w-full hover:scale-100">
             <Image

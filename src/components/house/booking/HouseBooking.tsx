@@ -91,7 +91,7 @@ const HouseBooking = ({user}: HouseBookingTypes) => {
    }
 
    return (
-      <p className="max-w-5xl mb-10">
+      <p className="max-w-5xl mb-10 mx-auto">
          {clientSecret && bookingHouseData && (
             <>
                <h3 className="text-2xl font-medium pb-5 sm:mb-0">

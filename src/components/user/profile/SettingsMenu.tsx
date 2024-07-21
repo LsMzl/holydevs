@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 // Components
 import {
    Sheet,
@@ -32,6 +32,7 @@ import UpdateInfosForm from "./UpdateInfosForm";
 import axios from "axios";
 import { toast } from "@/components/shadcn/use-toast";
 import { useRouter } from "next/navigation";
+import { deleteProfile } from "@/actions/user/profile.";
 
 interface SettingsMenuProps {
    lastname: string;
@@ -55,11 +56,37 @@ const SettingsMenu = ({
    phone,
 }: SettingsMenuProps) => {
    // States
-   const [isLoading, setIsLoading] = useState<boolean>(false);
+   const [isLoading, startTransition] = useTransition();
    const router = useRouter()
 
    // Delete Profile
    const handleDeleteProfile = () => {
+      startTransition(() => {
+         deleteProfile()
+            .then((data) => {
+               if (data?.error) {
+                  toast({
+                     title: "❌ Erreur",
+                     variant: "destructive",
+                     description: `${data.error}`,
+                  });
+               }
+               if (data?.success) {
+                  toast({
+                     title: "✔️ Succès",
+                     variant: "default",
+                     description: `${data.success}`,
+                  }); 
+               }
+            })
+            .catch(() =>
+               toast({
+                  title: "❌ Erreur",
+                  variant: "destructive",
+                  description: `Une erreur est survenue...`,
+               })
+            );
+      });
       axios
          .delete("/api/user/profile/delete")
          .then((res) => {router.push('/')})
@@ -69,7 +96,7 @@ const SettingsMenu = ({
                variant: "destructive",
                description: "Oups, une erreur est survenue...",
             });
-            setIsLoading(false);
+
          });
    };
    return (

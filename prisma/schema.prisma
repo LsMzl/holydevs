@@ -20,7 +20,7 @@ model User {
   // Informations
   firstname             String?
   lastname              String?
-  username                String?  @unique
+  username              String?  @unique
   phone                 String?
   profilePicture        String?  @db.Text
   coverPicture          String?  @db.Text

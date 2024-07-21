@@ -5,12 +5,12 @@ import { useState } from "react";
 
 import Delete from "../../../public/icon/delete.png";
 import Image from "next/image";
-import { deletePost } from "@/app/api/social/post";
+import { postDelete } from "@/actions/social/post";
 
 export const DeletePost = ({ postId }: { postId: string }) => {
    const [open, setOpen] = useState(false);
 
-   const deletePostWithId = deletePost.bind(null, postId);
+   const deletePostWithId = postDelete.bind(null, postId);
    return (
       <div className="rounded-full p-0.5 hover:bg-foreground/20 relative">
          <EllipsisIcon

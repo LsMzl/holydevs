@@ -16,7 +16,7 @@ import { Separator } from "../shadcn/separator";
 
 export const FooterMobile = ({ currentUser }: FooterTypes) => {
    return (
-      <footer className="w-full border-t bg-card mt-20 text-foreground/60">
+      <footer className="w-full border-t bg-card mt-5 text-foreground/60">
          <div className="max-w-[1200px] flex flex-col justify-center mx-auto p-5">
             {/* Logo */}
             <Link
@@ -38,14 +38,14 @@ export const FooterMobile = ({ currentUser }: FooterTypes) => {
             {/* Top */}
             <div className="grid grid-cols-2 text-sm justify-center mt-2">
                <Link
-                  href={`/${currentUser.username}/reservations`}
+                  href={`/${currentUser?.username}/reservations`}
                   title="Voir mes réservations"
                   className="hover:font-medium hover:underline hover:underline-offset-2"
                >
                   Réservations
                </Link>
                <Link
-                  href={`/${currentUser.username}/annonces`}
+                  href={`/${currentUser?.username}/annonces`}
                   title="Voir mes annonces"
                   className="hover:font-medium hover:underline hover:underline-offset-2"
                >
@@ -53,7 +53,7 @@ export const FooterMobile = ({ currentUser }: FooterTypes) => {
                </Link>
 
                <Link
-                  href={`/${currentUser.username}`}
+                  href={`/${currentUser?.username}`}
                   title="Voir mon profil"
                   className="hover:font-medium hover:underline hover:underline-offset-2"
                >

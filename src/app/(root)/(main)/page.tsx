@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 export default async function Home() {
    // User Datas
    const { userId } = auth();
-   if (!userId) return <p>Vous n'êtes pas connecté</p>;
+
    const currentUser = await db.user.findFirst({
       where: {
          clerkId: userId,
@@ -166,12 +166,13 @@ export default async function Home() {
    });
 
    return (
-      <div className="flex items-start gap-5 mt-5 max-w-[1700px] mx-auto">
+      <div className="flex items-start lg:gap-5 mt-2 lg:mt-5 max-w-[1700px]">
+         {/* Nav */}
          <div className="max-lg:hidden w-[20%]">
-            {/* //TODO Régler window is not defined */}
             <MainSideNav user={currentUser} favourites={userFav} />
          </div>
-         <div className="max-lg:w-full max-lg:mx-2 w-[80%] mx-2">
+         {/* Content */}
+         <div className="max-lg:w-full lg:mx-2 w-[80%] px-2">
             {/* Last Houses carousel */}
             <div className="w-full">
                <h2 className="mb-3 text-xl md:text-2xl font-semibold">
