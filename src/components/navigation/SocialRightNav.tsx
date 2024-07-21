@@ -55,7 +55,7 @@ export const SocialRightNav = ({
    );
 
    return (
-      <aside className="space-y-5">
+      <aside className="space-y-5 fixed top-20">
          {/* Friend Requests */}
          <div className="bg-card rounded-lg shadow flex flex-col gap-3 p-5">
             {/* Title */}

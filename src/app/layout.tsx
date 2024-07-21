@@ -24,10 +24,9 @@ export default async function RootLayout({
    const { userId } = auth();
    // Utilisateur dans la database
    const dbUser = await getUserByClerkId(userId ?? "");
-
-   // if (dbUser?.isOnboardingCompleted === false) {
-   //    redirect("/onboarding");
-   // }
+   if (!dbUser?.firstname) {
+      redirect("/onboarding");
+   }
 
    return (
       <ClerkProvider localization={frFR}>

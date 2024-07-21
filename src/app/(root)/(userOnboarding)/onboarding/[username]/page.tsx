@@ -18,8 +18,8 @@ export default async function UserOnboarding2() {
 
    // Utilisateur dans la database
    const dbUser = await getUserByClerkId(user.id);
-   // Utilisateur dans la database => redirection
-   if (dbUser) {
+   // Onboarding terminé => redirection
+   if (dbUser?.isOnboardingCompleted) {
       redirect("/");
    }
    const userData: UserOnboardingTypes = {

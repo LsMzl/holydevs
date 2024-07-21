@@ -69,7 +69,7 @@ export default async function AllUsers() {
                         {/* Infos */}
                         <div className="my-1">
                            {user.firstname && user.lastname ? (
-                              <p className="font-semibold text-lg md:text-xl">
+                              <p className="font-semibold text-lg">
                                  {user.firstname} {user.lastname}
                               </p>
                            ) : (

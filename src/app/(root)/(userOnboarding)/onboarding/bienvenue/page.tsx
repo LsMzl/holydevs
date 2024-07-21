@@ -16,12 +16,13 @@ export default async function WelcomePage() {
       where: { clerkId: user?.id },
       select: {
          firstname: true,
+         isOnboardingCompleted: true,
       },
    });
    // Utilisateur dans la database => redirection
-   if (dbUser) {
-      redirect("/");
-   }
+   // if (dbUser?.isOnboardingCompleted) {
+   //    redirect("/");
+   // }
 
    return <WelcomeStep dbUser={dbUser} />;
 }

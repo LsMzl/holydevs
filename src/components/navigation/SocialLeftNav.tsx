@@ -14,7 +14,7 @@ import Banner from "../../../public/img/banniere.jpg";
 
 export const SocialLeftNav = ({ user }: SocialLeftNavTypes) => {
    return (
-      <aside className="space-y-5">
+      <aside className="space-y-5 sticky top-20">
          {/* Top */}
          <Link href={`/${user.username}`} title="Visiter mon profil">
             <div className="bg-card rounded-lg shadow flex flex-col items-center pb-5">
