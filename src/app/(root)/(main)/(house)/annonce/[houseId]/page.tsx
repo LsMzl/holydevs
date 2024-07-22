@@ -8,10 +8,7 @@ import HouseDetails from "@/components/house/HouseDetails";
 import { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
 
-export const metadata: Metadata = {
-   title: "Annonce",
-   description: "Page d'accueil d'Holydevs",
-};
+
 
 interface HouseDetailsProps {
    params: {
@@ -19,6 +16,10 @@ interface HouseDetailsProps {
       title: string;
    };
 }
+export const metadata: Metadata = {
+   title: "Annonce",
+   description: "Page d'accueil d'Holydevs",
+};
 
 export default async function HousePage({ params }: HouseDetailsProps) {
    // Utilisateur connecté

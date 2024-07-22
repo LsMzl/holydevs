@@ -6,6 +6,7 @@ import { BottomNav } from "@/components/navigation/BottomNav";
 import { db } from "@/lib/prisma";
 import { FooterMobile } from "@/components/navigation/FooterMobile";
 import { FooterScreen } from "@/components/navigation/FooterScreen";
+import { redirect } from "next/navigation";
 
 export default async function MainLayout({
    children,
@@ -15,6 +16,11 @@ export default async function MainLayout({
 
    // Informations utilisateur
    const user = await getUserByClerkId(userId ?? "");
+
+   // Redirection vers l'onboarding si onboarding non complété
+   if(!user) {
+      redirect('/onboarding')
+   }
 
    const currentUser = await db.user.findFirst({
       where: {

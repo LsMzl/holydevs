@@ -1,7 +1,10 @@
+"use client";
 import { buttonVariants } from "@/components/shadcn/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
+
+import JSConfetti from "js-confetti";
 
 interface WelcomeStepProps {
    dbUser: {
@@ -10,6 +13,18 @@ interface WelcomeStepProps {
 }
 
 export const WelcomeStep = ({ dbUser }: WelcomeStepProps) => {
+   const jsConfetti = new JSConfetti();
+
+   const handleConfettis = () => {
+      jsConfetti.addConfetti({
+         confettiNumber: 800,
+      });
+   };
+   useEffect(() => {
+      handleConfettis();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
+
    return (
       <section className="w-full h-screen flex items-center justify-center">
          <div className="flex flex-col justify-center items-center">

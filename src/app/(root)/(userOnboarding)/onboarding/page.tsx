@@ -33,7 +33,7 @@ export default async function UserOnboarding1() {
    };
 
    return (
-      <section className="flex m-auto h-screen max-sm:mx-5 ">
+      <section className="flex m-auto h-screen max-sm:mx-5">
          <div className="flex flex-col md:flex-row justify-center items-center m-auto w-7xl">
             {/* Left section */}
             <div className="mb-3 md:mb-6 lg:mb-0 flex-1 flex flex-col rounded-l-xl py-5 bg-gradient-to-b from-foreground/10 to-transparent self-start">
