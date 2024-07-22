@@ -18,7 +18,7 @@ export default async function MainLayout({
    const user = await getUserByClerkId(userId ?? "");
 
    // Redirection vers l'onboarding si onboarding non complété
-   if(!user) {
+   if(userId && !user?.id) {
       redirect('/onboarding')
    }
 

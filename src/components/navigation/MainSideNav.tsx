@@ -85,7 +85,7 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
                         src={
                            user?.profilePicture
                               ? user?.profilePicture
-                              : `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${user?.username}`
+                              : `https://api.dicebear.com/8.x/thumbs/svg?seed=${user?.username}`
                         }
                         alt={`Photo de profil de ${user?.firstname} ${user?.lastname}`}
                         fill

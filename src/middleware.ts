@@ -17,7 +17,6 @@ export default clerkMiddleware((auth, request) => {
 const isProtectedRoute = createRouteMatcher([
    "/reserver",
    "/ajouter",
-   "/bienvenue",
    "/onboarding(.*)",
 ]);
 
