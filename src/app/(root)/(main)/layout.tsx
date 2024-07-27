@@ -11,13 +11,14 @@ import { redirect } from "next/navigation";
 export default async function MainLayout({
    children,
 }: Readonly<{ children: React.ReactNode }>) {
-   // Utilisateur connecté
+   // Identifiant Clerk de l'utilisateur connecté
    const { userId } = auth();
 
-   // Informations utilisateur
+   // Informations utilisateur depuis la base de données
    const user = await getUserByClerkId(userId ?? "");
 
-   // Redirection vers l'onboarding si onboarding non complété
+   // Redirection vers l'onboarding si onboarding non complété ou
+   // si utilisateur non enregistré dans la base de données
    if(userId && !user?.id) {
       redirect('/onboarding')
    }

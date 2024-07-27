@@ -57,7 +57,7 @@ const SettingsMenu = ({
 }: SettingsMenuProps) => {
    // States
    const [isLoading, startTransition] = useTransition();
-   const router = useRouter()
+   const router = useRouter();
 
    // Delete Profile
    const handleDeleteProfile = () => {
@@ -76,7 +76,7 @@ const SettingsMenu = ({
                      title: "✔️ Succès",
                      variant: "default",
                      description: `${data.success}`,
-                  }); 
+                  });
                }
             })
             .catch(() =>
@@ -87,17 +87,6 @@ const SettingsMenu = ({
                })
             );
       });
-      axios
-         .delete("/api/user/profile/delete")
-         .then((res) => {router.push('/')})
-         .catch((error) => {
-            console.log(error);
-            toast({
-               variant: "destructive",
-               description: "Oups, une erreur est survenue...",
-            });
-
-         });
    };
    return (
       <Sheet>

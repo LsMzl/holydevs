@@ -1,6 +1,14 @@
 import MyBookingsClient from "@/components/booking/MyBookingsClient";
 import { ReservationCard } from "@/components/house/booking/ReservationCard";
 import ProfileSideBar from "@/components/navigation/components/ProfileSideBar";
+import { Button, buttonVariants } from "@/components/shadcn/button";
+import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuGroup,
+   DropdownMenuLabel,
+   DropdownMenuTrigger,
+} from "@/components/shadcn/dropdown-menu";
 import {
    Tabs,
    TabsContent,
@@ -8,7 +16,10 @@ import {
    TabsTrigger,
 } from "@/components/shadcn/tabs";
 import { db } from "@/lib/prisma";
+import { cn } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
+import Link from "next/link";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -24,6 +35,7 @@ export default async function Reservations() {
       select: {
          id: true,
          firstname: true,
+         username: true,
          profilePicture: true,
          biography: true,
          languages: true,
@@ -145,13 +157,71 @@ export default async function Reservations() {
          <div className="flex flex-col gap-5 w-full">
             {/* Haut */}
             <Tabs defaultValue="myReservations">
-               <div className="bg-card rounded-lg p-2">
-                  <TabsList>
-                     <TabsTrigger value="myReservations">
-                        Mes réservations
-                     </TabsTrigger>
-                     <TabsTrigger value="userReservations">Autres</TabsTrigger>
-                  </TabsList>
+               <div className="flex items-center justify-between bg-card rounded-lg pr-2">
+                  {/* Tabs */}
+                  <div className="p-2">
+                     <TabsList>
+                        <TabsTrigger value="myReservations">
+                           Mes réservations
+                        </TabsTrigger>
+                        <TabsTrigger value="userReservations">
+                           Autres
+                        </TabsTrigger>
+                     </TabsList>
+                  </div>
+                  {/* DropDown menu */}
+                  <DropdownMenu>
+                     <DropdownMenuTrigger asChild>
+                        <Button variant="outline">Outils</Button>
+                     </DropdownMenuTrigger>
+
+                     <DropdownMenuContent
+                        className="w-56 bg-background px-3 py-2"
+                        align="end"
+                     >
+                        <DropdownMenuLabel>
+                           Gérer mes réservations
+                        </DropdownMenuLabel>
+                        <div className=" pl-2">
+                           <DropdownMenuItem
+                              className={cn(
+                                 buttonVariants({
+                                    variant: "ghost",
+                                    size: "sm",
+                                 }),
+                                 "flex items-center justify-start py-1 gap-1 text-sm font-normal focus:ring-none focus:outline-none"
+                              )}
+                           >
+                              {/* <UserRound size={15} /> */}
+                              <Link
+                                 href={`/${user.username}/reservations/outils/suivi-du-budget`}
+                                 title="Suivi du budget de vacances"
+                                 // className={cn(buttonVariants())}
+                              >
+                                 Suivre mon budget
+                              </Link>
+                           </DropdownMenuItem>
+                           <DropdownMenuItem
+                              className={cn(
+                                 buttonVariants({
+                                    variant: "ghost",
+                                    size: "sm",
+                                 }),
+                                 "flex items-center justify-start py-1 gap-1 text-sm font-normal"
+                              )}
+                           >
+                              {/* <UserRound size={15} /> */}
+                              <Link
+                                 href={`/${user.username}/reservations/outils/todo-list`}
+                                 title="Suivi du budget de vacances"
+                                 // className={cn(buttonVariants())}
+                              >
+                                 Créer une Todo List
+                              </Link>
+                           </DropdownMenuItem>
+                        </div>
+                     </DropdownMenuContent>
+                  </DropdownMenu>
                </div>
                <TabsContent value="myReservations">
                   {/* Bas */}
@@ -178,7 +248,7 @@ export default async function Reservations() {
                <TabsContent value="userReservations">
                   <div className="bg-card rounded-lg p-2">
                      {bookingsFromUsers.length === 0 ? (
-                        <p>Aucune réservation pour le moment.</p>
+                        <p>Aucune réservation pour le moment.oui</p>
                      ) : (
                         <>
                            <h2 className="text-xl md:text-2xl font-medium mb-6">

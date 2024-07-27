@@ -48,6 +48,7 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
    const [isLoading, startTransition] = useTransition();
    const [states, setStates] = useState<IState[]>([]);
    const [cities, setCities] = useState<ICity[]>([]);
+
    const [error, setError] = useState<string | undefined>("");
 
    const { getAllCountries, getCountryStates, getStateCities } = useLocation();
@@ -95,7 +96,6 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [form.watch("country"), form.watch("state")]);
 
-
    // Soumission du formulaire
    function onSubmit(values: z.infer<typeof firstStepSchema>) {
       setError("");
@@ -112,7 +112,9 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                      description: `${data.success}`,
                   });
                   form.reset();
+
                   router.push(`/onboarding/${data.username}`);
+                  
                }
             })
             .catch(() => setError("Une erreur est survenue"));
@@ -127,6 +129,7 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
          >
             {/* Nom et prénom */}
             <div className="flex gap-5">
+
                <FormField
                   control={form.control}
                   name="lastname"
@@ -138,17 +141,20 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                         </FormLabel>
                         <FormControl>
                            <Input
-                              placeholder="Maison au bord de la mer..."
+                              placeholder="Nom"
                               {...field}
                               id="lastname"
                               name="lastname"
                               autoComplete="true"
+                              required
                            />
                         </FormControl>
                         <FormMessage />
                      </FormItem>
                   )}
                />
+
+
                {/* Nom de famille */}
                <FormField
                   control={form.control}
@@ -160,11 +166,12 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                         </FormLabel>
                         <FormControl>
                            <Input
-                              placeholder="Maison au bord de la mer..."
+                              placeholder="Prénom"
                               {...field}
                               id="firstname"
                               name="firstname"
                               autoComplete="true"
+                              required
                            />
                         </FormControl>
                         <FormMessage />
@@ -183,11 +190,12 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                      </FormLabel>
                      <FormControl>
                         <Input
-                           placeholder="Maison au bord de la mer..."
+                           placeholder="Pseudo"
                            {...field}
                            id="username"
                            name="username"
                            autoComplete="true"
+                           required
                         />
                      </FormControl>
                      <FormMessage />
@@ -212,6 +220,7 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                               id="email"
                               name="email"
                               autoComplete="true"
+                              required
                            />
                         </FormControl>
                         <FormMessage />
@@ -286,6 +295,7 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                      </FormItem>
                   )}
                />
+
                <FormField
                   control={form.control}
                   name="state"
@@ -294,7 +304,6 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                         <FormLabel htmlFor="state">
                            Région <span className="text-red-500">*</span>
                         </FormLabel>
-
                         <FormControl>
                            <Select
                               disabled={isLoading || states.length < 1}
@@ -397,6 +406,7 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                   </FormItem>
                )}
             />
+
             {/* Affichage des erreurs */}
             {error && (
                <div className="mt-2">

@@ -12,11 +12,13 @@ export const metadata: Metadata = {
 };
 
 export default async function UserOnboarding1() {
-   // Utilisateur connecté
+   // Identifiant Clerk de l'utilisateur connecté
    const user = await currentUser();
    if (!user) return;
-   // Utilisateur dans la database
+
+   // Informations utilisateur depuis la base de données
    const dbUser = await getUserByClerkId(user.id);
+   
    // Onboarding complété => redirection
    if (dbUser?.isOnboardingCompleted) {
       redirect("/");

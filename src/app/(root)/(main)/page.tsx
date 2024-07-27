@@ -168,7 +168,7 @@ export default async function Home() {
    return (
       <div className="flex items-start lg:gap-5 mt-2 lg:mt-5 max-w-[1700px] mx-auto">
          {/* Nav */}
-         <div className="max-lg:hidden w-[20%]">
+         <div className="max-lg:hidden w-[20%] h-screen">
             <MainSideNav user={currentUser} favourites={userFav} />
          </div>
          {/* Content */}

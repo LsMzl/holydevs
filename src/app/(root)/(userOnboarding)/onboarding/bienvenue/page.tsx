@@ -20,12 +20,12 @@ export default async function WelcomePage() {
       },
    });
    // Utilisateur dans la database => redirection
-   if (dbUser?.isOnboardingCompleted) {
-      redirect("/");
-   }
+   // if (dbUser?.isOnboardingCompleted) {
+   //    redirect("/");
+   // }
 
    return (
-      <div className="bg-red-500 h-screen w-full">
+      <div className="h-screen w-full">
          <WelcomeStep dbUser={dbUser} />
       </div>
    );

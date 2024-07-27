@@ -64,7 +64,7 @@ export const onboardingSecondStep = async (
    // Mise à jour
    await db.user.update({
       where: {
-         id: idUser,
+         clerkId: idUser,
       },
       data: {
          ...values,

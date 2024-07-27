@@ -118,9 +118,8 @@ const UpdateInfosForm = ({
 
    const onSubmit = async (values: z.infer<typeof updateInfoSchema>) => {
       setIsLoading(true);
-      //? Modifications informations utilisateur
       axios
-         .patch(`../api/user/profile`, values)
+         .patch(`/api/user/profile`, values)
          .then((res) => {
             toast({
                variant: "success",
@@ -139,6 +138,8 @@ const UpdateInfosForm = ({
             setIsLoading(false);
          });
    };
+
+   
    return (
       <Dialog>
          <DialogTrigger asChild>

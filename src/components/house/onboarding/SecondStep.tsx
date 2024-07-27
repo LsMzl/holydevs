@@ -92,7 +92,10 @@ const SecondStep = ({
    });
 
    const router = useRouter();
-   const [isLoading, setIsLoading] = useState(false);
+
+   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+
    const [files, setFiles] = useState<File[]>([]);
 
    // Récupération des données du local storage
@@ -110,8 +113,6 @@ const SecondStep = ({
       fieldChange: (value: string) => void
    ) => {
       e.preventDefault();
-      // const file = e.target.files?.[0];
-      // const fileTypes = ["jpg", "jpeg", "gif", "webp", "png", "svg"];
 
       const fileReader = new FileReader();
 
@@ -532,30 +533,17 @@ const SecondStep = ({
                                                 >
                                                    <FormControl>
                                                       <Checkbox
-                                                         checked={field.value?.includes(
-                                                            feature.id
-                                                         )}
+                                                         checked={field.value?.includes(feature.id)}
                                                          name="features"
                                                          id="features"
-                                                         onCheckedChange={(
-                                                            checked
-                                                         ) => {
+                                                         onCheckedChange={(checked) => {
                                                             return checked
-                                                               ? field.onChange(
-                                                                    [
+                                                               ? field.onChange([
                                                                        ...field.value,
-                                                                       feature.id,
-                                                                    ]
+                                                                       feature.id,]
                                                                  )
                                                                : field.onChange(
-                                                                    field.value?.filter(
-                                                                       (
-                                                                          value
-                                                                       ) =>
-                                                                          value !==
-                                                                          feature.id
-                                                                    )
-                                                                 );
+                                                                    field.value?.filter((value) => value !== feature.id));
                                                          }}
                                                       />
                                                    </FormControl>

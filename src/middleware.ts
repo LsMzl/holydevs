@@ -1,5 +1,8 @@
+
+
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
+// Routes ne nécessitant pas d'authentication
 const isPublicRoute = createRouteMatcher([
    "/",
    "/connexion(.*)",
@@ -8,18 +11,22 @@ const isPublicRoute = createRouteMatcher([
    "/aide(.*)",
 ]);
 
+// Blocage des routes n'étant pas publiques
 export default clerkMiddleware((auth, request) => {
    if (!isPublicRoute(request)) {
       auth().protect();
    }
 });
 
-const isProtectedRoute = createRouteMatcher([
-   "/reserver",
-   "/ajouter",
-   "/onboarding(.*)",
-]);
 
 export const config = {
    matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
+
+
+
+
+
+
+
+

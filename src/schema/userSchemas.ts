@@ -11,9 +11,9 @@ export const firstStepSchema = z.object({
       message: "Votre pseudo doit contenir au moins 4 caractères",
    }),
    email: z
-      .string({ required_error: "Email is required" })
-      .min(1, "Email is required")
-      .email("Invalid email"),
+      .string({ required_error: "Votre email est obligatoire" })
+      .min(1, "Votre email est obligatoire")
+      .email("Ce format d'email n'est pas valide"),
    phone: z.string().min(10, {
       message: "Votre numéro de téléphone n'est pas valide",
    }),

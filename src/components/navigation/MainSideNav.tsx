@@ -65,7 +65,7 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
 
    return (
       <aside
-         className={cn("hidden lg:block static top-0 left-0 ml-2 space-y-5")}
+         className={cn("hidden lg:block fixed top-20 w-[15%] ml-2 space-y-5 mb-10")}
       >
          {/* User infos */}
          <Link href={`/${user?.username}`} title="Visiter mon profil">
@@ -176,7 +176,7 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
          </div>
 
          {/* Friends */}
-         <div className="flex flex-col gap-1 px-3 font-medium rounded py-3 bg-card/30 shadow">
+         {/* <div className="flex flex-col gap-1 px-3 font-medium rounded py-3 bg-card/30 shadow">
             <p className="text-sm font-medium mb-3">Discussions récentes</p>
             <div className="flex items-center gap-2">
                <Avatar className="hidden sm:block ml-1 bg-gray-200 h-8 w-8">
@@ -218,7 +218,7 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
                </Avatar>
                <p className="text-xs">Nom de l'utilisateur</p>
             </div>
-         </div>
+         </div> */}
       </aside>
    );
 };

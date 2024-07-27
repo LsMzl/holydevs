@@ -7,11 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-   return (
-      <div className="h-screen w-full flex items-center">
-         <div className="max-w-[350px] mx-auto">
-            <SignIn />
-         </div>
-      </div>
-   );
+   return <SignIn />;
 }
+

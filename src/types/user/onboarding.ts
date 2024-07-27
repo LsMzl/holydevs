@@ -1,4 +1,3 @@
-import { User } from "@prisma/client";
 
 export interface UserOnboardingTypes {
    user: {

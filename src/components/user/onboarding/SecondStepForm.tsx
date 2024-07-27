@@ -52,6 +52,8 @@ export const SecondStepForm = ({ user }: UserOnboardingTypes) => {
    });
 
    /** Affichage de l'image selectionnée par l'utilisateur.*/
+
+   
    const handleImageSelect = (
       e: React.ChangeEvent<HTMLInputElement>,
       fieldChange: (value: string) => void

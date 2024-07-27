@@ -23,6 +23,7 @@ import { Button, buttonVariants } from "@/components/shadcn/button";
 
 // Images
 import Banner from "../../../../../../public/img/banniere.jpg";
+import { UserTabs } from "@/components/navigation/components/UserTabs";
 
 export default async function MainLayout({
    children,
@@ -160,43 +161,8 @@ export default async function MainLayout({
                      />
                   </div>
                   {/* Tabs/Onglets */}
-                  <div className="md:mx-10">
-                     <ul className="flex items-center gap-2">
-                        <li>
-                           <Link
-                              href={`/${user.username}`}
-                              className={cn(
-                                 buttonVariants({ variant: "ghost" })
-                              )}
-                              title="Page des publications utilisateur"
-                           >
-                              Publications
-                           </Link>
-                        </li>
-                        <li>
-                           <Link
-                              href={`/${user.username}/amis`}
-                              className={cn(
-                                 buttonVariants({ variant: "ghost" })
-                              )}
-                              title="Page des amis utilisateur"
-                           >
-                              Amis
-                           </Link>
-                        </li>
-                        <li>
-                           <Link
-                              href={`/${user.username}/reservations`}
-                              className={cn(
-                                 buttonVariants({ variant: "ghost" })
-                              )}
-                              title="Page des réservations utilisateur"
-                           >
-                              Réservations
-                           </Link>
-                        </li>
-                     </ul>
-                  </div>
+                  <UserTabs user={user}/>
+                  
                </section>
             </div>
          </div>

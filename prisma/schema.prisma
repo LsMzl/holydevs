@@ -342,14 +342,14 @@ model Like {
 model Todolist {
   id   String  @id @default(uuid())
   // Nom de la liste choisie par l'utilisateur
-  name String?
+  name String
+  
   createdAt DateTime           @default(now())
   updatedAt DateTime           @default(now())
 
   //! 1 todo n'appartient qu'a un seul user
   user   User   @relation(fields: [userId], references: [id])
   userId String
-  //Réservation
 
   // Taches
   tasks Task[]
@@ -359,6 +359,7 @@ model Todolist {
 model Task {
   id   String @id @default(uuid())
   name String
+  description String? @db.VarChar(255)
   createdAt DateTime           @default(now())
   updatedAt DateTime           @default(now())
 
