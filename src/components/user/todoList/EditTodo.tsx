@@ -28,15 +28,15 @@ import {
 } from "@/components/shadcn/form";
 import { Input } from "@/components/shadcn/input";
 import { Textarea } from "@/components/shadcn/textarea";
-import { createTask, editTask } from "@/actions/user/todos";
+import { createTask, editTask, editTodo } from "@/actions/user/todos";
 import { toast } from "@/components/shadcn/use-toast";
-import { Task } from "@prisma/client";
+import { Task, Todolist } from "@prisma/client";
 
-interface EditTaskProps {
-   task: Task;
+interface EditTodoProps {
+   todo: Todolist;
 }
 
-export const EditTask = ({ task }: EditTaskProps) => {
+export const EditTodo = ({ todo }: EditTodoProps) => {
    // States
    const [isLoading, startTransition] = useTransition();
    const [error, setError] = useState<string | undefined>("");
@@ -46,8 +46,7 @@ export const EditTask = ({ task }: EditTaskProps) => {
    const form = useForm<z.infer<typeof createTaskSchema>>({
       resolver: zodResolver(createTaskSchema),
       defaultValues: {
-         name: task.name,
-         description: task.description || undefined,
+         name: todo.name,
       },
    });
 
@@ -55,7 +54,7 @@ export const EditTask = ({ task }: EditTaskProps) => {
    function onSubmit(values: z.infer<typeof createTaskSchema>) {
       setError("");
       startTransition(() => {
-         editTask(values, task.id)
+         editTodo(values, todo.id)
             .then((data) => {
                if (data?.error) {
                   setError(data.error);
@@ -76,15 +75,14 @@ export const EditTask = ({ task }: EditTaskProps) => {
 
    return (
       <Dialog>
-         <DialogTrigger>
-            <span className="flex items-center gap-1 text-blue-600 cursor-pointer hover:font-semibold -ml-0.5">
-               <PenIcon className="h-3 w-3" />
-               <p className="text-xs">Modifier</p>
-            </span>
+         <DialogTrigger asChild>
+            <Button variant="ghost" size="icon">
+               <PenIcon className="h-4 w-4" />
+            </Button>
          </DialogTrigger>
          <DialogContent>
             <DialogHeader>
-               <DialogTitle>Modifier une tâche</DialogTitle>
+               <DialogTitle>Modifier le nom de ma liste</DialogTitle>
             </DialogHeader>
             <Form {...form}>
                <form
@@ -97,7 +95,9 @@ export const EditTask = ({ task }: EditTaskProps) => {
                      name="name"
                      render={({ field }) => (
                         <FormItem>
-                           <FormLabel htmlFor="name">Nom de la tâche</FormLabel>
+                           <FormLabel htmlFor="name">
+                              Nouveau nom
+                           </FormLabel>
                            <FormControl>
                               <Input
                                  placeholder="Nom de la liste"
@@ -106,30 +106,6 @@ export const EditTask = ({ task }: EditTaskProps) => {
                                  name="name"
                                  autoComplete="true"
                                  required
-                              />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
-
-                  {/* Description */}
-                  <FormField
-                     control={form.control}
-                     name="description"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel htmlFor="description">
-                              Description
-                           </FormLabel>
-                           <FormControl>
-                              <Textarea
-                                 placeholder="Description optionnelle de votre tâche à réaliser"
-                                 {...field}
-                                 id="description"
-                                 name="description"
-                                 autoComplete="true"
-                                 rows={2}
                               />
                            </FormControl>
                            <FormMessage />

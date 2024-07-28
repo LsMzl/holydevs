@@ -37,7 +37,7 @@ export default async function page() {
 	
 
    return (
-      <div className="flex items-start gap-5">
+      <div className="flex items-start gap-5 max-lg:px-2">
          {/* Left Menu */}
          <SideMenu allList={allList} />
 

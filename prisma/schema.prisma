@@ -75,6 +75,12 @@ model User {
   blocks Block[] @relation("BlocksSent")
   //! Un utilisateur peut être bloqué par 0 ou plusieurs utilisateurs
   blockedBy Block[] @relation("BlocksReceived")
+  //! Messages
+  messageSend Message[] @relation("MessageSender")
+  messageReceive Message[] @relation("MessageReceiver")
+  //! Discussion
+  discussion Discussion[] @relation("DiscussionOwner")
+  discussionFriend Discussion[] @relation("DiscussionFriend")
 
 
 
@@ -367,7 +373,55 @@ model Task {
   todoList   Todolist @relation(fields: [todoListId], references: [id], onDelete: Cascade)
   todoListId String
 
-  isDone Boolean
+  isDone Boolean @default(false)
+}
+
+//* Messagerie
+model Discussion{
+  id   String @id @default(uuid())
+
+  createdAt DateTime           @default(now())
+
+    // 1 envoyeur
+  owner   User @relation("DiscussionOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId String
+
+  // 1 receveur
+  friend   User @relation("DiscussionFriend", fields: [friendId], references: [id], onDelete: Cascade)
+  friendId String
+
+  
+
+  //! Une discussion peut avoir plusieurs 1 ou plusieurs messages
+  messages   Message[]
+
+
+}
+
+//* Messages dans la messagerie
+model Message{
+  id   String @id @default(uuid())
+
+  content String @db.VarChar(255)
+
+  // 1 envoyeur
+  sender   User @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId String
+
+  // 1 receveur
+  receiver   User @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId String
+
+  sendAt DateTime @default(now())
+  updateAt DateTime @default(now())
+
+  //! Messag lu on non
+  isRead Boolean @default(false)
+
+  //! 1 message appartient à une discussion
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  discussionId String
+
 }
 
 //* Many to many entre groupes et users

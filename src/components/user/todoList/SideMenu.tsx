@@ -4,7 +4,13 @@ import { Todolist } from "@prisma/client";
 import React, { useState } from "react";
 import { CreateTodo } from "./CreateTodo";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { X } from "lucide-react";
+import {
+   ClipboardListIcon,
+   LayoutListIcon,
+   ListChecksIcon,
+   ListCollapseIcon,
+   X,
+} from "lucide-react";
 
 interface SideMenuProps {
    allList: Todolist[];
@@ -83,53 +89,61 @@ export const SideMenu = ({ allList }: SideMenuProps) => {
    };
 
    return (
-      <div className="rounded bg-card w-[27%] p-2 space-y-5 min-h-[500px] relative">
-         <div className="flex flex-col gap-2">
-            <p className="font-medium text-xl pb-2">Tâches</p>
+      <div className="rounded bg-card w-[27%] py-5 px-3 space-y-5 min-h-[500px] relative">
+         <p className="font-medium text-xl mb-3">Tâches</p>
+         <div className="flex flex-col gap-2 ml-2">
             <span
                className="flex items-center justify-between text-sm cursor-pointer hover:font-semibold"
                onClick={() => handleSelectedAllTasks()}
             >
-               <p>Toutes</p>
-               <Checkbox checked={allChecked} />
+               <span className="flex items-center gap-2">
+                  <LayoutListIcon size={20} />
+                  <p>Toutes</p>
+               </span>
+               <Checkbox checked={allChecked} className="border-cyan-500" />
             </span>
             <span
                className="flex items-center justify-between text-sm cursor-pointer hover:font-semibold"
                onClick={() => handleSelectedDoneTasks("done")}
             >
-               <p>Terminées</p>
-               <Checkbox checked={doneChecked} />
+               <span className="flex items-center gap-2">
+                  <ListChecksIcon size={20} />
+                  <p>Terminées</p>
+               </span>
+               <Checkbox checked={doneChecked} className="border-green-600" />
             </span>
             <span
                className="flex items-center justify-between text-sm cursor-pointer hover:font-semibold"
                onClick={() => handleSelectedTodoTasks("todo")}
             >
-               <p>A faire</p>
-               <Checkbox checked={todoChecked} />
+               <span className="flex items-center gap-2">
+                  <ListCollapseIcon size={20} />
+                  <p>A faire</p>
+               </span>
+               <Checkbox checked={todoChecked} className="border-orange-500" />
             </span>
          </div>
+
          {/* TodoLists */}
-         <div>
-            <p className="font-medium text-xl pb-2">Mes listes</p>
-            <div className="space-y-2 capitalize">
-               {allList.length === 0 ? (
-                  <p className="text-sm">Aucune liste créé</p>
-               ) : (
-                  allList.map((list) => (
-                     <div
-                        key={list.id}
-                        onClick={() => handleSelectedList(list.id)}
-                     >
-                        <p className="text-sm cursor-pointer hover:font-semibold">
-                           {list.name}
-                        </p>
-                     </div>
-                  ))
-               )}
-            </div>
+         <p className="font-medium text-xl mb-3">Mes listes</p>
+         <div className="space-y-3 capitalize ml-2">
+            {allList.length === 0 ? (
+               <p className="text-sm">Aucune liste créé</p>
+            ) : (
+               allList.map((list) => (
+                  <div
+                     key={list.id}
+                     onClick={() => handleSelectedList(list.id)}
+                     className="flex items-center gap-2 cursor-pointer hover:font-semibold"
+                  >
+                     <ClipboardListIcon size={20} />
+                     <p className="text-sm ">{list.name}</p>
+                  </div>
+               ))
+            )}
          </div>
 
-         <div className="absolute bottom-2 left-[50%] translate-x-[-50%] w-full">
+         <div className="absolute bottom-5 left-[50%] translate-x-[-50%] w-[200px]">
             <CreateTodo />
          </div>
       </div>

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/shadcn/badge";
+import { Publications } from "@/components/user/friend/pages/Publications";
 import { db } from "@/lib/prisma";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -160,7 +161,7 @@ export default async function UserProfile({
                      <p className="text-sm">{user?.biography}</p>
                   ) : user.firstname && user.lastname ? (
                      <p className="text-xs">
-                        {user.firstname} {user.lastname} n'a pas encore
+                        {user.firstname} n'a pas encore
                         renseigné de biographie
                      </p>
                   ) : (
@@ -176,7 +177,7 @@ export default async function UserProfile({
                      {user?.interests
                         ? user?.interests
                         : user.firstname && user.lastname
-                        ? `${user.firstname} ${user.lastname} n'a pas encore renseigné de centres d'intêrets`
+                        ? `${user.firstname} n'a pas encore renseigné de centres d'intêrets`
                         : `${user.username} n'a pas encore renseigné de centres d'intêrets`}
                   </p>
                </div>
@@ -187,7 +188,7 @@ export default async function UserProfile({
                      {user?.languages
                         ? user?.languages
                         : user.firstname && user.lastname
-                        ? `${user.firstname} ${user.lastname} n'a pas encore renseigné de langues parlées`
+                        ? `${user.firstname} n'a pas encore renseigné de langues parlées`
                         : `${user.username} n'a pas encore renseigné de langues parlées`}
                   </p>
                </div>
@@ -257,7 +258,7 @@ export default async function UserProfile({
                      ) : (
                         <p className="text-xs">
                            {user.firstname && user.lastname
-                              ? `${user.firstname} ${user.lastname} n'a pas encore ajouté d'annonce`
+                              ? `${user.firstname} n'a pas encore ajouté d'annonce`
                               : `${user.username} n'a pas encore ajouté d'annonce`}
                         </p>
                      )}
@@ -266,7 +267,7 @@ export default async function UserProfile({
             </div>
          </aside>
          {/* Right */}
-         <p>Contenu</p>
+         <Publications username={params.username}/>
       </section>
    );
 }

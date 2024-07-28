@@ -2,7 +2,7 @@
 // React / Next
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 
 import { cn } from "@/lib/utils";
 
@@ -14,20 +14,18 @@ import { MainSideNavUser } from "@/types/MainSideNav";
 // Images
 import House from "../../../public/icon/house.png";
 import Booking from "../../../public/icon/booking.png";
+import Message from '../../../public/icon/comments.png'
 import { UserFavourite } from "../user/favourite/UserFavourite";
 
-
-
-import { Avatar, AvatarImage } from "../shadcn/avatar";
 import { buttonVariants } from "../shadcn/button";
 import Image from "next/image";
 
 import Banner from "../../../public/img/banniere.jpg";
 import useLocation from "@/app/hooks/useLocations";
 
-const MiniMap = dynamic(() => import('../home/MiniMap'), {
+const MiniMap = dynamic(() => import("../home/MiniMap"), {
    ssr: false,
- })
+});
 
 const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
    // States
@@ -62,10 +60,11 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
    const city = cities?.filter((city) => city.name === user?.city);
    if (!city) return <p>Position non trouvée</p>;
 
-
    return (
       <aside
-         className={cn("hidden lg:block fixed top-20 w-[15%] ml-2 space-y-5 mb-10")}
+         className={cn(
+            "hidden lg:block fixed top-20 w-[15%] ml-2 space-y-5 mb-10"
+         )}
       >
          {/* User infos */}
          <Link href={`/${user?.username}`} title="Visiter mon profil">
@@ -134,7 +133,7 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
                   </p>
                </div>
             ) : (
-               <MiniMap latitude={latitude} longitude={longitude}/>
+               <MiniMap latitude={latitude} longitude={longitude} />
             )}
          </div>
 
@@ -173,6 +172,22 @@ const MainSideNav = ({ user, favourites }: MainSideNavUser) => {
                Mes réservations
             </Link>
             <UserFavourite favourites={favourites} />
+            <Link
+               href={`/${user?.username}/messages`}
+               className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "flex items-center gap-2 justify-start w-full"
+               )}
+            >
+               <Image
+                  src={Message}
+                  alt="Logo du lien"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4"
+               />
+               Messagerie
+            </Link>
          </div>
 
          {/* Friends */}

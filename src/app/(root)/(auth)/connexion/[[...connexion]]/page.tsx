@@ -6,7 +6,12 @@ export const metadata: Metadata = {
    description: "Page de connexion utilisateur",
 };
 
-export default function Page() {
-   return <SignIn />;
+export default function ConnexionPage() {
+   return (
+      <div className="h-screen w-full flex items-center">
+         <div className="max-w-[350px] mx-auto">
+            <SignIn />
+         </div>
+      </div>
+   );
 }
-

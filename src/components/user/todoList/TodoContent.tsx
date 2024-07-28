@@ -3,12 +3,20 @@ import { Separator } from "@/components/shadcn/separator";
 import React, { useState } from "react";
 import { AddTask } from "./AddTask";
 import { Checkbox } from "@/components/shadcn/checkbox";
-import { PenIcon, X } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Task, Todolist } from "@prisma/client";
 import { DeleteList } from "./DeleteList";
 import { cn } from "@/lib/utils";
 import { EditTask } from "./EditTask";
+import {
+   deleteTask,
+   setTaskToDone,
+   setTaskToFinish,
+} from "@/actions/user/todos";
+import { toast } from "@/components/shadcn/use-toast";
+import { EditTodo } from "./EditTodo";
+import { format } from "date-fns";
 
 interface TodoContentProps {
    allList: Todolist[];
@@ -16,9 +24,14 @@ interface TodoContentProps {
 }
 
 export const TodoContent = ({ allList, allTasks }: TodoContentProps) => {
+   //States
+   const [isTaskDone, setIsTaskDone] = useState<boolean>();
+
    // Récupération de l'id de la liste dans l'URL
    const searchParams = useSearchParams();
    const search = searchParams.get("liste");
+
+   const router = useRouter();
 
    // Récupération des tâches selon leur statut
    const taskStatus = searchParams.get("status");
@@ -47,6 +60,83 @@ export const TodoContent = ({ allList, allTasks }: TodoContentProps) => {
    // Filtrage des tâches selon le statut selectionné
    const filteredTasks = tasksByListId.filter((task) => task.isDone == isDone);
 
+   // Passage d'une tâche à terminée
+   const handleFinishTask = (taskId: string) => {
+      setIsTaskDone((prevState) => !prevState);
+      if (!isTaskDone) {
+         setTaskToDone(taskId)
+            .then((data) => {
+               if (data?.error) {
+                  toast({
+                     title: "❌ Erreur",
+                     variant: "destructive",
+                     description: `${data.error}`,
+                  });
+               }
+               if (data?.success) {
+                  router.refresh();
+               }
+            })
+            .catch(() => {
+               toast({
+                  title: "❌ Erreur",
+                  variant: "destructive",
+                  description: `Une erreur est survenue...`,
+               });
+            });
+      } else {
+         setTaskToFinish(taskId)
+            .then((data) => {
+               if (data?.error) {
+                  toast({
+                     title: "❌ Erreur",
+                     variant: "destructive",
+                     description: `${data.error}`,
+                  });
+               }
+               if (data?.success) {
+                  router.refresh();
+               }
+            })
+            .catch(() => {
+               toast({
+                  title: "❌ Erreur",
+                  variant: "destructive",
+                  description: `Une erreur est survenue...`,
+               });
+            });
+      }
+   };
+
+   // Suppression d'une tâche
+   const handleDeleteTask = (taskId: string) => {
+      deleteTask(taskId)
+         .then((data) => {
+            if (data?.error) {
+               toast({
+                  title: "❌ Erreur",
+                  variant: "destructive",
+                  description: `${data.error}`,
+               });
+            }
+            if (data?.success) {
+               toast({
+                  title: "✔️ Succès",
+                  variant: "default",
+                  description: `${data.success}`,
+               });
+               router.refresh();
+            }
+         })
+         .catch(() => {
+            toast({
+               title: "❌ Erreur",
+               variant: "destructive",
+               description: `Une erreur est survenue...`,
+            });
+         });
+   };
+
    return (
       <div className="rounded bg-card w-[73%] p-5 min-h-[330px]">
          {/* Liste non sélectionnée */}
@@ -55,9 +145,17 @@ export const TodoContent = ({ allList, allTasks }: TodoContentProps) => {
          ) : (
             <>
                <div className="flex items-center justify-between">
-                  <p className="text-2xl font-medium">{activeList[0].name}</p>
+                  <div className="flex items-center gap-1">
+                     <p className="text-2xl font-medium leading-1">
+                        {activeList[0].name}
+                     </p>
+                     <EditTodo todo={activeList[0]} />
+                  </div>
                   <DeleteList todoListId={activeList[0].id} />
                </div>
+               <p className="text-xs">
+                  Créée le {format(activeList[0].createdAt, "dd  MMM yyyy")}
+               </p>
                <Separator className="my-5" />
                <AddTask listId={activeList[0].id} />
                {/* Tâches non triées */}
@@ -81,7 +179,11 @@ export const TodoContent = ({ allList, allTasks }: TodoContentProps) => {
                                  "border rounded flex items-start gap-2 p-3"
                               )}
                            >
-                              <Checkbox className="mt-1" />
+                              <Checkbox
+                                 className="mt-1"
+                                 checked={task.isDone}
+                                 onClick={() => handleFinishTask(task.id)}
+                              />
                               {/* Details */}
                               <div className="flex flex-col gap-2">
                                  <div>
@@ -92,15 +194,18 @@ export const TodoContent = ({ allList, allTasks }: TodoContentProps) => {
                                        {task.description}
                                     </p>
                                  </div>
-                                 {task.isDone == false && (
-                                    <div className="flex items-center gap-3">
+                                 <div className="flex items-center gap-3">
+                                    {task.isDone == false && (
                                        <EditTask task={task} />
-                                       <span className="flex items-center gap-1 text-red-600 cursor-pointer hover:font-semibold -ml-0.5">
-                                          <X className="h-4 w-4" />
-                                          <p className="text-xs">Supprimer</p>
-                                       </span>
-                                    </div>
-                                 )}
+                                    )}
+                                    <span
+                                       className="flex items-center gap-1 text-red-600 cursor-pointer hover:font-semibold -ml-0.5"
+                                       onClick={() => handleDeleteTask(task.id)}
+                                    >
+                                       <X className="h-4 w-4" />
+                                       <p className="text-xs">Supprimer</p>
+                                    </span>
+                                 </div>
                               </div>
                            </div>
                         </div>
@@ -122,7 +227,11 @@ export const TodoContent = ({ allList, allTasks }: TodoContentProps) => {
                               "border rounded flex items-start gap-2 p-3"
                            )}
                         >
-                           <Checkbox className="mt-1" />
+                           <Checkbox
+                              className="mt-1"
+                              checked={filteredTask.isDone}
+                              onClick={() => handleFinishTask(filteredTask.id)}
+                           />
                            {/* Details */}
                            <div className="flex flex-col gap-2">
                               <div>
@@ -134,15 +243,20 @@ export const TodoContent = ({ allList, allTasks }: TodoContentProps) => {
                                     {filteredTask.description}
                                  </p>
                               </div>
-                              {filteredTask.isDone == false && (
-                                 <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-3">
+                                 {filteredTask.isDone == false && (
                                     <EditTask task={filteredTask} />
-                                    <span className="flex items-center gap-1 text-red-600 cursor-pointer hover:font-semibold -ml-0.5">
-                                       <X className="h-4 w-4" />
-                                       <p className="text-xs">Supprimer</p>
-                                    </span>
-                                 </div>
-                              )}
+                                 )}
+                                 <span
+                                    className="flex items-center gap-1 text-red-600 cursor-pointer hover:font-semibold -ml-0.5"
+                                    onClick={() =>
+                                       handleDeleteTask(filteredTask.id)
+                                    }
+                                 >
+                                    <X className="h-4 w-4" />
+                                    <p className="text-xs">Supprimer</p>
+                                 </span>
+                              </div>
                            </div>
                         </div>
                      </div>

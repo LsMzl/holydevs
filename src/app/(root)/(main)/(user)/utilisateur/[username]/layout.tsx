@@ -57,7 +57,7 @@ export default async function FriendLayout({
          },
       },
    });
-   if (!user) redirect('/utilisateurs');
+   if (!user) redirect("/utilisateurs");
 
    // Utilisateur connecté
    const { userId } = auth();
@@ -114,7 +114,7 @@ export default async function FriendLayout({
                {/* Cover picture & informations */}
                <section>
                   {/* Cover picture */}
-                  <div className="h-[200px] lg:h-[400px] relative group">
+                  <div className="h-[200px] lg:h-[400px] relative">
                      <Image
                         src={user?.coverPicture ? user?.coverPicture : Banner}
                         fill
@@ -123,10 +123,6 @@ export default async function FriendLayout({
                         sizes="100%"
                         priority
                      />
-                     <Button className="absolute z-10 items-center gap-2 right-1 bottom-1 hidden group-hover:flex">
-                        <CameraIcon size={20} />
-                        Changer de photo
-                     </Button>
                   </div>
 
                   <div className="flex justify-between items-start mx-2 md:mx-10 h-16 md:h-20 2xl:h-28 md:mb-2">
@@ -173,20 +169,22 @@ export default async function FriendLayout({
                               Annonces
                            </Link>
 
-                           <Button
-                              variant="secondary"
-                              className="flex items-center gap-1"
+                           <Link
+                              href={`/${currentUser.username}/messages`}
                               title="Envoyer un message"
+                              className={cn(
+                                 buttonVariants({ variant: "secondary" })
+                              )}
                            >
                               <Image
                                  src={Message}
                                  alt="Envoyer un message"
                                  width={20}
                                  height={20}
-                                 className="w-6 h-6 mt-1"
+                                 className="w-6 h-6 mr-1"
                               />
                               Contacter
-                           </Button>
+                           </Link>
 
                            <BlockAndFollowInteraction
                               currentUserId={currentUser.id}
@@ -214,9 +212,12 @@ export default async function FriendLayout({
                            Annonces
                         </Link>
                         <div className="flex items-center gap-2">
-                           <Button
-                              variant="secondary"
+                           <Link
+                              href={`${currentUser.username}/messages`}
                               title="Envoyer un message"
+                              className={cn(
+                                 buttonVariants({ variant: "secondary" })
+                              )}
                            >
                               <Image
                                  src={Message}
@@ -225,7 +226,8 @@ export default async function FriendLayout({
                                  height={20}
                                  className="w-6 h-6"
                               />
-                           </Button>
+                           </Link>
+
                            <Button
                               variant="secondary"
                               className="flex items-center gap-1"
@@ -254,7 +256,7 @@ export default async function FriendLayout({
                      <ul className="flex items-center gap-2">
                         <li>
                            <Link
-                              href={`/${user.username}`}
+                              href={`/utilisateur/${user.username}`}
                               className={cn(
                                  buttonVariants({ variant: "ghost" })
                               )}
@@ -265,7 +267,7 @@ export default async function FriendLayout({
                         </li>
                         <li>
                            <Link
-                              href={`/${user.username}/amis`}
+                              href={`/utilisateur/${user.username}/amis`}
                               className={cn(
                                  buttonVariants({ variant: "ghost" })
                               )}

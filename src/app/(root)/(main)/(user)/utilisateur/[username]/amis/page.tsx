@@ -1,5 +1,6 @@
 import ProfileSideBar from "@/components/navigation/components/ProfileSideBar";
-import { Friends } from "@/components/user/profile/pages/Friends";
+import { Friends } from "@/components/user/friend/pages/Friends";
+
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { Metadata } from "next";
