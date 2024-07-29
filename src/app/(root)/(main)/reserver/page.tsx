@@ -6,6 +6,12 @@
 import HouseBooking from "@/components/house/booking/HouseBooking";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+   title: "Réservation",
+   description: "Page de messagerie utilisateur",
+};
 
 const BookHouse = async () => {
    // User Datas

@@ -2,9 +2,15 @@ import ProfileSideBar from "@/components/navigation/components/ProfileSideBar";
 import { ProfileHouseCard } from "@/components/user/profile/pages/ProfileHouseCard";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { Metadata } from "next";
 import React from "react";
 
 import { v4 as uuidv4 } from "uuid";
+
+export const metadata: Metadata = {
+   title: "Mes annonces",
+   description: "Page des annonces utilisateur",
+};
 
 export default async function Annonces() {
    // Utilisateur connecté

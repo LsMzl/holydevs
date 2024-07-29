@@ -239,7 +239,6 @@ export const Chat: React.FC<ChatProps> = ({
                            >
                               {message.content}
                            </p>
-                           {/* <p className="text-[10px]">Il y a 3 minutes</p> */}
                            <p className="text-[10px] font-medium">
                               {formatDistance(
                                  new Date(message.sendAt),

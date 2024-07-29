@@ -5,7 +5,7 @@ import { redirect, useRouter } from "next/navigation";
 import React from "react";
 
 export const metadata: Metadata = {
-   title: "Modifier une annonce",
+   title: "Modification d'annonce",
    description: "Page de modification d'annonce",
 };
 

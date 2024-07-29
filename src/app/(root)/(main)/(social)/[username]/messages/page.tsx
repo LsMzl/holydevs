@@ -2,6 +2,12 @@ import { Chat } from "@/components/social/message/chat/Chat";
 import { List } from "@/components/social/message/list/List";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+   title: "Messagerie",
+   description: "Page de messagerie utilisateur",
+};
 
 export default async function Messenger({
    params,

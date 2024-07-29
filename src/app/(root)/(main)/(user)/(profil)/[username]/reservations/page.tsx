@@ -19,9 +19,15 @@ import { db } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
+
+export const metadata: Metadata = {
+   title: "Mes réservations",
+   description: "Page des réservations de l'utilisateur",
+};
 
 export default async function Reservations() {
    // Utilisateur connecté

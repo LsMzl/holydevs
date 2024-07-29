@@ -3,7 +3,14 @@ import { getAllFeatures } from "@/actions/getAllFeatures";
 import { getAllHouseTypes } from "@/actions/getAllHouseTypes";
 import SecondStep from "@/components/house/onboarding/SecondStep";
 import { db } from "@/lib/prisma";
+import { Metadata } from "next";
 import React from "react";
+
+
+export const metadata: Metadata = {
+   title: "Création d'annonce - 2ème étape",
+   description: "Deuxième étape du processus de création d'annonce",
+};
 
 interface AddHouseProps {
    params: {

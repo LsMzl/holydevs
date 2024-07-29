@@ -44,7 +44,7 @@ export const CommentForm = ({ user, post }: PostTypes) => {
 
    const router = useRouter()
 
-   if (!user) return <p>Vous devez être connecté pour commenter</p>;
+   
 
    const form = useForm<z.infer<typeof addCommentSchema>>({
       resolver: zodResolver(addCommentSchema),
@@ -53,7 +53,8 @@ export const CommentForm = ({ user, post }: PostTypes) => {
       },
    });
 
-   console.log('post.id', post.id)
+   if (!user) return <p>Vous devez être connecté pour commenter</p>;
+
 
    const handleEmojiSelect = (emoji: any) => {
       form.setValue("content", form.getValues("content") + emoji.emoji);
