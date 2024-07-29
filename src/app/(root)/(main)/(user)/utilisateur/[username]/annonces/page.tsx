@@ -1,18 +1,13 @@
 import { FriendProfileSideNav } from "@/components/navigation/components/FriendProfileSideNav";
 import ProfileSideBar from "@/components/navigation/components/ProfileSideBar";
-import { Friends } from "@/components/user/friend/pages/Friends";
-
+import { ProfileHouseCard } from "@/components/user/profile/pages/ProfileHouseCard";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { Metadata } from "next";
 import React from "react";
 
-export const metadata: Metadata = {
-   title: "Mes amis",
-   description: "Page d'accueil d'Holydevs",
-};
+import { v4 as uuidv4 } from "uuid";
 
-export default async function FriendsPage({
+export default async function Annonces({
    params,
 }: {
    params: { username: string };
@@ -78,12 +73,62 @@ export default async function FriendsPage({
    });
    if (!user) return <h1>Vous n'êtes pas connecté</h1>;
 
+   const annonces = await db.house.findMany({
+      where: {
+         userId: user.id,
+      },
+      select: {
+         id: true,
+         image: true,
+         title: true,
+         price: true,
+         description: true,
+         country: true,
+         city: true,
+         types: {
+            select: {
+               type: {
+                  select: {
+                     name: true,
+                  },
+               },
+            },
+         },
+         categories: {
+            select: {
+               category: {
+                  select: {
+                     name: true,
+                  },
+               },
+            },
+         },
+
+         Opinions: {
+            select: {
+               id: true,
+            },
+         },
+      },
+   });
+
    return (
-      <section className="flex items-start gap-5 max-w-[1200px] mx-auto">
+      <section className="flex items-start gap-5 w-full">
          {/* Left */}
          <FriendProfileSideNav user={user} />
          {/* Right */}
-         <Friends followers={user.followers} followings={user.followings} />
+         <div className="flex flex-col gap-5 w-full">
+            <div className="bg-card rounded-lg px-5 py-2 space-y-3">
+               <h2 className="text-2xl font-semibold">Mes annonces</h2>
+               {annonces.length === 0 ? (
+                  <p>Vous n'avez pas encore ajouté d'annonces</p>
+               ) : (
+                  annonces.map((house) => (
+                     <ProfileHouseCard house={house} key={uuidv4()} />
+                  ))
+               )}
+            </div>
+         </div>
       </section>
    );
 }

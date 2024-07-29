@@ -134,10 +134,12 @@ export const CommentsList = ({ post, user }: PostTypes) => {
                                  <div className="flex items-center justify-between">
                                     {comment?.author.firstname &&
                                     comment?.author.lastname ? (
-                                       <p className="font-semibold text-sm">
-                                          {comment?.author.firstname}{" "}
-                                          {comment?.author.lastname}
-                                       </p>
+                                       <span>
+                                          <p className="font-semibold text-sm">
+                                             {comment?.author.firstname}{" "}
+                                             {comment?.author.lastname}
+                                          </p>
+                                       </span>
                                     ) : (
                                        <p className="font-semibold text-sm">
                                           {comment?.author.username}

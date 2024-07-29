@@ -7,17 +7,22 @@ import Avatar from "../../../.././../public/img/palmier.jpg";
 import Phone from "../../../.././../public/svg/phone.svg";
 import Camera from "../../../.././../public/icon/camera.png";
 import More from "../../../.././../public/icon/more.png";
-import Emoji from "../../../.././../public/icon/smile.png";
-import Picture from "../../../.././../public/logo/picture.png";
-import Camera2 from "../../../.././../public/icon/camera2.png";
-import Micro from "../../../.././../public/icon/microphone.png";
-import Send from "../../../.././../public/icon/send.png";
 
 // Libraries
-import EmojiPicker from "emoji-picker-react";
+
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
-import { format } from "date-fns";
+import {
+   format,
+   formatDate,
+   formatDistance,
+   subDays,
+   subMinutes,
+} from "date-fns";
+import { AddMessageForm } from "./AddMessageForm";
+
+import { fr } from "date-fns/locale";
+import { setDefaultOptions } from "date-fns";
 
 interface ChatProps {
    connectedUser: {
@@ -48,6 +53,7 @@ interface ChatProps {
            id: string;
            discussionId: string;
            content: string;
+           sendAt: Date;
            receiver: {
               id: string;
               username: string | null;
@@ -71,10 +77,7 @@ export const Chat: React.FC<ChatProps> = ({
    messages,
    connectedUser,
 }) => {
-   // States
-   const [isOpen, setIsOpen] = useState(false);
-   const [text, setText] = useState("");
-
+   setDefaultOptions({ locale: fr });
    // Récupération de l'id de la discussion dans l'URL
    const searchParams = useSearchParams();
    const activeChatId = searchParams.get("chat");
@@ -95,18 +98,6 @@ export const Chat: React.FC<ChatProps> = ({
    const filteredMessages = messages?.filter(
       (items) => items.discussionId == currentDiscussion[0].id
    );
-
-   // AutoScroll to last message
-   // const endRef = useRef<null | HTMLDivElement>(null);
-   // useEffect(() => {
-   //    endRef.current?.scrollIntoView({ behavior: "smooth" });
-   // }, []);
-
-   // Emoji on input
-   const handleEmoji = (e: any) => {
-      setText((prev) => prev + e.emoji);
-      setIsOpen(false);
-   };
 
    return (
       <>
@@ -200,7 +191,7 @@ export const Chat: React.FC<ChatProps> = ({
                   </div>
                </div>
                {/* Middle */}
-               <div className="px-5 py-5 flex-1 min-h-[650px] max-h-[650px] bg-card/5 flex flex-col gap-5 overflow-y-auto">
+               <div className="px-5 py-5 flex-1 min-h-[600px] max-h-[650px] bg-card/5 flex flex-col gap-5 overflow-y-auto">
                   {filteredMessages?.map((message) => (
                      <div
                         key={message?.id}
@@ -237,98 +228,34 @@ export const Chat: React.FC<ChatProps> = ({
                            )}
                         </div>
                         {/* Content */}
-                        <p
-                           className={cn(
-                              message.sender.id === connectedUser.id
-                                 ? "bg-primary/50"
-                                 : "bg-foreground/10",
-                              "rounded-md px-2 py-1 shadow"
-                           )}
-                        >
-                           {message.content}
-                        </p>
+                        <div>
+                           <p
+                              className={cn(
+                                 message.sender.id === connectedUser.id
+                                    ? "bg-primary/50"
+                                    : "bg-foreground/10",
+                                 "rounded-md px-2 py-1 shadow"
+                              )}
+                           >
+                              {message.content}
+                           </p>
+                           {/* <p className="text-[10px]">Il y a 3 minutes</p> */}
+                           <p className="text-[10px] font-medium">
+                              {formatDistance(
+                                 new Date(message.sendAt),
+                                 new Date(),
+                                 { addSuffix: true }
+                              )}
+                           </p>
+                        </div>
                      </div>
                   ))}
-
-                  {/* useRef auto-scroll */}
-                  {/* <div ref={endRef}></div> */}
                </div>
                {/* Bottom */}
-               <div className="flex items-center justify-between gap-2 py-2 px-5 border-t">
-                  {/* Icons */}
-                  <div className="flex items-center">
-                     <div className="cursor-pointer p-1 hover:bg-foreground/30 rounded-full">
-                        <Image
-                           src={Picture}
-                           alt="Emoji smiley pour ouvrir le menu d'ajout d'émoji"
-                           width={20}
-                           height={20}
-                           className="h-4 w-4"
-                        />
-                     </div>
-                     <div className="cursor-pointer p-1 hover:bg-foreground/30 rounded-full">
-                        <Image
-                           src={Camera2}
-                           alt="Emoji smiley pour ouvrir le menu d'ajout d'émoji"
-                           width={20}
-                           height={20}
-                           className="h-4 w-4"
-                        />
-                     </div>
-                     <div className="cursor-pointer p-1 hover:bg-foreground/30 rounded-full">
-                        <Image
-                           src={Micro}
-                           alt="Emoji smiley pour ouvrir le menu d'ajout d'émoji"
-                           width={20}
-                           height={20}
-                           className="h-4 w-4"
-                        />
-                     </div>
-                  </div>
-                  {/* Input */}
-                  <div className="relative flex-1">
-                     <input
-                        type="text"
-                        placeholder="Ecrire un message"
-                        className="bg-foreground/20 outline-none rounded-full py-1 px-3 text-sm w-full"
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                     />
-                     {/* Emoji */}
-                     <div
-                        className="absolute top-[50%] translate-y-[-50%] right-0 cursor-pointer p-1 hover:bg-foreground/30 rounded-full"
-                        onClick={() => setIsOpen(!isOpen)}
-                     >
-                        <Image
-                           src={Emoji}
-                           alt="Emoji smiley pour ouvrir le menu d'ajout d'émoji"
-                           width={20}
-                           height={20}
-                           className="h-4 w-4"
-                        />
-                     </div>
-                     <div className="absolute bottom-10 -right-10">
-                        <EmojiPicker
-                           open={isOpen}
-                           onEmojiClick={handleEmoji}
-                           className=""
-                           allowExpandReactions={false}
-                           height={300}
-                           searchDisabled={true}
-                        />
-                     </div>
-                  </div>
-                  {/* Submit */}
-                  <button>
-                     <Image
-                        src={Send}
-                        alt="Emoji smiley pour ouvrir le menu d'ajout d'émoji"
-                        width={20}
-                        height={20}
-                        className="h-4 w-4"
-                     />
-                  </button>
-               </div>
+               <AddMessageForm
+                  discussionId={activeChatId}
+                  receiverId={currentDiscussion[0].friendId}
+               />
             </div>
          )}
       </>

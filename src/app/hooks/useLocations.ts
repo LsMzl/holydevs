@@ -11,6 +11,7 @@ const useLocation = () => {
          (country) => country.isoCode === countryCode
       );
    };
+   
    /**
     * Permet de récupérer l'état d'un pays grâce à son code.
     * @param countryCode String - Code du pays dans lequels récupérer l'état.
@@ -21,9 +22,7 @@ const useLocation = () => {
          (state) =>
             state.countryCode === countryCode && state.isoCode === stateCode
       );
-
       if (!state) return null;
-
       return state;
    };
 

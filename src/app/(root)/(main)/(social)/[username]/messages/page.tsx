@@ -72,6 +72,7 @@ export default async function Messenger({
          id: true,
          discussionId: true,
          content: true,
+         sendAt: true,
          receiver: {
             select: {
                id: true,

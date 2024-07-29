@@ -443,6 +443,7 @@ const SecondStep = ({
                                                    defaultValue={field.value}
                                                 />
                                              </SelectTrigger>
+
                                              <SelectContent>
                                                 {types?.map((type) => (
                                                    <SelectItem
@@ -454,6 +455,7 @@ const SecondStep = ({
                                                 ))}
                                              </SelectContent>
                                           </Select>
+
                                        </FormControl>
                                        <FormMessage />
                                     </FormItem>
@@ -490,6 +492,7 @@ const SecondStep = ({
                                                    defaultValue={field.value}
                                                 />
                                              </SelectTrigger>
+
                                              <SelectContent>
                                                 {categories?.map((category) => (
                                                    <SelectItem
@@ -500,6 +503,7 @@ const SecondStep = ({
                                                    </SelectItem>
                                                 ))}
                                              </SelectContent>
+                                             
                                           </Select>
                                        </FormControl>
                                        <FormMessage />

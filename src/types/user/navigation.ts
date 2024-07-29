@@ -2,6 +2,7 @@ export interface PublicationsSideNavTypes {
    user: {
       id: string;
       firstname: string | null;
+      username: string | null;
       profilePicture: string | null;
       biography: string | null;
       languages: string | null;

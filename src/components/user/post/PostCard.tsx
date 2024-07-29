@@ -47,6 +47,9 @@ export default async function PostCard({ post }: PostTypes) {
       where: {
          postId: post.id,
       },
+      orderBy: {
+         createdAt: "desc",
+      },
       include: {
          author: {
             select: {

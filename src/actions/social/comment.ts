@@ -5,8 +5,10 @@ import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { getUserByClerkId } from "../getUserByClerkId";
 
-
-export const commentCreate = async (values: z.infer<typeof postCreateSchema>) => {
+export const commentCreate = async (
+   values: z.infer<typeof postCreateSchema>,
+   postId: string
+) => {
    // Vérification des champs
    const validateFields = postCreateSchema.safeParse(values);
    if (!validateFields.success) {
@@ -28,9 +30,14 @@ export const commentCreate = async (values: z.infer<typeof postCreateSchema>) =>
    };
 
    // Création du post
-   await db.post.create({
+   await db.comment.create({
       data: {
-         ...values,
+         content: values.content,
+         post: {
+            connect: {
+               id: postId,
+            },
+         },
          author: {
             connect: {
                id: dbUser.id,
@@ -39,8 +46,9 @@ export const commentCreate = async (values: z.infer<typeof postCreateSchema>) =>
       },
    });
 
-   return { success: "Votre post à bien été publié" };
+   return { success: "Votre commentaire à bien été publié" };
 };
+
 export const commentDelete = async (commentId: string) => {
    // Utilisateur connecté
    const { userId } = auth();
@@ -53,13 +61,11 @@ export const commentDelete = async (commentId: string) => {
       return { error: "Non autorisé" };
    }
 
-
    // Création du post
    await db.comment.delete({
-    where: {
-        id: commentId,
-        authorId: user.id,
-     },
+      where: {
+         id: commentId,
+         authorId: user.id,
+      },
    });
-
 };

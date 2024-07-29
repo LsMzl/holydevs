@@ -119,7 +119,7 @@ export const BlockAndFollowInteraction = ({
                      height={20}
                      className="w-6 h-6"
                   />
-                  <p>Suivre</p>
+                  <p className="max-md:hidden">Suivre</p>
                </Button>
             )}
          </form>

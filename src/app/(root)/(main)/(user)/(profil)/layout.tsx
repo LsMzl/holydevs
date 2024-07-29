@@ -24,6 +24,7 @@ import { Button, buttonVariants } from "@/components/shadcn/button";
 // Images
 import Banner from "../../../../../../public/img/banniere.jpg";
 import { UserTabs } from "@/components/navigation/components/UserTabs";
+import House from "../../../../../../public/icon/house.png";
 
 export default async function MainLayout({
    children,
@@ -38,8 +39,6 @@ export default async function MainLayout({
       },
    });
    if (!user) return <h1>Vous n'êtes pas connecté</h1>;
-
-   
 
    return (
       <main className="flex flex-col items-center gap-5">
@@ -103,7 +102,14 @@ export default async function MainLayout({
                            )}
                            title="Annonces utilisateur"
                         >
-                           <Eye size={15} /> Mes annonces
+                           <Image
+                              src={House}
+                              alt="Envoyer un message"
+                              width={20}
+                              height={20}
+                              className="w-5 h-5 mr-1"
+                           />
+                           Annonces
                         </Link>
 
                         <UpdateProfileForm
@@ -138,31 +144,39 @@ export default async function MainLayout({
                         )}
                         title="Annonces utilisateur"
                      >
-                        <Eye size={15} /> Mes annonces
+                        <Image
+                           src={House}
+                           alt="Envoyer un message"
+                           width={20}
+                           height={20}
+                           className="w-5 h-5 mr-1"
+                        />
+                        Annonces
                      </Link>
-                     <UpdateProfileForm
-                        biography={user?.biography ?? ""}
-                        avatar={user?.profilePicture ?? ""}
-                        email={user?.email ?? ""}
-                        coverPicture={user?.coverPicture ?? ""}
-                        createdAt={user?.createdAt}
-                        languages={user?.languages ?? ""}
-                        interests={user?.interests ?? ""}
-                     />
-                     <SettingsMenu
-                        firstname={user?.firstname ?? ""}
-                        lastname={user?.lastname ?? ""}
-                        country={user?.country ?? ""}
-                        state={user?.state ?? ""}
-                        city={user?.city ?? ""}
-                        address={user?.address ?? ""}
-                        email={user?.email ?? ""}
-                        phone={user?.phone ?? ""}
-                     />
+                     <div className="flex items-center gap-2">
+                        <UpdateProfileForm
+                           biography={user?.biography ?? ""}
+                           avatar={user?.profilePicture ?? ""}
+                           email={user?.email ?? ""}
+                           coverPicture={user?.coverPicture ?? ""}
+                           createdAt={user?.createdAt}
+                           languages={user?.languages ?? ""}
+                           interests={user?.interests ?? ""}
+                        />
+                        <SettingsMenu
+                           firstname={user?.firstname ?? ""}
+                           lastname={user?.lastname ?? ""}
+                           country={user?.country ?? ""}
+                           state={user?.state ?? ""}
+                           city={user?.city ?? ""}
+                           address={user?.address ?? ""}
+                           email={user?.email ?? ""}
+                           phone={user?.phone ?? ""}
+                        />
+                     </div>
                   </div>
                   {/* Tabs/Onglets */}
-                  <UserTabs user={user}/>
-                  
+                  <UserTabs user={user} />
                </section>
             </div>
          </div>

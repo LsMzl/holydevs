@@ -4,14 +4,6 @@ import { auth } from "@clerk/nextjs/server";
 // Database
 import { db } from "@/lib/prisma";
 
-// Icons
-import {
-   CameraIcon,
-   Eye,
-   MessageSquareTextIcon,
-   UserPlusIcon,
-} from "lucide-react";
-
 // React / Next
 import Link from "next/link";
 import Image from "next/image";
@@ -20,12 +12,12 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/shadcn/badge";
 import { Avatar, AvatarImage } from "@/components/shadcn/avatar";
-import { Button, buttonVariants } from "@/components/shadcn/button";
+import { buttonVariants } from "@/components/shadcn/button";
 
 // Images
 import Banner from "../../../../../../../public/img/banniere.jpg";
-import Block from "../../../../../../../public/icon/block.png";
 import Message from "../../../../../../../public/icon/comments.png";
+import House from "../../../../../../../public/icon/house.png";
 
 // Queries
 import { getUserByClerkId } from "@/actions/getUserByClerkId";
@@ -158,14 +150,20 @@ export default async function FriendLayout({
                      {currentUser && (
                         <div className=" mt-2 items-center gap-2 hidden md:flex ">
                            <Link
-                              href=""
+                              href={`/utilisateur/${user.username}/annonces`}
                               className={cn(
                                  buttonVariants(),
                                  "flex gap-1 font-semibold"
                               )}
                               title="Annonces utilisateur"
                            >
-                              <Eye size={15} />
+                              <Image
+                                 src={House}
+                                 alt="Envoyer un message"
+                                 width={20}
+                                 height={20}
+                                 className="w-5 h-5 mr-1"
+                              />
                               Annonces
                            </Link>
 
@@ -201,14 +199,20 @@ export default async function FriendLayout({
                   {currentUser && (
                      <div className="items-center flex justify-between mx-2 md:hidden pb-5">
                         <Link
-                           href=""
+                           href={`/utilisateur/${user.username}/annonces`}
                            className={cn(
                               buttonVariants(),
                               "flex gap-1 font-semibold"
                            )}
                            title="Annonces utilisateur"
                         >
-                           <Eye size={15} />
+                           <Image
+                              src={House}
+                              alt="Envoyer un message"
+                              width={20}
+                              height={20}
+                              className="w-5 h-5 mr-1"
+                           />
                            Annonces
                         </Link>
                         <div className="flex items-center gap-2">
@@ -228,25 +232,13 @@ export default async function FriendLayout({
                               />
                            </Link>
 
-                           <Button
-                              variant="secondary"
-                              className="flex items-center gap-1"
-                           >
-                              <UserPlusIcon size={20} />
-                              S'abonner
-                           </Button>
-                           <Button
-                              variant="secondary"
-                              // title="Bloquer cet utilisateur"
-                           >
-                              <Image
-                                 src={Block}
-                                 alt="Icône de blocage"
-                                 width={20}
-                                 height={20}
-                                 className="w-6 h-6"
-                              />
-                           </Button>
+                           <BlockAndFollowInteraction
+                              currentUserId={currentUser.id}
+                              userId={user.id}
+                              isUserBlocked={isUserBlocked}
+                              isFollowing={isFollowing}
+                              isFollowingRequestSent={isFollowingRequestSent}
+                           />
                         </div>
                      </div>
                   )}

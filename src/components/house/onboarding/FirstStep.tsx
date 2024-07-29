@@ -113,7 +113,9 @@ const FirstStep = () => {
     */
    function onSubmit(values: z.infer<typeof formSchema>) {
       setIsLoading(true);
+      
       localStorage.setItem("house", JSON.stringify(values));
+      
       axios
          .post("/api/house", values)
          .then((res) => {

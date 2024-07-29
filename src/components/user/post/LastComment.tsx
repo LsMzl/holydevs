@@ -7,6 +7,7 @@ import Link from "next/link";
 import React from "react";
 import { CommentsList } from "./CommentsList";
 import { DeleteComment } from "@/components/social/DeleteComment";
+import { format } from "date-fns";
 
 export const LastComment = async ({ post, user }: PostTypes) => {
    // Last Comment Datas
@@ -52,14 +53,19 @@ export const LastComment = async ({ post, user }: PostTypes) => {
          <div className="space-y-1 bg-gradient-to-r from-foreground/10 to-card/10 rounded-lg p-2 min-w-[95%]">
             <div className="flex items-center justify-between">
                {lastComment.author.firstname && lastComment.author.lastname ? (
-                  <p className="font-semibold text-sm">
-                     {lastComment?.author.firstname}{" "}
-                     {lastComment?.author.lastname}
-                  </p>
+                  <span>
+                     <p className="font-semibold text-sm">
+                        {lastComment?.author.firstname}{" "}
+                        {lastComment?.author.lastname}
+                     </p>
+                     <p className="text-[10px] font-medium">Le {format(lastComment?.createdAt, "dd MMM yyyy")}</p>
+                  </span>
                ) : (
-                  <p className="font-medium text-sm">
-                     {lastComment?.author.username}
-                  </p>
+                  <>
+                     <p className="font-medium text-sm">
+                        {lastComment?.author.username}
+                     </p>
+                  </>
                )}
                {/* Delete comment */}
                {user?.id === lastComment.author.id && (
