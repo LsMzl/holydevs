@@ -28,6 +28,7 @@ export default async function MyProfile({params}: Props) {
       select: {
          id: true,
          firstname: true,
+         username: true,
          profilePicture: true,
          biography: true,
          languages: true,
