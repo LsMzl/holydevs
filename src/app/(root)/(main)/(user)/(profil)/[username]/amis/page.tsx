@@ -22,6 +22,7 @@ export default async function FriendsPage() {
       select: {
          id: true,
          firstname: true,
+         username: true,
          profilePicture: true,
          biography: true,
          languages: true,
