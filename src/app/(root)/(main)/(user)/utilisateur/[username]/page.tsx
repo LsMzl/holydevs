@@ -18,6 +18,7 @@ export default async function UserProfile({
 }: {
    params: { username: string };
 }) {
+   console.log('params.username', params.username)
    const user = await db.user.findFirst({
       where: {
          username: params.username,

@@ -8,9 +8,28 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export const metadata: Metadata = {
+   openGraph: {
+      title: "Mes annonces",
+      description: "Page des annonces utilisateur",
+      url: "https://holydevs.fr/annonces",
+      siteName:"Holydevs",
+      images: [
+         // Mobile
+         {
+            url: "",
+            width: 800,
+            height: 600,
+         },
+         // Screen
+         { url: "", width: 800, height: 600, alt: "" },
+      ],
+      locale: "fr_FR",
+      type: "website",
+   },
    title: "Mes annonces",
    description: "Page des annonces utilisateur",
 };
+
 
 export default async function Annonces() {
    // Utilisateur connecté

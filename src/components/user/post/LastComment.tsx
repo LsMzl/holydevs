@@ -35,8 +35,8 @@ export const LastComment = async ({ post, user }: PostTypes) => {
    if (!lastComment) return null;
 
    return (
-      <div className="flex items-start justify-between gap-2 mb-4">
-         <div className=" min-w-[5%]">
+      <div className="grid grid-cols-12 gap-2 mb-4">
+         <div className="sm:col-span-1 col-span-2">
             <Image
                src={
                   lastComment?.author.profilePicture
@@ -46,11 +46,11 @@ export const LastComment = async ({ post, user }: PostTypes) => {
                width={40}
                height={40}
                alt={`Photo de ${lastComment?.author.firstname} ${lastComment?.author.lastname}`}
-               className="rounded-full object-cover h-9 w-9"
+               className="rounded-full object-cover h-10 w-10"
             />
          </div>
 
-         <div className="space-y-1 bg-gradient-to-r from-foreground/10 to-card/10 rounded-lg p-2 min-w-[95%]">
+         <div className="space-y-1 bg-gradient-to-r from-foreground/10 to-card/10 rounded-lg p-2 col-span-10 sm:col-span-11">
             <div className="flex items-center justify-between">
                {lastComment.author.firstname && lastComment.author.lastname ? (
                   <span>

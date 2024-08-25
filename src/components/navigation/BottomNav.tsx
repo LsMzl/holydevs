@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
 import { UserMenuProps } from "@/types/topNav";
 import { UserMenu } from "./components/UserMenu";
 import { GuestMenu } from "./components/GuestMenu";
+import SearchInputMobile from "./SearchInputMobile";
 
 export const BottomNav = ({
    userId,
@@ -22,20 +23,7 @@ export const BottomNav = ({
       <nav className="flex items-center justify-between py-1 fixed w-full bottom-0 left-0 z-50 bg-card px-2 lg:hidden border-t">
          <div className="flex items-center gap-2">
             {/* Search Bar */}
-            <Popover>
-               <PopoverTrigger asChild>
-                  <Button
-                     variant="outline"
-                     className="rounded-full p-2"
-                     title="Rechercher"
-                  >
-                     <Search size={20} />
-                  </Button>
-               </PopoverTrigger>
-               <PopoverContent className="p-0">
-                  <Input placeholder="Recherchez une annonce, ville, catégorie..." />
-               </PopoverContent>
-            </Popover>
+            <SearchInputMobile />
 
             {userId && (
                <Link

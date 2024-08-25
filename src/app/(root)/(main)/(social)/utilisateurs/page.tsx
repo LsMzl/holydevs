@@ -10,6 +10,8 @@ import House from "../../../../../../public/icon/home-button.png";
 // Libraries
 import { v4 as uuidv4 } from "uuid";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
    title: "Tous les membres",
@@ -18,6 +20,10 @@ export const metadata: Metadata = {
 
 // TODO: Ajouter un layout avec une barre de navigation sur la gauche
 export default async function AllUsers() {
+   // Utilisateur connecté
+   const { userId } = auth();
+   if (!userId) redirect("/");
+
    const allUsers = await db.user.findMany({
       include: {
          houses: {
@@ -45,8 +51,8 @@ export default async function AllUsers() {
             {allUsers.length > 1 &&
                allUsers.map((user) => (
                   <Link
-                  href={`/utilisateur/${user.username}`}
-                  title={`Visiter le profil de ${user.firstname} ${user.lastname}`}
+                     href={`/utilisateur/${user.username}`}
+                     title={`Visiter le profil de ${user.firstname} ${user.lastname}`}
                      className="flex flex-col shadow rounded-lg bg-card"
                      key={uuidv4()}
                   >

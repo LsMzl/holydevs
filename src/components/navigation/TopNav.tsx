@@ -17,6 +17,7 @@ import Logo from "../../../public/logo/logo.png";
 
 // Icons
 import { Home, LayoutGrid, Plus, Users } from "lucide-react";
+import SearchInput from "./SearchInput";
 
 export const TopNav = ({
    userId,
@@ -76,16 +77,9 @@ export const TopNav = ({
                >
                   <LayoutGrid />
                </Link>
-            </div>
             {/* SearchBar */}
-            {/* <div className="flex items-center flex-1">
-               <label htmlFor="searchBar" />
-               <input
-                  placeholder="Recherchez une annonce, ville, catégorie..."
-                  name="searchBar"
-                  id="searchBar"
-               />
-            </div> */}
+            <SearchInput/>
+            </div>
          </div>
 
          {/* Right */}

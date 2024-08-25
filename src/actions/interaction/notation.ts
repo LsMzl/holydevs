@@ -6,7 +6,7 @@ export const notation = async (value: number, houseId: string) => {
    // Utilisateur connecté
    const { userId } = auth();
    if (!userId) {
-      return { error: "Non autorisé" };
+      return { error: "Vous devez être connecté pour noter une annonce " };
    }
 
    const user = await db.user.findFirst({

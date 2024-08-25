@@ -112,9 +112,7 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                      description: `${data.success}`,
                   });
                   form.reset();
-
                   router.push(`/onboarding/${data.username}`);
-                  
                }
             })
             .catch(() => setError("Une erreur est survenue"));
@@ -391,7 +389,7 @@ export const FirstStepForm = ({ user }: UserOnboardingTypes) => {
                   <FormItem>
                      <FormLabel htmlFor="address">
                         Adresse <span className="text-red-500">*</span>
-                     </FormLabel>
+                     </FormLabel>            
                      <FormControl>
                         <Input
                            type="text"

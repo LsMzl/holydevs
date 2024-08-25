@@ -8,13 +8,18 @@ import { getUserByClerkId } from "@/actions/getUserByClerkId";
 import { SocialLeftNav } from "@/components/navigation/SocialLeftNav";
 import { SocialRightNav } from "@/components/navigation/SocialRightNav";
 import { db } from "@/lib/prisma";
+import { redirect } from "next/navigation";
 
 export default async function SocialLayout({
    children,
 }: Readonly<{ children: React.ReactNode }>) {
+   
    // Utilisateur connecté
    const { userId } = auth();
-   if (!userId) return null;
+   // Non connecté / non inscrit
+   if (!userId) redirect('/');
+
+
    const user = await db.user.findUnique({
       where: {
          clerkId: userId,

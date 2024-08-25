@@ -1,38 +1,49 @@
-'use client'
+"use client";
 import useLocation from "@/app/hooks/useLocations";
 import { Badge } from "@/components/shadcn/badge";
-import { Button } from "@/components/shadcn/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/shadcn/card";
+import { Button, buttonVariants } from "@/components/shadcn/button";
+import {
+   Card,
+   CardContent,
+   CardDescription,
+   CardFooter,
+   CardHeader,
+   CardTitle,
+} from "@/components/shadcn/card";
 import { Separator } from "@/components/shadcn/separator";
 import { ReservationCardTypes } from "@/types/house/Booking";
 
-import { differenceInCalendarDays } from "date-fns";
+import { differenceInCalendarDays, format } from "date-fns";
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { fr } from "date-fns/locale";
+import { setDefaultOptions } from "date-fns";
+import { cn } from "@/lib/utils";
 
 export const ReservationCard = ({ house }: ReservationCardTypes) => {
-    // React, Next
+   // React, Next
    const router = useRouter();
 
    // Paiement
    const [bookingIsLoading, setBookingIsLoading] = useState(false);
 
+   setDefaultOptions({ locale: fr });
 
-    // Localisation
+   // Localisation
    const { getCountryByCode, getStateByCode } = useLocation();
    const country = getCountryByCode(house.country);
 
-    // Réservation dates
-    moment.locale("fr");
-    const startDate = moment(house.bookings[0].startDate).format("dd.MMMM.YYYY");
-    const endDate = moment(house.bookings[0].endDate).format("dd.MMMM.YYYY");
-    const dayCount = differenceInCalendarDays(
-        house.bookings[0].endDate,
-        house.bookings[0].startDate
-    );
+   // Réservation dates
+   moment.locale("fr");
+   const startDate = format(house.bookings[0].startDate,"dd MMMM yyyy");
+   const endDate = format(house.bookings[0].endDate,"dd MMMM yyyy");
+   const dayCount = differenceInCalendarDays(
+      house.bookings[0].endDate,
+      house.bookings[0].startDate
+   );
    return (
       <Card>
          <CardContent className="flex flex-col sm:flex-row p-0">
@@ -53,7 +64,7 @@ export const ReservationCard = ({ house }: ReservationCardTypes) => {
                      {house.bookings[0].paymentStatus ? (
                         <Badge
                            variant="outline"
-                           className="text-emerald-500 font-medium inline-block"
+                           className="text-emerald-500 font-medium inline-block bg-foreground/10"
                         >
                            Payé
                         </Badge>
@@ -74,9 +85,9 @@ export const ReservationCard = ({ house }: ReservationCardTypes) => {
                <CardContent className="text-sm">
                   <p>
                      Réservation effectuée le{" "}
-                     {moment(house.bookings[0].bookedAt).format("dd.MMMM.YYYY")} par{" "}
+                     {format(house.bookings[0].bookedAt, "dd.MM.yyyy")} par{" "}
                      <Link
-                        href="/user"
+                        href={`/utilisateur/${house.bookings[0].userName}`}
                         className="hover:text-gray-500 underline"
                      >
                         {house.bookings[0].userName}
@@ -105,16 +116,21 @@ export const ReservationCard = ({ house }: ReservationCardTypes) => {
                   <p className="text-xs">Arrivée le {startDate}</p>
                   <p className="text-xs">Départ le {endDate}</p>
                </CardContent>
-               <CardFooter className="flex items-center justify-center sm:justify-start gap-2 mb-2">
-                  <Button
-                     disabled={bookingIsLoading}
-                     variant="outline"
-                     onClick={() =>
-                        router.push(`/annonce/${house.bookings[0].houseId}`)
-                     }
+               <CardFooter className="flex items-center justify-start  gap-2 mb-2">
+                  <Link
+                     href={`/annonce/${house.bookings[0].houseId}`}
+                     className={cn(buttonVariants({ variant: "outline" }))}
+                     title="Page de l'annonce"
                   >
                      Voir l'annonce
-                  </Button>
+                  </Link>
+                  <Link
+                     href={`/annonce/${house.bookings[0].houseId}`}
+                     className={cn(buttonVariants({ variant: "outline" }))}
+                     title="Page de l'annonce"
+                  >
+                     Facture
+                  </Link>
                   {/* {house.bookings[0].paymentStatus === false &&
                      house.bookings[0].userId === userId && (
                         <Button
@@ -125,7 +141,6 @@ export const ReservationCard = ({ house }: ReservationCardTypes) => {
                         </Button>
                      )} */}
                </CardFooter>
-
             </div>
          </CardContent>
       </Card>

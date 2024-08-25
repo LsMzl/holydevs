@@ -26,17 +26,18 @@ const OpinionsCarousel = ({ lastOpinions }: LastOpinionsTypes) => {
          >
             <CarouselContent className="-ml-0">
                {lastOpinions.map((opinion) => (
-                  <CarouselItem key={uuidv4()} className="basis-1/6">
+                  <CarouselItem key={uuidv4()} className="basis-1/3 md:basis-1/5 lg:basis-1/6">
                      <div
                         className="flex flex-col items-center justify-between"
                         key={uuidv4()}
                      >
-                        <Link href={`/user/${opinion.author.username}`}>
+                        <Link href={`/utilisateur/${opinion.author.username}`}>
                            <Image
                               src={opinion.author.profilePicture ?? ""}
                               alt={`Photo de ${opinion.author.firstname} ${opinion.author.lastname}`}
                               height={40}
                               width={40}
+                              className="rounded-full h-10 w-10 object-cover"
                            />
                         </Link>
                         {/* <div className="flex items-start mt-2">

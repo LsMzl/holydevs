@@ -25,6 +25,7 @@ import { HouseBookingTypes } from "@/types/house/Booking";
 const stripePromise = loadStripe(
    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 );
+
 /** Gestion des réservations. */
 const HouseBooking = ({user}: HouseBookingTypes) => {
    // Hooks
@@ -69,7 +70,7 @@ const HouseBooking = ({user}: HouseBookingTypes) => {
             <Button variant="outline" onClick={() => router.push("/")}>
                Accueil
             </Button>
-            <Button onClick={() => router.push(`${user.username}/reservations`)}>
+            <Button onClick={() => router.push(`/${user.username}/reservations`)}>
                Voir mes réservations
             </Button>
          </div>

@@ -43,6 +43,7 @@ export default async function Home() {
          state: true,
       },
    });
+
    const owner = await db.user.findFirst({
       where: {
          clerkId: userId,
@@ -90,6 +91,7 @@ export default async function Home() {
    });
 
    // Lasts Houses data
+   
    const lastHouses = await db.house.findMany({
       orderBy: {
          createdAt: "desc",
@@ -169,11 +171,11 @@ export default async function Home() {
    return (
       <div className="flex items-start lg:gap-5 mt-2 lg:mt-5 max-w-[1700px] mx-auto">
          {/* Nav */}
-         <div className={cn(userId ? "" : "hidden" ,"max-lg:hidden w-[20%] h-screen")}>
+         <div className={cn(userId ? "" : "hidden" ,"max-xl:hidden w-[20%] h-screen")}>
             <MainSideNav user={currentUser} favourites={userFav} />
          </div>
          {/* Content */}
-         <div className={cn(!userId ? " w-full" : "max-lg:w-full w-[80%]", " lg:mx-2  px-2")}>
+         <div className={cn(!userId ? " w-full" : "max-xl:w-full w-[80%]", " lg:mx-2  px-2")}>
             {/* Last Houses carousel */}
             <div className="w-full">
                <h2 className="mb-3 text-xl md:text-2xl font-semibold">

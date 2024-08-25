@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Badge } from "@/components/shadcn/badge";
 
 const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
+
    return (
       <aside className="hidden w-[27%] md:flex flex-col gap-5 ">
          <div className="flex items-center justify-center text-center rounded m-auto bg-card w-full">
@@ -66,22 +67,20 @@ const ProfileSideBar = ({ user }: PublicationsSideNavTypes) => {
             </Link>
             {/* Avis */}
             <span className="w-28 hover:bg-border/70 py-2">
-               <div>
-                  {user?.opinions.length === 0 && (
-                     <>
-                        <p className="font-semibold leading-5">0</p>
-                        <p className="text-sm">Avis</p>
-                     </>
-                  )}
-                  {user?.opinions.length > 1 && (
-                     <>
-                        <p className="font-semibold leading-5">
-                           {user?.opinions.length}
-                        </p>
-                        <p className="text-sm">Avis</p>
-                     </>
-                  )}
-               </div>
+               {user.opinions.length === 0 && (
+                  <>
+                     <p className="font-semibold leading-5">0</p>
+                     <p className="text-sm">Avis</p>
+                  </>
+               )}
+               {user.opinions.length > 1 && (
+                  <>
+                     <p className="font-semibold leading-5">
+                        {user?.opinions.length}
+                     </p>
+                     <p className="text-sm">Avis</p>
+                  </>
+               )}
             </span>
          </div>
          <div className="rounded-lg shadow-sm bg-card w-full p-3 flex flex-col gap-3">

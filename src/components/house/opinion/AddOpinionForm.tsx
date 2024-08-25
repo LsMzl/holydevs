@@ -65,7 +65,7 @@ const AddOpinionForm = ({ house }: AddOpinionFormTypes) => {
                      variant: "default",
                      description: `${data.success}`,
                   });
-                  router.push(`/annonce/${house.id}`);
+                  router.refresh();
                }
             })
             .catch(() =>
@@ -109,7 +109,7 @@ const AddOpinionForm = ({ house }: AddOpinionFormTypes) => {
                               <FormLabel htmlFor="title">Titre</FormLabel>
                               <FormControl>
                                  <Input
-                                    placeholder="Donnez envie aux membres d'entrer en contact avec vous"
+                                    placeholder="Titre de votre avis"
                                     {...field}
                                     id="title"
                                     name="title"
@@ -128,7 +128,7 @@ const AddOpinionForm = ({ house }: AddOpinionFormTypes) => {
                               <FormLabel htmlFor="content">Contenu</FormLabel>
                               <FormControl>
                                  <Textarea
-                                    placeholder="Donnez envie aux membres d'entrer en contact avec vous"
+                                    placeholder="Contenu de votre avis"
                                     {...field}
                                     id="content"
                                     name="content"

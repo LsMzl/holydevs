@@ -15,19 +15,20 @@ export const onboardingFirstStep = async (
       return { error: "Champs invalides" };
    }
 
-   // Fields data
+   // Destructuration des valeurs
    const { username } = validateFields.data;
 
+   // Utilisateur connecté
    const { userId } = auth();
-
+   // Non connecté
    if (!userId) {
       return { error: "Non autorisé" };
    }
-
+   // Vérification que le pseudo n'est pas déjà prit
    const existingUsername = await db.user.findFirst({
       where: { username: username },
    });
-
+   // Pseudo déjà utilisé
    if (existingUsername) {
       return { error: "Ce pseudo est déjà utilisé" };
    }

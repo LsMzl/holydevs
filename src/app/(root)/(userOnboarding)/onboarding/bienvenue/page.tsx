@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 
 export default async function WelcomePage() {
    const user = await currentUser();
+
+   
    const dbUser = await db.user.findUnique({
       where: { clerkId: user?.id },
       select: {
@@ -19,6 +21,8 @@ export default async function WelcomePage() {
          isOnboardingCompleted: true,
       },
    });
+
+   
    // Utilisateur dans la database => redirection
    // if (dbUser?.isOnboardingCompleted) {
    //    redirect("/");

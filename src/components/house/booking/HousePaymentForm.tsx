@@ -44,7 +44,7 @@ type DateRangesType = {
  * @param dateRange Plage de dates.
  * @returns
  */
-function hasOverlap(
+export function hasOverlap(
    startDate: Date,
    endDate: Date,
    dateRange: DateRangesType[]
@@ -77,6 +77,8 @@ function hasOverlap(
    // Pas de chevauchement
    return false;
 }
+
+
 
 const HousePaymentForm = ({
    clientSecret,
@@ -120,33 +122,33 @@ const HousePaymentForm = ({
       }
 
       try {
-         //? Chevauchement de dates
-         const bookings = await axios.get(
-            `api/booking/${bookingHouseData.house.id}`
-         );
+         // //? Chevauchement de dates
+         // const bookings = await axios.get(
+         //    `api/booking/${bookingHouseData.house.id}`
+         // );
 
-         const houseBookingsDates = bookings.data.map((booking: Booking) => {
-            return {
-               startDate: booking.startDate,
-               endDate: booking.endDate,
-            };
-         });
+         // const houseBookingsDates = bookings.data.map((booking: Booking) => {
+         //    return {
+         //       startDate: booking.startDate,
+         //       endDate: booking.endDate,
+         //    };
+         // });
 
-         const overlapFound = hasOverlap(
-            bookingHouseData.startDate,
-            bookingHouseData.endDate,
-            houseBookingsDates
-         );
+         // const overlapFound = hasOverlap(
+         //    bookingHouseData.startDate,
+         //    bookingHouseData.endDate,
+         //    houseBookingsDates
+         // );
 
-         //! Chevauchement de dates trouvé
-         if (overlapFound) {
-            setIsLoading(false);
-            return toast({
-               variant: "destructive",
-               description:
-                  "Certains des jours sélectionnés sont déjà réservés. Veuillez choisir des dates différentes.",
-            });
-         }
+         // //! Chevauchement de dates trouvé
+         // if (overlapFound) {
+         //    setIsLoading(false);
+         //    return toast({
+         //       variant: "destructive",
+         //       description:
+         //          "Certains des jours sélectionnés sont déjà réservés. Veuillez choisir des dates différentes.",
+         //    });
+         // }
 
          // Paiement
          stripe

@@ -37,6 +37,7 @@ const CategoriesCarousel = ({ categories, types }: CategoryCarouselTypes) => {
                         className="shadow hover:bg-primary hover:text-black capitalize"
                         key={uuidv4()}
                         variant="secondary"
+                        title={type.name}                 
                      >
                         {type.name}
                      </Button>
@@ -49,6 +50,7 @@ const CategoriesCarousel = ({ categories, types }: CategoryCarouselTypes) => {
                         className="shadow hover:bg-primary hover:text-black capitalize"
                         key={uuidv4()}
                         variant="secondary"
+                        title={category.name}
                      >
                         {category.name}
                      </Button>

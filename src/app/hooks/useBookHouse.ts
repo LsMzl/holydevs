@@ -1,5 +1,3 @@
-import { HouseDetailsTypes } from "@/types/house/houseDetails";
-import { House } from "@prisma/client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -33,9 +31,6 @@ type HouseDataType = {
       isAvailable: boolean;
       ownerId: string;
       userId: string;
-      // user : {
-      //    id: string;
-      // }
    };
    totalPrice: number;
    startDate: Date;

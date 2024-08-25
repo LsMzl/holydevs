@@ -56,13 +56,14 @@ export const editTodo = async (
       return { error: "Non autorisé" };
    }
 
-   // Création de la liste
+   // Modification de la liste
+
    await db.todolist.update({
       where: {
          id: todolistId,
       },
       data: {
-         ...values,
+         ...values
       },
    });
 
@@ -81,12 +82,14 @@ export const deleteTodo = async (todolistId: string) => {
       return { error: "Non autorisé" };
    }
 
-   // Création du post
+   // Suppression du post
    await db.todolist.delete({
       where: {
          id: todolistId,
       },
    });
+
+   
 
    return { success: "Liste supprimée" };
 };

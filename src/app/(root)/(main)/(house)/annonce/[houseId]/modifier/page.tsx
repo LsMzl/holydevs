@@ -1,5 +1,6 @@
 import { HouseUpdateForm } from "@/components/house/HouseUpdateForm";
 import { db } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import { Metadata } from "next";
 import { redirect, useRouter } from "next/navigation";
 import React from "react";
@@ -16,25 +17,18 @@ interface HouseDetailsProps {
 }
 
 export default async function UpdateHouse({ params }: HouseDetailsProps) {
+   // Utilisateur connecté
+   const { userId } = auth();
+
    const house = await db.house.findFirst({
       where: {
          id: params.houseId,
       },
       select: {
-         id: true,
-         country: true,
-         state: true,
-         city: true,
-         address: true,
-         title: true,
-         image: true,
-         introduction: true,
-         description: true,
-         price: true,
-         bedroom: true,
-         kitchen: true,
-         bathroom: true,
-         isAvailable: true,
+         id: true, country: true, state: true, city: true,
+         ownerId: true, address: true, title: true, image: true, introduction: true,
+         description: true, price: true, bedroom: true, kitchen: true,
+         bathroom: true,isAvailable: true,
          categories: {
             select: {
                category: {
@@ -67,6 +61,13 @@ export default async function UpdateHouse({ params }: HouseDetailsProps) {
          },
       },
    });
+
+   // Utilisateur connecté non propriétaire de l'annonce
+   if (house?.ownerId != userId) {
+      redirect("/");
+   }
+   
+   // Pas d'annonce trouvée
    if (!house)
       return <p className="text-center mt-2 text-lg">Annonce non trouvée...</p>;
    const categories = await db.category.findMany();
@@ -74,7 +75,12 @@ export default async function UpdateHouse({ params }: HouseDetailsProps) {
    const features = await db.feature.findMany();
    return (
       <div>
-         <HouseUpdateForm house={house} categories={categories} types={types} features={features.map(feature => feature)}/>
+         <HouseUpdateForm
+            house={house}
+            categories={categories}
+            types={types}
+            features={features.map((feature) => feature)}
+         />
       </div>
    );
 }

@@ -125,7 +125,7 @@ export default async function Reservations() {
    const bookingsFromMe = await db.house.findMany({
       where: {
          bookings: {
-            some: { userId: userId },
+            some: { userId: user.id },
          },
       },
       select: {
@@ -171,7 +171,7 @@ export default async function Reservations() {
                            Mes réservations
                         </TabsTrigger>
                         <TabsTrigger value="userReservations">
-                           Autres
+                           Maisons réservées
                         </TabsTrigger>
                      </TabsList>
                   </div>
@@ -232,13 +232,13 @@ export default async function Reservations() {
                <TabsContent value="myReservations">
                   {/* Bas */}
                   <div className="bg-card rounded-lg p-2">
+                     <h2 className="text-xl md:text-2xl font-medium mb-4">
+                        Mes réservations personnelles
+                     </h2>
                      {bookingsFromMe.length === 0 ? (
                         <p>Aucune réservation pour le moment.</p>
                      ) : (
                         <>
-                           <h2 className="text-xl md:text-2xl font-medium mb-6">
-                              Mes réservations personnelles
-                           </h2>
                            <div className="flex flex-col gap-5">
                               {bookingsFromMe.map((booking) => (
                                  <ReservationCard
@@ -253,13 +253,13 @@ export default async function Reservations() {
                </TabsContent>
                <TabsContent value="userReservations">
                   <div className="bg-card rounded-lg p-2">
+                     <h2 className="text-xl md:text-2xl font-medium mb-4">
+                        Réservations sur mes maisons
+                     </h2>
                      {bookingsFromUsers.length === 0 ? (
-                        <p>Aucune réservation pour le moment.oui</p>
+                        <p>Aucune réservation pour le moment</p>
                      ) : (
                         <>
-                           <h2 className="text-xl md:text-2xl font-medium mb-6">
-                              Réservations sur mes maisons
-                           </h2>
                            <div className="flex flex-col gap-5">
                               {bookingsFromUsers.map((booking) => (
                                  <ReservationCard

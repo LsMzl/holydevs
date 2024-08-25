@@ -54,6 +54,8 @@ import { useRouter } from "next/navigation";
 // Libraries
 import { fr } from "date-fns/locale";
 import { setDefaultOptions } from "date-fns";
+import { hasOverlap } from "./booking/HousePaymentForm";
+import { Booking } from "@prisma/client";
 
 const HouseDetails = ({
    house,
@@ -65,8 +67,8 @@ const HouseDetails = ({
 }: HouseDetailsTypes) => {
    // States
    const [date, setDate] = useState<DateRange | undefined>();
-   const [totalPrice, setTotalPrice] = useState(0);
-   const [days, setDays] = useState(0);
+   const [totalPrice, setTotalPrice] = useState<number>(0);
+   const [days, setDays] = useState(house.price);
    const [bookingIsLoading, setBookingIsLoading] = useState(false);
 
    // Hooks
@@ -80,6 +82,8 @@ const HouseDetails = ({
    const router = useRouter();
 
    setDefaultOptions({ locale: fr });
+   if (!house) return;
+
    // Notation
    const totalRates = house.rates.reduce(
       (acc, currentValue) => acc + currentValue.rate,
@@ -109,8 +113,6 @@ const HouseDetails = ({
          // Calcul du prix selon le nombre de jours
          if (dayCount) {
             setTotalPrice(dayCount * (house?.price ?? 0));
-            // Prix pour une journée
-            setTotalPrice(house?.price ?? 0);
          }
       }
    }, [date, house?.price]);
@@ -134,7 +136,7 @@ const HouseDetails = ({
       });
       return dates;
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [bookings]);
+   }, [bookings, totalPrice]);
 
    const handleBookHouse = () => {
       //! Pas d'utilisateur connecté
@@ -149,6 +151,37 @@ const HouseDetails = ({
       //? Si l'utilisateur à bien selectionné des dates de réservation
       if (date?.from && date?.to) {
          setBookingIsLoading(true);
+
+         // Chevauchement de dates
+         const houseBookings = bookings?.filter(
+            (booking) => booking.houseId === house?.id && booking.paymentStatus
+         );
+
+         const houseBookingsDates = houseBookings?.map((booking: Booking) => {
+            return {
+               startDate: booking.startDate,
+               endDate: booking.endDate,
+            };
+         });
+         if (!houseBookingsDates) {
+            return;
+         }
+
+         const overlapFound = hasOverlap(
+            date.from,
+            date.to,
+            houseBookingsDates
+         );
+         if (overlapFound) {
+            toast({
+               variant: "destructive",
+               title: "❌ Erreur",
+               description:
+                  "Il y a déjà une réservation en cours pour ces dates.",
+            });
+            setBookingIsLoading(false);
+            return;
+         }
 
          // Création des données de réservation selon useBookHouse()
          const bookingHouseData = {
@@ -593,7 +626,7 @@ const HouseDetails = ({
                            <p>Aucune note</p>
                         ) : (
                            <p>
-                              {averageRate}/5 | {house.rates.length} notes
+                              {averageRate}/5 | {house.rates.length} note
                            </p>
                         )}
                      </div>

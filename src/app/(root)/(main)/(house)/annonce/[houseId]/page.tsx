@@ -16,10 +16,13 @@ interface HouseDetailsProps {
       title: string;
    };
 }
-export const metadata: Metadata = {
-   title: "Annonce",
-   description: "Page d'accueil d'Holydevs",
+export const generateMetadata = ({ params }: HouseDetailsProps): Metadata => {
+   return {
+      title: `${params.title} `,
+      description: `Page de l'annonce ${params.title}.`,
+   };
 };
+
 
 export default async function HousePage({ params }: HouseDetailsProps) {
    // Utilisateur connecté
@@ -107,10 +110,6 @@ export default async function HousePage({ params }: HouseDetailsProps) {
       },
    });
    if (!house) {
-      toast({
-         variant: "destructive",
-         description: "Oups, l'annonce n'a pas été trouvée",
-      });
       redirect("/");
    }
 
@@ -128,11 +127,12 @@ export default async function HousePage({ params }: HouseDetailsProps) {
    });
 
    /** Contient toutes les réservations d'une maison */
-   // const bookings = await db.booking.findMany({
-   //    where: {
-   //       houseId: params.houseId,
-   //    },
-   // });
+   const bookings = await db.booking.findMany({
+      where: {
+         houseId: params.houseId,
+      },
+   });
+
 
    // Données des 10 derniers avis
    const lastOpinions = await db.opinion.findMany({
@@ -186,6 +186,7 @@ export default async function HousePage({ params }: HouseDetailsProps) {
             startDate={new Date}
             endDate={new Date}
             user={currentUser}
+            bookings={bookings}
          />
       </div>
    );

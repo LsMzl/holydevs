@@ -3,6 +3,7 @@ import PostCard from "@/components/user/post/PostCard";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -15,7 +16,8 @@ export const metadata: Metadata = {
 export default async function Post() {
    // Utilisateur connecté
    const { userId } = auth();
-   if (!userId) return null;
+   if (!userId) redirect('/');
+   
    // Informations utilisateur
    const user = await db.user.findUnique({
       where: {

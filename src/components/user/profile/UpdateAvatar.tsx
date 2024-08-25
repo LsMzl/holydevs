@@ -64,6 +64,7 @@ const UpdateAvatar = ({ avatar }: UpdateAvatarTypes) => {
 
    /** Affichage de l'image selectionnée par l'utilisateur.*/
    const handleAvatarSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+      
       const file = event.target.files?.[0];
       const fileTypes = ["jpg", "jpeg", "gif", "webp", "png", "svg"];
 

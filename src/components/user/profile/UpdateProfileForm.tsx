@@ -42,35 +42,20 @@ const UpdateProfileForm = ({
    return (
       <Dialog>
          <DialogTrigger asChild>
-            <>
-               <Button
-                  variant="outline"
-                  className="font-semibold text-foreground flex gap-1 md:hidden"
-                  title="Modification du profil utilisateur"
-               >
-                  <Image
-                     src={Pencil}
-                     alt="Envoyer un message"
-                     width={20}
-                     height={20}
-                     className="w-6 h-6 mr-1"
-                  />
-               </Button>
-               <Button
-                  variant="outline"
-                  className="font-semibold text-foreground flex gap-1 max-md:hidden"
-                  title="Modification du profil utilisateur"
-               >
-                  <Image
-                     src={Pencil}
-                     alt="Envoyer un message"
-                     width={20}
-                     height={20}
-                     className="w-5 h-5 mr-1"
-                  />
-                  Modifier le profil
-               </Button>
-            </>
+            <Button
+               variant="outline"
+               className="font-semibold text-foreground flex gap-1"
+               title="Modification du profil utilisateur"
+            >
+               <Image
+                  src={Pencil}
+                  alt="Envoyer un message"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 mr-1"
+               />
+               <p className="max-md:hidden">Modifier le profil</p>
+            </Button>
          </DialogTrigger>
          <DialogContent>
             <DialogHeader>

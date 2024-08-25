@@ -29,6 +29,7 @@ export const getUserByClerkId = async (userId: string) => {
 
       return user;
    } catch (error: any) {
+      console.log('error', error)
       throw new Error(error);
    }
 };

@@ -99,12 +99,12 @@ const formSchema = z.object({
    isAvailable: z.boolean(),
 });
 
-export const HouseUpdateForm = ({
+export const HouseUpdateForm: React.FC<HouseUpdateFormTypes> = ({
    house,
    categories,
    types,
    features,
-}: HouseUpdateFormTypes) => {
+}) => {
    const [states, setStates] = useState<IState[]>([]);
    const [cities, setCities] = useState<ICity[]>([]);
    const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -113,6 +113,7 @@ export const HouseUpdateForm = ({
    const router = useRouter();
    const countries = getAllCountries();
 
+   /** Default form values */
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
@@ -206,6 +207,7 @@ export const HouseUpdateForm = ({
             setIsLoading(false);
          });
    };
+
    /** Soumission du formulaire */
    const onSubmit = async (values: z.infer<typeof formSchema>) => {
       setIsLoading(true);
@@ -566,7 +568,7 @@ export const HouseUpdateForm = ({
                            control={form.control}
                            name="image"
                            render={({ field }) => (
-                              <FormItem className=" w-full lg:h-[250px]">
+                              <FormItem className=" w-full h-[150px] lg:h-[250px]">
                                  <FormLabel htmlFor="image">
                                     {field.value ? (
                                        <Image

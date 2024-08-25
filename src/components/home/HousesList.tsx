@@ -56,18 +56,19 @@ import {
 
 const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
    // Filters
-   const [categoryFilter, setCategoryFilter] = useState("");
-   const [typeFilter, setTypeFilter] = useState("");
-   const [display, setDisplay] = useState("grid");
+   const [categoryFilter, setCategoryFilter] = useState<string>("");
+   const [typeFilter, setTypeFilter] = useState<string>("");
+   const [display, setDisplay] = useState<string>("grid");
 
    const [sortedHouses, setSortedHouses] = useState("");
 
    // Categories & types filter
-   const handleCategoryFilter = (e: any) => {
-      setCategoryFilter(e.currentTarget.textContent);
+   const handleCategoryFilter = (selectedCategory: string) => {
+      setCategoryFilter(selectedCategory.toLowerCase());
    };
-   const handleTypeFilter = (e: any) => {
-      setTypeFilter(e.currentTarget.textContent);
+
+   const handleTypeFilter = (selectedType: string) => {
+      setTypeFilter(selectedType.toLowerCase());
    };
    const resetFilter = () => {
       setCategoryFilter("");
@@ -182,12 +183,10 @@ const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
                               variant={
                                  typeFilter === type.name ? "selected" : "type"
                               }
-                              onClick={(
-                                 e: React.MouseEvent<HTMLButtonElement>
-                              ) => {
+                              onClick={() => {
                                  typeFilter === type.name
                                     ? setTypeFilter("")
-                                    : handleTypeFilter(e);
+                                    : handleTypeFilter(type.name);
                               }}
                            >
                               {type.name}
@@ -205,12 +204,10 @@ const HousesList = ({ categories, types, houses, user }: HouseListTypes) => {
                                     ? "selected"
                                     : "category"
                               }
-                              onClick={(
-                                 e: React.MouseEvent<HTMLButtonElement>
-                              ) => {
+                              onClick={() => {
                                  categoryFilter === category.name
                                     ? setCategoryFilter("")
-                                    : handleCategoryFilter(e);
+                                    : handleCategoryFilter(category.name);
                               }}
                            >
                               {category.name}

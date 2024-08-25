@@ -3,8 +3,9 @@
  * @creation 04.06.2024 - Louis Mazzella
  */
 
+import { getUserByClerkId } from "@/actions/getUserByClerkId";
 import { db } from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -13,26 +14,27 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 });
 
 export async function POST(req: Request) {
-   const user = await currentUser();
+   const {userId} = auth();
 
    //! Pas d'utilisateur connecté
-   if (!user) return new NextResponse("Non autorisé", { status: 401 });
+   if (!userId) return new NextResponse("Non autorisé", { status: 401 });
+
+   const user = await getUserByClerkId(userId)
 
    // Récupération et destructuration des informations du body
    const body = await req.json();
-   const { booking, payment_intent_id } = body;
+   const { booking, payment_intent_id,  } = body;
 
    // Création des informations de réservation
    const bookingData = {
-      houseId: body.houseId,
       ...booking,
-      userName: user.firstName,
-      userEmail: user.emailAddresses[0].emailAddress,
-      userId: user.id,
+      userName: user?.username,
+      userEmail: user?.email,
+      houseId: body.booking.houseId,
+      userId: user?.id,
       currency: "usd",
       paymentIntentId: payment_intent_id,
    };
-   console.log("bookingData", bookingData);
 
    /** Contient une réservation. */
    let foundBooking;
@@ -42,7 +44,7 @@ export async function POST(req: Request) {
       foundBooking = await db.booking.findUnique({
          where: {
             paymentIntentId: payment_intent_id,
-            userId: user.id,
+            userId: user?.id,
          },
       });
    }
@@ -67,7 +69,7 @@ export async function POST(req: Request) {
          const res = await db.booking.update({
             where: {
                paymentIntentId: payment_intent_id,
-               userId: user.id,
+               userId: user?.id,
             },
             data: bookingData,
          });
@@ -95,9 +97,6 @@ export async function POST(req: Request) {
       // Création d'une réservation dans la base de données
       await db.booking.create({
          data: bookingData,
-         include: {
-            House: true,
-         },
       });
 
       return NextResponse.json({ paymentIntent });
