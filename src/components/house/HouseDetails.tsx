@@ -82,7 +82,7 @@ const HouseDetails = ({
    const router = useRouter();
 
    setDefaultOptions({ locale: fr });
-   if (!house) return;
+   
 
    // Notation
    const totalRates = house.rates.reduce(
@@ -244,6 +244,8 @@ const HouseDetails = ({
          });
       }
    };
+
+   if (!house) return;
    return (
       <div className="mt-5 max-w-[1400px] mx-auto px-2">
          {/* Top */}

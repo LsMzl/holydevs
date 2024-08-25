@@ -14,11 +14,15 @@ const nextConfig = {
             hostname: "api.dicebear.com",
          },
       ],
+      
    },
+   
+   
    experimental: {
       serverActions: {
          bodySizeLimit: "5mb",
       },
+      
    },
 };
 
@@ -32,6 +36,8 @@ export default withPWAInit({
    workboxOptions: {
       disableDevLogs: true,
    },
+   
+   
 })(nextConfig);
 
 
