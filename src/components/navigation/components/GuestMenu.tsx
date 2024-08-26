@@ -8,14 +8,19 @@ import {
    DropdownMenuLabel,
    DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
+import {
+   Popover,
+   PopoverContent,
+   PopoverTrigger,
+} from "@/components/shadcn/popover";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 export const GuestMenu = () => {
    return (
-      <DropdownMenu>
-         <DropdownMenuTrigger asChild>
+      <Popover>
+         <PopoverTrigger asChild>
             <Button
                variant="outline"
                className="py-5 px-1 rounded-full drop-shadow-md focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -31,20 +36,14 @@ export const GuestMenu = () => {
                   />
                </Avatar>
             </Button>
-         </DropdownMenuTrigger>
-         {/* Contenu du menu */}
-         <DropdownMenuContent className="w-56 px-3 py-4 rounded">
-            <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
-            <DropdownMenuGroup>
-               <DropdownMenuItem>
-                  <Link href="/inscription">Inscription</Link>
-               </DropdownMenuItem>
-
-               <DropdownMenuItem>
-                  <Link href="/connexion">Connexion</Link>
-               </DropdownMenuItem>
-            </DropdownMenuGroup>
-         </DropdownMenuContent>
-      </DropdownMenu>
+         </PopoverTrigger>
+         <PopoverContent className="w-56 px-3 py-4 rounded">
+            <p className="text-lg font-medium mb-2">Mon compte</p>
+            <div className="flex flex-col gap-1.5">
+               <Link href="/inscription" className="text-foreground/80 hover:text-foreground transition-color">Inscription</Link>
+               <Link href="/connexion" className="text-foreground/80 hover:text-foreground transition-color">Connexion</Link>
+            </div>
+         </PopoverContent>
+      </Popover>
    );
 };
