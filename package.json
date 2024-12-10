@@ -34,7 +34,7 @@
     "@radix-ui/react-toast": "^1.2.1",
     "@stripe/react-stripe-js": "^2.7.3",
     "@stripe/stripe-js": "^4.1.0",
-    "axios": "^1.7.2",
+    "axios": "^1.7.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "country-state-city": "^3.2.1",
